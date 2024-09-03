@@ -1,0 +1,8 @@
+.footer {
+  position: sticky;
+  border-radius: 10px 10px 0 0;
+}
+
+#subscribe {
+  margin-left: -15px;
+}
