@@ -1,18 +1,23 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./components/HeroSection";
 import Navbar from "./components/Navbar";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "./components/Footer";
+import FaqSupportPage from "./components/FaqSupportPage";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => (
-  <Router>
-    <Navbar />
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-    </Routes>
-    <Footer />
-    {/* <div className="container mt-4"> </div> */}
-  </Router>
+  <div className="content-wrapper">
+    <Router>
+      <Navbar />
+      <div className="content">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/faq-support" element={<FaqSupportPage />} />
+        </Routes>
+      </div>
+      <Footer />
+    </Router>
+  </div>
 );
 
 export default App;

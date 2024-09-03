@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import logo from "../../images/HVlogo.png";
+import logo from "../../images/NNlogo.png";
 import "../styles/navbar.css";
 
 const NavbarComponent = () => (
@@ -15,9 +15,13 @@ const NavbarComponent = () => (
           className="d-inline-block align-top color"
         />
         {""}
-        HeavenView.
+        NextNest.
       </Navbar.Brand>
-      <Navbar.Toggle aria-controls="navbar-nav" />
+      <Navbar.Toggle
+        aria-controls="navbar-nav"
+        className="bg-white"
+        id="hamburger"
+      />
       <Navbar.Collapse id="navbar-nav" className="justify-content-center">
         <Nav className="me-auto">
           <Nav.Link as={Link} to="/">
