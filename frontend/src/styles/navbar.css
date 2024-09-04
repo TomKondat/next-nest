@@ -1,5 +1,5 @@
 .navbar-transparent {
-  background-color: rgba(40, 40, 40, 0.416);
+  background-color: rgba(40, 40, 40, 0.475);
   z-index: 1000;
 }
 
@@ -17,4 +17,8 @@
 
 .navbar-brand:hover {
   color: #ff9800 !important;
+}
+
+#hamburger {
+  color: transparent;
 }

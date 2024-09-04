@@ -1,35 +1,36 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "../styles/footer.css";
-import logo from "../../images/HVlogo.png";
+import logo from "../../images/NNlogo.png";
 
 const Footer = () => {
   return (
-    <footer className="footer bg-dark text-white py-1 mt-5">
+    <footer className="footer bg-dark text-white py-4 mt-5">
       <Container>
-        <Row className="mb-3 mt-5">
+        <Row className="mb-3">
           <Col md={4}>
             <h5>FAQ & Support</h5>
             <ul className="list-unstyled">
               <li>
-                <a href="#faq" className="text-white">
+                <Link to="/faq-support#faq" className="text-white">
                   Frequently Asked Questions
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#support" className="text-white">
+                <Link to="/faq-support#support" className="text-white">
                   Contact Support
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#privacy" className="text-white">
+                <Link to="/faq-support#privacy" className="text-white">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#terms" className="text-white">
+                <Link to="/faq-support#terms" className="text-white">
                   Terms & Conditions
-                </a>
+                </Link>
               </li>
             </ul>
           </Col>
@@ -67,7 +68,7 @@ const Footer = () => {
             </div>
           </Col>
         </Row>
-        <Row className="text-center">
+        <Row className="text-center" id="social">
           <Col>
             <h5>Follow Us</h5>
             <a href="https://www.facebook.com" className="text-white mx-2">
@@ -87,7 +88,7 @@ const Footer = () => {
         <Row className="text-center mt-3">
           <Col>
             <p>
-              &copy; {new Date().getFullYear()} HeavenView. All rights reserved.
+              &copy; {new Date().getFullYear()} NextNest. All rights reserved.
             </p>
           </Col>
         </Row>
