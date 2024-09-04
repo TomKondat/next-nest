@@ -2,7 +2,7 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../../images/NNlogo.png";
 import "../styles/navbar.css";
-
+import "bootstrap-icons/font/bootstrap-icons.css";
 const NavbarComponent = () => (
   <Navbar expand="lg" fixed="top" className="navbar-transparent">
     <Container fluid>
@@ -27,10 +27,22 @@ const NavbarComponent = () => (
           <Nav.Link as={Link} to="/">
             Home
           </Nav.Link>
+          <Nav.Link as={Link} to="/properties">
+            Add Property
+          </Nav.Link>
+        </Nav>
+
+        <Nav>
+          <Nav.Link as={Link} to="/login">
+            Login/Register
+          </Nav.Link>
         </Nav>
         <Nav>
           <Nav.Link as={Link} to="/profile">
-            Profile
+            <i
+              className="bi bi-person-circle"
+              style={{ marginRight: "5px" }}
+            ></i>
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>

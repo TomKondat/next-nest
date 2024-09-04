@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import FaqSupportPage from "./components/FaqSupportPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LoginRegisterPage from "./components/LoginRegisterPage";
+import AddProperty from "./components/AddProperties";
 
 const App = () => (
   <div className="content-wrapper">
@@ -15,8 +16,10 @@ const App = () => (
           <Route path="/" element={<HomePage />} />
           <Route path="/faq-support" element={<FaqSupportPage />} />
           <Route path="/login" element={<LoginRegisterPage />} />
+          <Route path="/properties" element={<AddProperty />} />
         </Routes>
       </div>
+
       <Footer />
     </Router>
   </div>
