@@ -8,8 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 FeaturedProperties.jsx
 featuredProperties.css
-HomePage.jsx
-
 node_modules
 dist
 dist-ssr
