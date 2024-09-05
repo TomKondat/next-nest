@@ -14,8 +14,7 @@ const NavbarComponent = () => (
           height="30"
           className="d-inline-block align-top color"
         />
-        {""}
-        NextNest
+        &nbsp; NextNest
       </Navbar.Brand>
       <Navbar.Toggle
         aria-controls="navbar-nav"
