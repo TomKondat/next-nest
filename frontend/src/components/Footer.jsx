@@ -6,7 +6,7 @@ import logo from "../../images/NNlogo.png";
 
 const Footer = () => {
   return (
-    <footer className="footer bg-dark text-white py-4 mt-5">
+    <footer className="footer bg-dark text-white py-4">
       <Container>
         <Row className="mb-3">
           <Col md={4}>

@@ -1,0 +1,41 @@
+.property-form-box {
+  background-color: #1f2a38;
+  padding: 40px;
+  border-radius: 10px;
+  color: #ffffff;
+  margin-top: 20px;
+  min-height: 50vh;
+}
+
+.property-form-box .form-label {
+  color: #ffcc99;
+}
+
+.property-form-box .form-control {
+  background-color: #6e7275;
+  color: white;
+  border: 1px solid #f8bd7f;
+}
+
+.property-form-box .form-control::placeholder {
+  color: white;
+}
+
+.property-form-box .btn-primary {
+  background-color: #ff8c00;
+  border-color: #ff8c00;
+}
+
+.property-form-box .btn-primary:hover {
+  background-color: #ff6700;
+  border-color: #ff6700;
+}
+
+#backgcontainer {
+  margin-bottom: 200px !important;
+}
+.property-form-box .form-control,
+.property-form-box .btn-primary,
+.property-form-box .card {
+  box-shadow: none;
+}

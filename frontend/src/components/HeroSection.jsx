@@ -10,7 +10,6 @@ const HeroSection = () => {
         <div className="button-group mb-4">
           <button className="btn-option active">Buyer</button>
           <button className="btn-option">Renter</button>
-          <button className="btn-option">Seller</button>
         </div>
 
         <Container className="search-container justify-content-center">
