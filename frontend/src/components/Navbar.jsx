@@ -26,7 +26,7 @@ const NavbarComponent = () => (
           <Nav.Link as={Link} to="/">
             Home
           </Nav.Link>
-          <Nav.Link as={Link} to="/properties">
+          <Nav.Link as={Link} to="/addproperties">
             Add Property
           </Nav.Link>
         </Nav>
