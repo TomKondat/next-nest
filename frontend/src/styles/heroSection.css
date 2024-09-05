@@ -1,13 +1,10 @@
-/* HomePage.css */
-
 .homepage {
   position: relative;
-  height: 70vh;
+  min-height: 100vh;
   background-image: url("./images/cover.webp");
   background-size: cover;
   background-position: center;
   color: #ffffff;
-  border-radius: 0 0 10px 10px;
 }
 
 .homepage-overlay {
@@ -68,6 +65,7 @@
   padding: 8px;
   font-size: 0.875rem;
   border-radius: 5px 0 0 5px;
+  border-color: #ffc107 !important;
 }
 
 Button:hover .btn-primary:hover {

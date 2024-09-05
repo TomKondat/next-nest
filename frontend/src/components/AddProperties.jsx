@@ -132,13 +132,19 @@ const AddProperty = () => {
                         >
                           <Form.Label>Property Type</Form.Label>
                           <Form.Control
-                            type="text"
-                            placeholder="Enter property type"
-                            name="propertyType"
-                            value={formData.propertyType}
+                            as="select"
+                            name="PropertyType"
+                            value={formData.PropertyType}
                             onChange={handleChange}
                             required
-                          />
+                          >
+                            <option value="" disabled hidden>
+                              Choose Property Type
+                            </option>
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Land">Land</option>
+                          </Form.Control>
                         </Form.Group>
 
                         <Form.Group controlId="formAddress" className="mb-3">

@@ -35,17 +35,17 @@
 }
 
 .auth-box .form-control {
-  background-color: #101d2b;
+  background-color: #6e7275;
   color: #ffffff;
   border: 1px solid #4f4e4b;
 }
 
 .auth-box .form-control::placeholder {
-  color: #b8d2e6;
+  color: #a8b29f;
 }
 
 .auth-box .nav-tabs .nav-link {
-  color: #b8d2e6;
+  color: white;
 }
 
 .auth-box .nav-tabs .nav-link.active {

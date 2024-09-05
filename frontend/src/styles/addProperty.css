@@ -12,13 +12,13 @@
 }
 
 .property-form-box .form-control {
-  background-color: #dedede5d;
-  color: #ffffff;
+  background-color: #6e7275;
+  color: white;
   border: 1px solid #f8bd7f;
 }
 
 .property-form-box .form-control::placeholder {
-  color: #ffffff;
+  color: white;
 }
 
 .property-form-box .btn-primary {
@@ -33,4 +33,9 @@
 
 #backgcontainer {
   margin-bottom: 200px !important;
+}
+.property-form-box .form-control,
+.property-form-box .btn-primary,
+.property-form-box .card {
+  box-shadow: none;
 }
