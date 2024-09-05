@@ -6,6 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+FeaturedProperties.jsx
+featuredProperties.css
+HomePage.jsx
 
 node_modules
 dist

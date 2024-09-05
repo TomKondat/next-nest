@@ -1,0 +1,108 @@
+.profile-page {
+  margin-top: 80px !important;
+  padding: 30px;
+  background-color: #e9eaeb;
+}
+
+.border-container {
+  border: 1px solid #dee2e6;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  margin-bottom: 30px;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border: 3px solid #6c757d;
+}
+
+.profile-name {
+  font-size: 2rem;
+  margin-top: 15px;
+}
+
+.profile-email {
+  color: gray;
+  font-size: 1rem;
+}
+
+.stats-card {
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 0;
+}
+
+.stats-card h3 {
+  font-size: 2rem;
+}
+
+.rating-stars {
+  color: gold;
+  margin-bottom: 5px;
+}
+
+.toggle-btn {
+  margin: 0 5px;
+  padding: 10px 20px;
+}
+
+.listings-section {
+  margin-top: 20px;
+}
+
+.listing-card {
+  margin-bottom: 20px;
+}
+
+.listing-card img {
+  border-radius: 10px;
+}
+
+.equal-height-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card-body-profile {
+  flex-grow: 1;
+  height: 180px;
+}
+
+@media (min-width: 768px) {
+  .profile-page {
+    margin-top: 30px;
+  }
+
+  .profile-header {
+    margin-bottom: 40px;
+  }
+
+  .profile-name {
+    font-size: 2.5rem;
+  }
+
+  .stats-card h3 {
+    font-size: 2.5rem;
+  }
+}
+
+/* Sold tag overlay */
+.sold-tag-container {
+  position: relative;
+}
+
+.sold-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 100px;
+  height: auto;
+  z-index: 10;
+}

@@ -1,0 +1,27 @@
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
+
+.footer {
+  background-color: #343a40;
+  color: #ffffff;
+  padding: 20px 0;
+}
+
+#subscribe {
+  margin-left: -15px;
+}
+
+#social a {
+  transition: 0.3s ease-in-out;
+}
+#social a:hover {
+  color: rgb(1, 207, 203) !important;
+}
