@@ -14,8 +14,7 @@ const NavbarComponent = () => (
           height="30"
           className="d-inline-block align-top color"
         />
-        {""}
-        NextNest
+        &nbsp; NextNest
       </Navbar.Brand>
       <Navbar.Toggle
         aria-controls="navbar-nav"
@@ -27,7 +26,7 @@ const NavbarComponent = () => (
           <Nav.Link as={Link} to="/">
             Home
           </Nav.Link>
-          <Nav.Link as={Link} to="/properties">
+          <Nav.Link as={Link} to="/addproperties">
             Add Property
           </Nav.Link>
         </Nav>

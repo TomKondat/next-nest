@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Container,
   Row,
@@ -12,7 +13,28 @@ import {
 import "../styles/logreg.css";
 
 const LoginRegisterPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [key, setKey] = useState("login");
+
+  // Set the tab based on the current path
+  useEffect(() => {
+    if (location.pathname === "/register") {
+      setKey("register");
+    } else {
+      setKey("login");
+    }
+  }, [location.pathname]);
+
+  // Handle tab switching and navigation
+  const handleSelect = (k) => {
+    setKey(k);
+    if (k === "register") {
+      navigate("/register");
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="overlay-container">
@@ -31,7 +53,7 @@ const LoginRegisterPage = () => {
                 <Tabs
                   id="auth-tabs"
                   activeKey={key}
-                  onSelect={(k) => setKey(k)}
+                  onSelect={handleSelect}
                   className="mb-3 justify-content-center"
                 >
                   <Tab eventKey="login" title="Login">

@@ -1,0 +1,137 @@
+.property-item {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  max-width: 450px; /* Set a smaller max-width for each card */
+  margin: 0 auto;
+}
+.property-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.image-wrapper {
+  overflow: hidden;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.property-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.property-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.property-title {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.view-property-btn {
+  margin-top: auto;
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: white;
+}
+
+.view-property-btn:hover {
+  background-color: #ff5e3a;
+  border-color: #ff5e3a;
+}
+.property-list-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(250, 235, 215, 0.735);
+}
+.property-list-wrapper h4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 80px;
+  font-weight: 700;
+  font-size: xx-large;
+}
+
+.property-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.property-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+/* src/styles/propertyDetail.css */
+
+.property-detail-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+  background-color: #fbf0e2;
+}
+
+.property-detail {
+  background-color: #fff;
+  padding: 20px;
+  max-width: 800px;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  text-align: center;
+}
+
+.property-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.searched-property-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.property-price {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.property-description {
+  font-size: 1.2rem;
+  color: #666;
+}
+.view-more-button {
+  border: none;
+  border-radius: 10px;
+  padding: 5px;
+  background-color: #ffc107;
+  color: black;
+  font-weight: 500;
+  transition: 0.3s ease-in-out;
+}
+.view-more-button:hover {
+  background-color: #ea9809;
+}
