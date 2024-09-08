@@ -8,7 +8,6 @@ import LoginRegisterPage from "./components/LoginRegisterPage";
 import AddProperty from "./components/AddProperties";
 import ProfilePage from "./components/ProfilePage";
 import HomePage from "./components/HomePage";
-import PropertyPage from "./components/PropertyPage";
 import PropertyDetail from "./components/PropertyDetail";
 import "./index.css";
 
@@ -24,7 +23,6 @@ const App = () => (
           <Route path="/register" element={<LoginRegisterPage />} />{" "}
           <Route path="/addproperties" element={<AddProperty />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/properties" element={<PropertyPage />} />{" "}
           <Route path="/properties/:id" element={<PropertyDetail />} />{" "}
         </Routes>
       </div>

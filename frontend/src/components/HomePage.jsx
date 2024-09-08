@@ -1,10 +1,10 @@
 import HeroSection from "./HeroSection";
-import PropertyPage from "./PropertyPage";
+import PropertyList from "./PropertyList";
 const HomePage = () => {
   return (
     <div>
       <HeroSection />
-      <PropertyPage />
+      <PropertyList />
     </div>
   );
 };
