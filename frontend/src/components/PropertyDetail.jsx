@@ -1,35 +1,57 @@
 import { useParams, Link } from "react-router-dom";
-import properties from "../data/propertyData";
+import { useGetPropertiesQuery } from "./../slices/propertyApiSlice";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import "../styles/propertyItem.css";
 
 const PropertyDetail = () => {
   const { id } = useParams();
-  const property = properties.find((p) => p.id === parseInt(id));
+  const { data } = useGetPropertiesQuery();
+
+  const property = data?.properties.find((p) => p._id === id);
 
   if (!property) {
-    return <h2>Property not found</h2>;
+    return <h2 className="text-center">Property not found</h2>;
   }
 
   return (
-    <div className="property-detail-container">
-      <div className="property-detail">
-        <h1 className="property-title">{property.title}</h1>
-        <img
-          src={property.image}
-          alt={property.title}
-          className="searched-property-image"
-        />
-        <p className="property-price">
-          <strong>Price: </strong> {property.price}
-        </p>
-        <p className="property-description">
-          <strong>Description: </strong> About the property.
-        </p>
-        <Link to="/">
-          <button className="view-more-button">View More Properties</button>
-        </Link>{" "}
-      </div>
-    </div>
+    <Container
+      fluid
+      className="d-flex justify-content-center align-items-center vh-100"
+    >
+      <Row className="w-100 d-flex justify-content-center">
+        <Col xs={12} md={10} lg={8}>
+          <Card
+            className="shadow-lg"
+            style={{ padding: "20px", fontSize: "1.2rem" }}
+          >
+            <Card.Img
+              variant="top"
+              src={property.image}
+              alt={property.title}
+              className="property-detail-image"
+            />
+            <Card.Body>
+              <Card.Title className="text-center display-5">
+                {property.title}
+              </Card.Title>
+              <Card.Text className="text-center">
+                <strong>Price: </strong> {property.price}
+              </Card.Text>
+              <Card.Text className="text-center">
+                <strong>Description: </strong> About the property.
+              </Card.Text>
+              <div className="d-flex justify-content-center">
+                <Link to="/">
+                  <Button variant="warning" size="lg">
+                    View More Properties
+                  </Button>
+                </Link>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

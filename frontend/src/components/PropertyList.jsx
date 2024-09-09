@@ -11,13 +11,19 @@ const PropertyList = () => {
 
   const propertiesArr = data?.properties || [];
 
+  console.log("Fetched Properties:", propertiesArr);
+
   return (
     <div className="property-list-wrapper">
-      <Row>
-        <h4>Searched Properties</h4>
+      <h4>Searched Properties</h4>
+      <Row className="g-3">
+        {" "}
+        {/* Add gap between rows and columns */}
         {propertiesArr.length > 0 ? (
           propertiesArr.map((property) => (
-            <Col key={property._id} xs={12} md={4}>
+            <Col key={property._id} xs={12} sm={6} md={4} lg={3} xl={3}>
+              {" "}
+              {/* Responsive sizes */}
               <PropertyItem
                 id={property._id}
                 image={property.image}
