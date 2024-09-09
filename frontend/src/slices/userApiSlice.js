@@ -2,15 +2,16 @@ import { apiSlice } from "./apiSlice";
 import { USER_URL } from "./urlConstrains";
 
 const userApiSlice = apiSlice.injectEndpoints({
-  endpoints: (buider) => ({
-    getUsers: buider.query({
+  endpoints: (builder) => ({
+    getUsers: builder.query({
       query: () => ({
         url: USER_URL,
       }),
       keepUnusedDataFor: 5,
     }),
 
-    // getUserById: buider.query({
+    // Get user by ID (uncomment if needed)
+    // getUserById: builder.query({
     //   query: (userId) => ({
     //     url: `${USER_URL}/${userId}`,
     //   }),
@@ -18,15 +19,17 @@ const userApiSlice = apiSlice.injectEndpoints({
     //   provideTags: ["User"],
     // }),
 
-    // register: buider.mutation({
-    //   query: (data) => ({
-    //     url: `${USER_URL}/register`,
-    //     method: "POST",
-    //     body: data,
-    //   }),
-    // }),
+    // Register user
+    register: builder.mutation({
+      query: (data) => ({
+        url: `${USER_URL}/register`,
+        method: "POST",
+        body: data,
+      }),
+    }),
 
-    login: buider.mutation({
+    // Login user
+    login: builder.mutation({
       query: (data) => ({
         url: `${USER_URL}/login`,
         method: "POST",
@@ -34,7 +37,8 @@ const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // logout: buider.mutation({
+    // Logout user (uncomment if needed)
+    // logout: builder.mutation({
     //   query: () => ({
     //     url: `${USER_URL}/logout`,
     //     method: "DELETE",
@@ -42,10 +46,11 @@ const userApiSlice = apiSlice.injectEndpoints({
     // }),
   }),
 });
+
 export const {
   useLoginMutation,
+  useRegisterMutation, // Export the register mutation hook
   useGetUsersQuery,
-  //   useGetUserByIdQuery,
-  //   useRegisterMutation,
-  //   useLogoutMutation,
+  // useGetUserByIdQuery,
+  // useLogoutMutation,
 } = userApiSlice;

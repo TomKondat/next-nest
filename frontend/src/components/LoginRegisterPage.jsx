@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Container,
@@ -10,16 +10,28 @@ import {
   Tabs,
   Card,
 } from "react-bootstrap";
-import { useLoginMutation } from "./../slices/userApiSlice";
-
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from "./../slices/userApiSlice"; // Import the register mutation
+import AuthContext from "../context/AuthContext";
 import "../styles/logreg.css";
 
 const LoginRegisterPage = () => {
+  const { login } = useContext(AuthContext); // Use the login function from AuthContext
   const location = useLocation();
   const navigate = useNavigate();
   const [key, setKey] = useState("login");
+
+  // State for login
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // State for register
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Set the tab based on the current path
   useEffect(() => {
@@ -39,29 +51,71 @@ const LoginRegisterPage = () => {
       navigate("/login");
     }
   };
-  const [login] = useLoginMutation();
-  const handleSubmit = async (e) => {
+
+  const [loginRequest] = useLoginMutation();
+  const [registerRequest] = useRegisterMutation(); // Add the register mutation
+
+  // Handle Login Form Submission
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     const formData = {
       email,
       password,
     };
-    console.log("Form Data Submitted:", formData);
+
     try {
-      await login(formData).unwrap();
-      console.log("Form Data Submitted:", formData);
-      alert("Logged in!");
+      await loginRequest(formData).unwrap();
+      console.log("Login Successful:", formData);
+
+      // Call login function from AuthContext
+      login(formData);
+
+      // Wait 1 second before navigating to the homepage
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch (err) {
-      console.error("Failed to add property:", err);
-      alert("Failed to Logged in.");
+      console.error("Failed to log in:", err);
+      alert("Failed to log in.");
     }
   };
+
+  // Handle Register Form Submission
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+
+    if (regPassword !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    const formData = {
+      name: regName,
+      email: regEmail,
+      password: regPassword,
+    };
+
+    try {
+      await registerRequest(formData).unwrap(); // Send the form data to the API
+      console.log("Registration Successful:", formData);
+
+      // Automatically log in the user after registration
+      login(formData);
+
+      // Wait 1 second before navigating to the homepage
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } catch (err) {
+      console.error("Failed to register:", err);
+      alert("Failed to register.");
+    }
+  };
+
   return (
     <div className="overlay-container">
-      {/* Background overlay */}
       <div className="overlay"></div>
 
-      {/* Content */}
       <Container
         fluid
         className="auth-container d-flex justify-content-center align-items-center"
@@ -77,7 +131,7 @@ const LoginRegisterPage = () => {
                   className="mb-3 justify-content-center"
                 >
                   <Tab eventKey="login" title="Login">
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={handleLoginSubmit}>
                       <Form.Group controlId="formBasicEmail" className="mb-3">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
@@ -110,13 +164,15 @@ const LoginRegisterPage = () => {
                   </Tab>
 
                   <Tab eventKey="register" title="Register">
-                    <Form>
+                    <Form onSubmit={handleRegisterSubmit}>
                       <Form.Group controlId="formRegisterName" className="mb-3">
                         <Form.Label>Full Name</Form.Label>
                         <Form.Control
                           type="text"
                           placeholder="Enter your full name"
                           required
+                          value={regName}
+                          onChange={(e) => setRegName(e.target.value)}
                         />
                       </Form.Group>
 
@@ -129,6 +185,8 @@ const LoginRegisterPage = () => {
                           type="email"
                           placeholder="Enter email"
                           required
+                          value={regEmail}
+                          onChange={(e) => setRegEmail(e.target.value)}
                         />
                       </Form.Group>
 
@@ -141,6 +199,8 @@ const LoginRegisterPage = () => {
                           type="password"
                           placeholder="Create password"
                           required
+                          value={regPassword}
+                          onChange={(e) => setRegPassword(e.target.value)}
                         />
                       </Form.Group>
 
@@ -153,6 +213,8 @@ const LoginRegisterPage = () => {
                           type="password"
                           placeholder="Confirm password"
                           required
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                       </Form.Group>
 
