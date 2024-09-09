@@ -28,11 +28,6 @@
   margin-bottom: 20px;
 }
 
-.homepage-subtitle {
-  font-size: 1.5rem;
-  margin-bottom: 40px;
-}
-
 .button-group {
   display: flex;
   gap: 10px;
@@ -46,10 +41,17 @@
   font-size: 1rem;
   cursor: pointer;
   border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .btn-option:hover {
   background-color: #ff9800;
+}
+
+/* Active Button Style */
+.btn-option.active {
+  background-color: #ff9800;
+  color: white;
 }
 
 .search-container {
@@ -68,10 +70,6 @@
   border-color: #ffc107 !important;
 }
 
-Button:hover .btn-primary:hover {
-  background-color: #e67e00;
-  border-color: #e67e00;
-}
 #search {
   margin-left: -15px;
 }

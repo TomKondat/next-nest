@@ -86,7 +86,7 @@ const ProfilePage = () => {
             </Col>
             <Col xs={12} md={6} lg={4} className="listing-card">
               <Card className="equal-height-card">
-                <Card.Img variant="top" src="../../images/h2.webp" />
+                <Card.Img variant="top" src="../../images/h5.webp" />
                 <Card.Body>
                   <Card.Title>The Overdale Apartment</Card.Title>
                   <Card.Text>
@@ -97,7 +97,7 @@ const ProfilePage = () => {
             </Col>
             <Col xs={12} md={6} lg={4} className="listing-card">
               <Card className="equal-height-card">
-                <Card.Img variant="top" src="../../images/h3.webp" />
+                <Card.Img variant="top" src="../../images/h4.webp" />
                 <Card.Body>
                   <Card.Title>The Midnight House</Card.Title>
                   <Card.Text>
