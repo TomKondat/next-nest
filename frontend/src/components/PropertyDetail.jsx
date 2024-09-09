@@ -16,7 +16,7 @@ const PropertyDetail = () => {
   return (
     <Container
       fluid
-      className="d-flex justify-content-center align-items-center vh-100"
+      className="d-flex justify-content-center align-items-center vh-100 propertypage"
     >
       <Row className="w-100 d-flex justify-content-center">
         <Col xs={12} md={10} lg={8}>
@@ -41,9 +41,14 @@ const PropertyDetail = () => {
                 <strong>Description: </strong> About the property.
               </Card.Text>
               <div className="d-flex justify-content-center">
-                <Link to="/">
-                  <Button variant="warning" size="lg">
+                <Link className="m-2" to="/">
+                  <Button variant="warning" size="md">
                     View More Properties
+                  </Button>
+                </Link>
+                <Link className="m-2" to="/profile">
+                  <Button variant="warning" size="md">
+                    Contact the Seller
                   </Button>
                 </Link>
               </div>
