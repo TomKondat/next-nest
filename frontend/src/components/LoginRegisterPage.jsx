@@ -10,6 +10,8 @@ import {
   Tabs,
   Card,
 } from "react-bootstrap";
+import { useLoginMutation } from "./../slices/userApiSlice";
+
 import "../styles/logreg.css";
 
 const LoginRegisterPage = () => {
@@ -37,14 +39,22 @@ const LoginRegisterPage = () => {
       navigate("/login");
     }
   };
-  const handleSubmit = (e) => {
+  const [login] = useLoginMutation();
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
       email,
       password,
     };
     console.log("Form Data Submitted:", formData);
-    alert("Logged In !");
+    try {
+      await login(formData).unwrap();
+      console.log("Form Data Submitted:", formData);
+      alert("Logged in!");
+    } catch (err) {
+      console.error("Failed to add property:", err);
+      alert("Failed to Logged in.");
+    }
   };
   return (
     <div className="overlay-container">
