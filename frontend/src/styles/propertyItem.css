@@ -60,7 +60,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 80px;
+  margin: 40px;
   font-weight: 700;
   font-size: xx-large;
 }
@@ -73,4 +73,7 @@
 .property-link:hover {
   text-decoration: none;
   color: inherit;
+}
+.propertypage {
+  background-color: rgba(250, 235, 215, 0.735);
 }
