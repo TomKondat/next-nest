@@ -1,19 +1,20 @@
 .homepage {
   position: relative;
-  min-height: 100vh;
+  min-height: 70vh;
   background-image: url("./images/cover.webp");
   background-size: cover;
   background-position: center;
   color: #ffffff;
+  border-radius: 0 0 12px 12px;
 }
 
-.homepage-overlay {
+.image-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  background-color: rgba(0, 0, 0, 0.5) !important; /* Dark overlay */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,4 +73,61 @@
 
 #search {
   margin-left: -15px;
+}
+/* heroSection.css */
+
+.overlay-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 100%;
+}
+
+/* Filter Bar */
+.filter-bar {
+  background: rgba(210, 210, 210, 0.452);
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  padding: 15px 30px;
+  display: inline-block;
+  margin-top: 20px;
+  color: white;
+}
+
+.homepage-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  border: none;
+  border-radius: 50px;
+  padding: 10px 15px;
+}
+
+.btn-filter {
+  border-radius: 12px;
+  margin: 0 5px;
+  padding: 10px 20px;
+}
+
+.btn-filter.active {
+  background-color: orange;
+  color: white;
+}
+
+.search-button {
+  background-color: rgb(255, 77, 0);
+  border: none;
+  border-radius: 12px;
+  padding: 4px 7px;
+}
+
+.search-button i {
+  font-size: 1.5rem;
+  color: white;
 }
