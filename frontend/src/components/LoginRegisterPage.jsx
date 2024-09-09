@@ -16,6 +16,8 @@ const LoginRegisterPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [key, setKey] = useState("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // Set the tab based on the current path
   useEffect(() => {
@@ -35,7 +37,15 @@ const LoginRegisterPage = () => {
       navigate("/login");
     }
   };
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = {
+      email,
+      password,
+    };
+    console.log("Form Data Submitted:", formData);
+    alert("Logged In !");
+  };
   return (
     <div className="overlay-container">
       {/* Background overlay */}
@@ -57,13 +67,15 @@ const LoginRegisterPage = () => {
                   className="mb-3 justify-content-center"
                 >
                   <Tab eventKey="login" title="Login">
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                       <Form.Group controlId="formBasicEmail" className="mb-3">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
                           type="email"
                           placeholder="Email"
                           required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                         />
                       </Form.Group>
 
@@ -76,6 +88,8 @@ const LoginRegisterPage = () => {
                           type="password"
                           placeholder="Password"
                           required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </Form.Group>
 

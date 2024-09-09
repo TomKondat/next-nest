@@ -52,7 +52,7 @@ const HeroSection = () => {
                 <Col>
                   <Form.Control
                     type="text"
-                    placeholder="Address"
+                    placeholder="Search Address"
                     className="search-input"
                   />
                 </Col>
@@ -132,7 +132,10 @@ const HeroSection = () => {
                 {/* Search Button */}
                 <Col xs="auto">
                   <Button variant="warning" className="search-button">
-                    <i className="bi bi-search"></i>
+                    <i
+                      className="bi bi-search"
+                      style={{ fontSize: "1.2rem" }}
+                    ></i>
                   </Button>
                 </Col>
               </Row>
