@@ -4,7 +4,8 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 
 const propertyRoutes = require("./routes/property.Routes");
-// const userRoutes = require("./routes/user.Routes");
+const userRoutes = require("./routes/user.Routes");
+
 const AppError = require("./utils/AppError");
 const globalErrorHandler = require("./utils/errorHandler");
 const app = express();
@@ -19,7 +20,7 @@ app.use(cors(corsOptions));
 app.use(express.static("public"));
 
 app.use("/api/properties", propertyRoutes);
-// app.use("/api/properties", userRoutes);
+app.use("/api/users", userRoutes);
 
 app.all("*", (req, res, next) => {
     next(new AppError(550, "The route can not be found"));

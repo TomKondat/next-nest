@@ -28,7 +28,7 @@ exports.addProperty = asyncHandler(async (req, res, next) => {
 //     });
 // });
 
-// getProperties for debugging
+// getProperties for debugging---------->>>>>
 exports.getProperties = asyncHandler(async (req, res, next) => {
     const properties = await Property.find();
     if (!properties || properties.length === 0) {
@@ -63,7 +63,6 @@ exports.getPropertyById = asyncHandler(async (req, res, next) => {
     });
 });
 
-
 exports.editPropertyById = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     if (!id) {
@@ -90,7 +89,6 @@ exports.editPropertyById = asyncHandler(async (req, res, next) => {
         property
     });
 });
-
 
 exports.deletePropertyById = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
