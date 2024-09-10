@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useGetPropertiesQuery } from "./../slices/propertyApiSlice";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import PropertyMap from "./PropertyMap"; 
 import "../styles/propertyItem.css";
 
 const PropertyDetail = () => {
@@ -38,7 +39,7 @@ const PropertyDetail = () => {
                 <strong>Price: </strong> {property.price}
               </Card.Text>
               <Card.Text className="text-center">
-                <strong>Description: </strong> About the property.
+                <strong>Description: </strong> {property.description}
               </Card.Text>
               <div className="d-flex justify-content-center">
                 <Link className="m-2" to="/">
@@ -51,6 +52,14 @@ const PropertyDetail = () => {
                     Contact the Seller
                   </Button>
                 </Link>
+              </div>
+              <div className="mt-4">
+                <PropertyMap 
+                  latitude={property.location.coordinates.lat} 
+                  longitude={property.location.coordinates.lng} 
+                  zoom={property.location.zoom} 
+                  title={property.title} 
+                />
               </div>
             </Card.Body>
           </Card>

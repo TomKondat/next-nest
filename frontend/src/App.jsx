@@ -9,6 +9,7 @@ import AddProperty from "./components/AddProperties";
 import ProfilePage from "./components/ProfilePage";
 import HomePage from "./components/HomePage";
 import PropertyDetail from "./components/PropertyDetail";
+import 'leaflet/dist/leaflet.css';
 import "./index.css";
 
 const App = () => (
