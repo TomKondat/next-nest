@@ -49,7 +49,7 @@ const userApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLoginMutation,
-  useRegisterMutation, // Export the register mutation hook
+  useRegisterMutation,
   useGetUsersQuery,
   // useGetUserByIdQuery,
   // useLogoutMutation,

@@ -10,7 +10,10 @@ import {
   Tabs,
   Card,
 } from "react-bootstrap";
-import { useLoginMutation } from "./../slices/userApiSlice";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from "./../slices/userApiSlice";
 import "../styles/logreg.css";
 
 const LoginRegisterPage = () => {
@@ -24,6 +27,7 @@ const LoginRegisterPage = () => {
   const [password, setPassword] = useState("");
 
   // register states
+  const [register] = useRegisterMutation();
 
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
@@ -54,26 +58,36 @@ const LoginRegisterPage = () => {
       password,
     };
     console.log("Form Data Submitted:", formData);
-    alert("Logged In !");
     try {
       await login(formData).unwrap();
       console.log("Form Data Submitted:", formData);
-      alert("Logged in!");
+      setTimeout(() => {
+        navigate("/"); // Redirect to the home page ("/")
+      }, 2000);
     } catch (err) {
       console.error("Failed to add property:", err);
       alert("Failed to Logged in.");
     }
   };
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     const formData = {
       username,
-      regEmail,
-      regPassword,
-      regConfirmPassword,
+      email: regEmail,
+      password: regPassword,
+      confirmPassword: regConfirmPassword,
     };
     console.log("Form Data Submitted:", formData);
-    alert("You Have Been Registered !");
+    try {
+      await register(formData).unwrap();
+      console.log("Form Data Submitted:", formData);
+      setTimeout(() => {
+        navigate("/login"); // Redirect to the home page ("/")
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to register:", err);
+      alert("Failed to Register in.");
+    }
   };
   return (
     <div className="overlay-container">
