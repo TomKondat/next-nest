@@ -63,9 +63,13 @@ const LoginRegisterPage = () => {
     console.log("Form Data Submitted:", formData);
     try {
       const userData = await login(formData).unwrap();
-      console.log("Login Successful:", userData);
+
       // Store username in localStorage
+
       localStorage.setItem("username", userData.data.username);
+      localStorage.setItem("isLoggedIn", "true");
+      // Immediately trigger event for Navbar to update
+      window.dispatchEvent(new Event("storage"));
       setTimeout(() => {
         navigate("/");
       }, 2000);
