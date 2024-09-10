@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Container,
@@ -10,30 +10,26 @@ import {
   Tabs,
   Card,
 } from "react-bootstrap";
-import {
-  useLoginMutation,
-  useRegisterMutation,
-} from "./../slices/userApiSlice"; // Import the register mutation
-import AuthContext from "../context/AuthContext";
+import { useLoginMutation } from "./../slices/userApiSlice";
 import "../styles/logreg.css";
 
 const LoginRegisterPage = () => {
-  const { login } = useContext(AuthContext); // Use the login function from AuthContext
   const location = useLocation();
   const navigate = useNavigate();
   const [key, setKey] = useState("login");
 
-  // State for login
+  // login states
+  const [login] = useLoginMutation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // State for register
-  const [regName, setRegName] = useState("");
+  // register states
+
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [regConfirmPassword, setRegConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
 
-  // Set the tab based on the current path
   useEffect(() => {
     if (location.pathname === "/register") {
       setKey("register");
@@ -51,71 +47,40 @@ const LoginRegisterPage = () => {
       navigate("/login");
     }
   };
-
-  const [loginRequest] = useLoginMutation();
-  const [registerRequest] = useRegisterMutation(); // Add the register mutation
-
-  // Handle Login Form Submission
-  const handleLoginSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
       email,
       password,
     };
-
+    console.log("Form Data Submitted:", formData);
+    alert("Logged In !");
     try {
-      await loginRequest(formData).unwrap();
-      console.log("Login Successful:", formData);
-
-      // Call login function from AuthContext
-      login(formData);
-
-      // Wait 1 second before navigating to the homepage
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
+      await login(formData).unwrap();
+      console.log("Form Data Submitted:", formData);
+      alert("Logged in!");
     } catch (err) {
-      console.error("Failed to log in:", err);
-      alert("Failed to log in.");
+      console.error("Failed to add property:", err);
+      alert("Failed to Logged in.");
     }
   };
-
-  // Handle Register Form Submission
-  const handleRegisterSubmit = async (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-
-    if (regPassword !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-
     const formData = {
-      name: regName,
-      email: regEmail,
-      password: regPassword,
+      username,
+      regEmail,
+      regPassword,
+      regConfirmPassword,
     };
-
-    try {
-      await registerRequest(formData).unwrap(); // Send the form data to the API
-      console.log("Registration Successful:", formData);
-
-      // Automatically log in the user after registration
-      login(formData);
-
-      // Wait 1 second before navigating to the homepage
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
-    } catch (err) {
-      console.error("Failed to register:", err);
-      alert("Failed to register.");
-    }
+    console.log("Form Data Submitted:", formData);
+    alert("You Have Been Registered !");
   };
-
   return (
     <div className="overlay-container">
+      {/* Background overlay */}
       <div className="overlay"></div>
 
+      {/* Content */}
       <Container
         fluid
         className="auth-container d-flex justify-content-center align-items-center"
@@ -131,7 +96,7 @@ const LoginRegisterPage = () => {
                   className="mb-3 justify-content-center"
                 >
                   <Tab eventKey="login" title="Login">
-                    <Form onSubmit={handleLoginSubmit}>
+                    <Form onSubmit={handleSubmit}>
                       <Form.Group controlId="formBasicEmail" className="mb-3">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
@@ -163,16 +128,18 @@ const LoginRegisterPage = () => {
                     </Form>
                   </Tab>
 
+                  {/* register form */}
+
                   <Tab eventKey="register" title="Register">
-                    <Form onSubmit={handleRegisterSubmit}>
+                    <Form onSubmit={handleRegister}>
                       <Form.Group controlId="formRegisterName" className="mb-3">
-                        <Form.Label>Full Name</Form.Label>
+                        <Form.Label>UserName</Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Enter your full name"
+                          placeholder="Enter your Username"
                           required
-                          value={regName}
-                          onChange={(e) => setRegName(e.target.value)}
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
                         />
                       </Form.Group>
 
@@ -213,8 +180,10 @@ const LoginRegisterPage = () => {
                           type="password"
                           placeholder="Confirm password"
                           required
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          value={regConfirmPassword}
+                          onChange={(e) =>
+                            setRegConfirmPassword(e.target.value)
+                          }
                         />
                       </Form.Group>
 
