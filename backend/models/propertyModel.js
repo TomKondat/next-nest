@@ -1,6 +1,6 @@
 
-
 const mongoose = require("mongoose");
+const axios = require("axios");
 
 const propertySchema = new mongoose.Schema({
     title: {
@@ -16,9 +16,13 @@ const propertySchema = new mongoose.Schema({
         required: [true, 'The property must have a type'],
     },
     location: {
-        address: {
+        houseNumber: {
             type: String,
-            required: [true, 'The property must have an address']
+            required: [true, 'The property must have a house number']
+        },
+        street: {
+            type: String,
+            required: [true, 'The property must have a street']
         },
         city: {
             type: String,
@@ -27,6 +31,10 @@ const propertySchema = new mongoose.Schema({
         coordinates: {
             lat: { type: Number },
             lng: { type: Number }
+        },
+        zoom: {
+            type: Number,
+            default: 7
         }
     },
     price: {
@@ -82,6 +90,55 @@ const propertySchema = new mongoose.Schema({
     }
 },
     { timestamps: true });
+
+propertySchema.pre('save', async function (next) {
+    if (!this.location.coordinates || !this.location.coordinates.lat || !this.location.coordinates.lng) {
+        try {
+            const fetchCoordinates = async (query) => {
+                const response = await axios.get('https://nominatim.openstreetmap.org/search', {
+                    params: {
+                        q: query,
+                        format: 'json',
+                        limit: 1,
+                    },
+                    headers: {
+                        'User-Agent': 'YourAppName',
+                    },
+                });
+                return response.data;
+            };
+
+            const queries = [
+                `${this.location.houseNumber}, ${this.location.street}, ${this.location.city}, Israel`,
+                `${this.location.street}, ${this.location.city}, Israel`,
+                `${this.location.city}, Israel`,
+                `Jerusalem, Israel`,
+            ];
+            let responseData;
+            for (let i = 0; i < queries.length; i++) {
+                const data = await fetchCoordinates(queries[i]);
+                if (data.length > 0) {
+                    responseData = data;
+                    zoomLevel = (i === 0) ? 17 : (i === 1) ? 16 : (i === 2) ? 13 : 7;
+                    break;
+                }
+            }
+            if (responseData && responseData.length > 0) {
+                const { lat, lon } = responseData[0];
+                this.location.coordinates = {
+                    lat: parseFloat(lat).toFixed(5),
+                    lng: parseFloat(lon).toFixed(5),
+                };
+                this.location.zoom = zoomLevel;
+            } else {
+                throw new Error('No coordinates found for the provided address');
+            }
+        } catch (error) {
+            return next(error);
+        }
+    }
+    next();
+});
 
 
 const Property = mongoose.model("Property", propertySchema);
