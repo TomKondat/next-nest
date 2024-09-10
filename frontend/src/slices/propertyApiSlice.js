@@ -28,7 +28,7 @@ export const propertyApiSlice = apiSlice.injectEndpoints({
     editProperty: builder.mutation({
       query: ({ data, propertyId }) => ({
         url: `${PROPERTY_URL}/${propertyId}`,
-        method: "POST",
+        method: "PATCH",
         body: data,
       }),
       invalidatesTags: ["Property"],

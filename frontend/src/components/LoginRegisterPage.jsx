@@ -10,16 +10,30 @@ import {
   Tabs,
   Card,
 } from "react-bootstrap";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from "./../slices/userApiSlice";
 import "../styles/logreg.css";
 
 const LoginRegisterPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [key, setKey] = useState("login");
+
+  // login states
+  const [login] = useLoginMutation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Set the tab based on the current path
+  // register states
+  const [register] = useRegisterMutation();
+
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regConfirmPassword, setRegConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
+
   useEffect(() => {
     if (location.pathname === "/register") {
       setKey("register");
@@ -37,14 +51,54 @@ const LoginRegisterPage = () => {
       navigate("/login");
     }
   };
-  const handleSubmit = (e) => {
+
+  // Login Submission
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
       email,
       password,
     };
     console.log("Form Data Submitted:", formData);
-    alert("Logged In !");
+    try {
+      const userData = await login(formData).unwrap();
+
+      // Store username in localStorage
+
+      localStorage.setItem("username", userData.data.username);
+      localStorage.setItem("isLoggedIn", "true");
+      // Immediately trigger event for Navbar to update
+      window.dispatchEvent(new Event("storage"));
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to log in:", err);
+      alert("Failed to log in.");
+    }
+  };
+  // Register Submission
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const formData = {
+      username,
+      email: regEmail,
+      password: regPassword,
+      confirmPassword: regConfirmPassword,
+    };
+    console.log("Form Data Submitted:", formData);
+    try {
+      await register(formData).unwrap();
+      console.log("Form Data Submitted:", formData);
+      setTimeout(() => {
+        navigate("/login"); // Redirect to the home page ("/")
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to register:", err);
+      alert("Failed to Register in.");
+    }
   };
   return (
     <div className="overlay-container">
@@ -99,14 +153,18 @@ const LoginRegisterPage = () => {
                     </Form>
                   </Tab>
 
+                  {/* register form */}
+
                   <Tab eventKey="register" title="Register">
-                    <Form>
+                    <Form onSubmit={handleRegister}>
                       <Form.Group controlId="formRegisterName" className="mb-3">
-                        <Form.Label>Full Name</Form.Label>
+                        <Form.Label>UserName</Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Enter your full name"
+                          placeholder="Enter your Username"
                           required
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
                         />
                       </Form.Group>
 
@@ -119,6 +177,8 @@ const LoginRegisterPage = () => {
                           type="email"
                           placeholder="Enter email"
                           required
+                          value={regEmail}
+                          onChange={(e) => setRegEmail(e.target.value)}
                         />
                       </Form.Group>
 
@@ -131,6 +191,8 @@ const LoginRegisterPage = () => {
                           type="password"
                           placeholder="Create password"
                           required
+                          value={regPassword}
+                          onChange={(e) => setRegPassword(e.target.value)}
                         />
                       </Form.Group>
 
@@ -143,6 +205,10 @@ const LoginRegisterPage = () => {
                           type="password"
                           placeholder="Confirm password"
                           required
+                          value={regConfirmPassword}
+                          onChange={(e) =>
+                            setRegConfirmPassword(e.target.value)
+                          }
                         />
                       </Form.Group>
 
