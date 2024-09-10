@@ -51,6 +51,9 @@ const LoginRegisterPage = () => {
       navigate("/login");
     }
   };
+
+  // Login Submission
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
@@ -59,16 +62,24 @@ const LoginRegisterPage = () => {
     };
     console.log("Form Data Submitted:", formData);
     try {
-      await login(formData).unwrap();
-      console.log("Form Data Submitted:", formData);
+      const userData = await login(formData).unwrap();
+
+      // Store username in localStorage
+
+      localStorage.setItem("username", userData.data.username);
+      localStorage.setItem("isLoggedIn", "true");
+      // Immediately trigger event for Navbar to update
+      window.dispatchEvent(new Event("storage"));
       setTimeout(() => {
-        navigate("/"); // Redirect to the home page ("/")
+        navigate("/");
       }, 2000);
     } catch (err) {
-      console.error("Failed to add property:", err);
-      alert("Failed to Logged in.");
+      console.error("Failed to log in:", err);
+      alert("Failed to log in.");
     }
   };
+  // Register Submission
+
   const handleRegister = async (e) => {
     e.preventDefault();
     const formData = {

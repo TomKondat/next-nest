@@ -76,4 +76,27 @@
 }
 .propertypage {
   background-color: rgba(250, 235, 215, 0.735);
+  padding-top: 90px;
+  overflow: auto;
+}
+.editdeletebtn {
+  display: flex;
+  justify-content: end;
+  margin-top: -15px;
+  margin-bottom: 4px;
+}
+.editbtn {
+  margin-right: 10px;
+}
+.carddetail {
+  margin-top: 100px;
+  height: 80%;
+}
+
+.property-detail-image {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
 }
