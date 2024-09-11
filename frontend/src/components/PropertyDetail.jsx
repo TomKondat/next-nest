@@ -14,6 +14,7 @@ import {
   Modal,
   Form,
 } from "react-bootstrap";
+import PropertyMap from "./PropertyMap"; 
 import "../styles/propertyItem.css";
 
 const PropertyDetail = () => {
@@ -126,6 +127,14 @@ const PropertyDetail = () => {
                     Contact the Seller
                   </Button>
                 </Link>
+              </div>
+              <div className="mt-4">
+                <PropertyMap 
+                  latitude={property.location.coordinates.lat} 
+                  longitude={property.location.coordinates.lng} 
+                  zoom={property.location.zoom} 
+                  title={property.title} 
+                />
               </div>
             </Card.Body>
           </Card>
