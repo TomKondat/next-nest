@@ -76,12 +76,11 @@
 }
 .propertypage {
   background-color: rgba(250, 235, 215, 0.735);
-  padding-top: 90px;
-  overflow: auto;
+  padding-top: 100px !important;
 }
 .editdeletebtn {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: -15px;
   margin-bottom: 4px;
 }
@@ -89,7 +88,7 @@
   margin-right: 10px;
 }
 .carddetail {
-  margin-top: 50px;
+  max-width: 100%;
 }
 
 .property-detail-image {
@@ -103,4 +102,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.cardbody {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
