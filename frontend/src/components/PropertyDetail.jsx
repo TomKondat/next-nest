@@ -14,7 +14,7 @@ import {
   Modal,
   Form,
 } from "react-bootstrap";
-import PropertyMap from "./PropertyMap"; 
+import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
 
 const PropertyDetail = () => {
@@ -106,7 +106,7 @@ const PropertyDetail = () => {
               alt={property.title}
               className="property-detail-image"
             />
-            <Card.Body>
+            <Card.Body className="cardbody">
               <Card.Title className="text-center display-5">
                 {property.title}
               </Card.Title>
@@ -128,12 +128,12 @@ const PropertyDetail = () => {
                   </Button>
                 </Link>
               </div>
-              <div className="mt-4">
-                <PropertyMap 
-                  latitude={property.location.coordinates.lat} 
-                  longitude={property.location.coordinates.lng} 
-                  zoom={property.location.zoom} 
-                  title={property.title} 
+              <div className="mt-4 map-wrapper">
+                <PropertyMap
+                  latitude={property.location.coordinates.lat}
+                  longitude={property.location.coordinates.lng}
+                  zoom={property.location.zoom}
+                  title={property.title}
                 />
               </div>
             </Card.Body>
