@@ -12,14 +12,14 @@ router.route("/register").post(authControllers.registerUser);
 router.route("/login").post(authControllers.login);
 router.route("/logout").post(authControllers.logout);
 
-//  FIX WHEN NEEDED------------>>>>>>
+router.route("/update/:id")
+    .patch(authControllers.protect, authControllers.restrictByRole("agent"), authControllers.updateUser);
+router.route("/delete/:id")
+    .delete(authControllers.protect, authControllers.restrictByRole("agent"), authControllers.deleteUser);
 
+//  FIX WHEN NEEDED------------>>>>>>
 // router.post('/forgotPassword', authControllers.forgotPassword)
 // router.post('/resetPassword/:plainResetToken', authControllers.resetPassword)
-// router
-//     .route("/update/:id")
-//     .patch(authControllers.protect, authControllers.restrictByRole("agent"), authControllers.updateUser);
-router
-    .route("/delete/:id")
-    .delete(authControllers.protect, authControllers.restrictByRole("agent"), authControllers.deleteUser);
+// router    
+
 module.exports = router;

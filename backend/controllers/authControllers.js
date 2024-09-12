@@ -119,24 +119,26 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
     });
 });
 
-//  FIX WHEN NEED------------>>>>>>
-// exports.updateUser = asyncHandler(async (req, res, next) => {
-//   if (!req.body || Object.keys(req.body).length === 0) {
-//     return next(new AppError(400, "No data provided to update the user"));
-//   }
-//   const editedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-//     new: true,
-//     runValidators: true,
-//   }).lean();
+exports.updateUser = asyncHandler(async (req, res, next) => {
+    if (!req.body || Object.keys(req.body).length === 0) {
+        return next(new AppError(400, "No data provided to update the user"));
+    }
+    const editedUser = await User.findByIdAndUpdate(req.params.id, {
+        username: req.body.newUsername,
+        email: req.body.newEmail,
+    }, {
+        new: true,
+        runValidators: true,
+    }).lean();
+    if (!editedUser) {
+        return next(new AppError(404, "User not found"));
+    }
+    res.status(200).json({
+        status: "success",
+        data: {
+            user: editedUser,
+        },
+    });
+});
 
-//   if (!editedUser) {
-//     return next(new AppError(404, "User not found"));
-//   }
-//   res.status(200).json({
-//     status: "success",
-//     data: {
-//       user: editedUser,
-//     },
-//   });
-// });
 

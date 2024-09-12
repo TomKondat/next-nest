@@ -1,21 +1,22 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from 'leaflet';
-import markerIcon from '../../images/marker-icon.png';
+import L from "leaflet";
+import markerIcon from "../../images/marker-icon.png";
+import "../styles/map.css";
 
 const customIcon = new L.Icon({
-  iconUrl: markerIcon, 
+  iconUrl: markerIcon,
   iconSize: [50, 50],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
 });
-const PropertyMap = ({ latitude, longitude, zoom, title }) => {  
+const PropertyMap = ({ latitude, longitude, zoom, title }) => {
   return (
     <MapContainer
       center={[latitude, longitude]}
       zoom={zoom}
-      style={{ height: "350px", width: "100%" }}
       attributionControl={false}
+      className="mapcontainer"
     >
       <TileLayer
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
