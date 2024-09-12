@@ -30,11 +30,19 @@ exports.getUserById = asyncHandler(async (req, res, next) => {
 
 exports.getManagedProperties = asyncHandler(async (req, res, next) => {
   const userId = req.user._id;
-
-  const agent = await User.findById(userId).populate('managedProperties');
+  let agent = await User.findById(userId).populate('managedProperties');
   if (!agent) {
     return next(new AppError(404, "Agent not found"));
   }
+  agent.managedProperties = agent.managedProperties.filter(property => property !== null);
+  if (agent.managedProperties.length === 0) {
+    return res.status(200).json({
+      status: "success",
+      message: "No managed properties found for this agent"
+    });
+  }
+  await agent.save(); // Update the user managedProperties array, removeing non-existent property ref
+
   res.status(200).json({
     status: "success",
     data: {
@@ -45,11 +53,19 @@ exports.getManagedProperties = asyncHandler(async (req, res, next) => {
 
 exports.getSavedProperties = asyncHandler(async (req, res, next) => {
   const userId = req.user._id;
-
-  const buyer = await User.findById(userId).populate('savedProperties');
+  let buyer = await User.findById(userId).populate('savedProperties');
   if (!buyer) {
     return next(new AppError(404, "Buyer not found"));
   }
+  buyer.savedProperties = buyer.savedProperties.filter(property => property !== null);
+  if (buyer.savedProperties.length === 0) {
+    return res.status(200).json({
+      status: "success",
+      message: "No saved properties found for this buyer"
+    });
+  }
+  await buyer.save(); // Update the user savedProperties array, removeing non-existent property ref
+
   res.status(200).json({
     status: "success",
     data: {
