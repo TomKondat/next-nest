@@ -41,7 +41,8 @@ exports.getManagedProperties = asyncHandler(async (req, res, next) => {
       message: "No managed properties found for this agent"
     });
   }
-  await agent.save(); // Update the user managedProperties array, removeing non-existent property ref
+  // FIX confirmPassword needed when UPDATE user
+  // await agent.save(); // Update the user managedProperties array, removeing non-existent property ref
 
   res.status(200).json({
     status: "success",
@@ -64,7 +65,8 @@ exports.getSavedProperties = asyncHandler(async (req, res, next) => {
       message: "No saved properties found for this buyer"
     });
   }
-  await buyer.save(); // Update the user savedProperties array, removeing non-existent property ref
+  // FIX confirmPassword needed when UPDATE user
+  // await buyer.save(); // Update the user savedProperties array, removeing non-existent property ref
 
   res.status(200).json({
     status: "success",
