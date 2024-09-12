@@ -7,7 +7,8 @@ const router = Router();
 router
   .route("/")
   .get(propertyControllers.getProperties)
-  .post(authControllers.protect, authControllers.restrictByRole("agent"), propertyControllers.addProperty);
+  .post(authControllers.protect, authControllers.restrictByRole("agent"), propertyControllers.uploadPropertyImage ,propertyControllers.addProperty);
+
 
 router
   .route("/:id")

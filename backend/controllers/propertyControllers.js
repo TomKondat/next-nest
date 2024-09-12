@@ -1,8 +1,53 @@
 const Property = require("../models/propertyModel.js");
 const asyncHandler = require("express-async-handler");
+const express = require('express');
+const Router = express.Router;
+const router = Router();
 const AppError = require("./../utils/AppError");
+const multer = require("multer");
+const sharp = require("sharp");
+
+
+const memoryStorage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  if (!file.mimetype.startsWith("image"))
+    cb(new AppError(404, "The file is not type image"), false);
+  else cb(null, true);
+};
+const upload = multer({ memoryStorage, fileFilter });
+
+exports.uploadPropertyImage = upload.single("image");
 
 exports.addProperty = asyncHandler(async (req, res, next) => {
+
+    console.log(req.body)
+    //onst { title,price, description,area,propertyType,agent,location} = req.body;
+    const { title, propertyType, location, price, description, area, agent } = req.body;
+    //if (!title || !propertyType || !price || !description || !location || !area || !agent) {
+        if (!title || !propertyType || !price || !description || !area ) {
+        return next(new AppError(400, 'Please provide all the required fields'));
+    }
+    //console.log("enter")
+    const newProperty = await Property.create(req.body);
+    console.log(newProperty)
+    if (req.file) {
+        console.log(req.file)
+        
+        const fileName = `property-${Date.now()}-${newProperty._id}.jpg`;
+        sharp(req.file.buffer)
+          .resize(500, 300)
+          .toFormat("jpeg")
+          .jpeg({ quality: 80 })
+          .toFile(`public/img/properties/${fileName}`);
+          newProperty.images = `img/properties/${fileName}`;
+        await newProperty.save();
+      }
+    res.status(201).json({
+        status: 'success',
+        property: newProperty
+    });
+
   const { title, propertyType, location, price, description, area, agent } =
     req.body;
   if (!title || !propertyType || !price || !description || !location || !area) {
@@ -13,6 +58,7 @@ exports.addProperty = asyncHandler(async (req, res, next) => {
     status: "success",
     property: newProperty,
   });
+
 });
 
 //actual getProperties---------->>>>>
