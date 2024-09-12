@@ -1,13 +1,79 @@
 import { useState } from "react";
-import { Container, Row, Col, Card, Button, Image } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Image,
+  Modal,
+  Form,
+} from "react-bootstrap";
+import { useUpdateUserProfileMutation } from "../slices/userApiSlice"; // Import the Redux mutation
 import "../styles/profilePage.css";
 
 const ProfilePage = () => {
   // State to toggle between listings and sold items
   const [showListings, setShowListings] = useState(true);
 
+  // State to handle modal visibility
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  // Profile state
+  const [username, setUsername] = useState("Michael");
+  const [email, setEmail] = useState("michael.trust@email.com");
+
+  // Separate modal state to store edits before submission
+  const [tempUsername, setTempUsername] = useState(username);
+  const [tempEmail, setTempEmail] = useState(email);
+  const [tempPassword, setTempPassword] = useState(""); // Password is only temporary and not stored until save
+
+  // Redux mutation to update the user profile
+  const [updateUserProfile, { isLoading, isSuccess, isError }] =
+    useUpdateUserProfileMutation();
+
+  // Handle the modal visibility
+  const handleShow = () => {
+    setTempUsername(username); // Set current username to modal state
+    setTempEmail(email); // Set current email to modal state
+    setShowEditModal(true);
+  };
+  const handleClose = () => setShowEditModal(false);
+
+  // Handle form submission (update the user data)
+  const handleSaveChanges = async () => {
+    try {
+      const updatedUserData = {
+        username: tempUsername, // Use modal state value
+        email: tempEmail, // Use modal state value
+        ...(tempPassword && { password: tempPassword }), // Only include password if it's provided
+      };
+
+      // Update profile through Redux mutation
+      await updateUserProfile(updatedUserData).unwrap();
+
+      // If successful, update the main state and close modal
+      setUsername(tempUsername);
+      setEmail(tempEmail);
+
+      alert("Profile updated successfully!");
+    } catch (error) {
+      alert("Failed to update profile. Please try again.");
+      console.error(error);
+    }
+    setShowEditModal(false);
+  };
+
   return (
     <Container className="profile-page border-container">
+      {/* Edit Button to trigger the modal */}
+      <div className="d-flex justify-content-end">
+        <Button variant="outline-danger" onClick={handleShow}>
+          Edit
+        </Button>
+      </div>
+
+      {/* User Info */}
       <Row className="justify-content-center">
         <Col xs={12} md={8} className="text-center">
           <div className="profile-header">
@@ -16,40 +82,13 @@ const ProfilePage = () => {
               roundedCircle
               className="profile-image"
             />
-            <h2 className="profile-name">Michael</h2>
-            <p className="profile-email">michael.trust@email.com</p>
+            <h2 className="profile-name">{username}</h2>
+            <p className="profile-email">{email}</p>
           </div>
         </Col>
       </Row>
 
-      <Row className="text-center mb-4 ">
-        <Col xs={4}>
-          <Card className="stats-card card-body-profile">
-            <Card.Body>
-              <h3>5.0</h3>
-              <p className="rating-stars">★★★★★</p>
-              <p>Rating</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={4}>
-          <Card className="stats-card card-body-profile">
-            <Card.Body>
-              <h3>235</h3>
-              <p>Reviews</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={4}>
-          <Card className="stats-card card-body-profile">
-            <Card.Body>
-              <h3>112</h3>
-              <p>Sold</p>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-
+      {/* Listings / Sold Toggle Buttons */}
       <Row>
         <Col className="text-center mb-4">
           <Button
@@ -69,6 +108,7 @@ const ProfilePage = () => {
         </Col>
       </Row>
 
+      {/* Listings or Sold Items */}
       <Row className="listings-section">
         {showListings ? (
           <>
@@ -149,6 +189,66 @@ const ProfilePage = () => {
           </>
         )}
       </Row>
+
+      {/* ---------------- Edit Modal ---------------- */}
+      <Modal show={showEditModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formUsername" className="mb-3">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter username"
+                value={tempUsername} // Using modal state value
+                onChange={(e) => setTempUsername(e.target.value)} // Temporarily store
+              />
+            </Form.Group>
+            <Form.Group controlId="formEmail" className="mb-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={tempEmail} // Using modal state value
+                onChange={(e) => setTempEmail(e.target.value)} // Temporarily store
+              />
+            </Form.Group>
+            <Form.Group controlId="formPassword" className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter password"
+                value={tempPassword} // Using modal state value
+                onChange={(e) => setTempPassword(e.target.value)} // Temporarily store
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleSaveChanges}
+            disabled={isLoading}
+          >
+            {isLoading ? "Saving..." : "Save Changes"}
+          </Button>
+        </Modal.Footer>
+        {isError && (
+          <p className="text-danger text-center">
+            Failed to update profile. Please try again.
+          </p>
+        )}
+        {isSuccess && (
+          <p className="text-success text-center">
+            Profile updated successfully!
+          </p>
+        )}
+      </Modal>
     </Container>
   );
 };
