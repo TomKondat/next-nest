@@ -26,7 +26,7 @@ const PropertyList = () => {
               {/* Responsive sizes */}
               <PropertyItem
                 id={property._id}
-                image={property.image}
+                images={property.images}
                 title={property.title}
                 price={property.price}
               />

@@ -20,46 +20,41 @@ const upload = multer({ memoryStorage, fileFilter });
 exports.uploadPropertyImage = upload.single("image");
 
 exports.addProperty = asyncHandler(async (req, res, next) => {
-
-    console.log(req.body)
-    //onst { title,price, description,area,propertyType,agent,location} = req.body;
-    const { title, propertyType, location, price, description, area, agent } = req.body;
-    //if (!title || !propertyType || !price || !description || !location || !area || !agent) {
-        if (!title || !propertyType || !price || !description || !area ) {
-        return next(new AppError(400, 'Please provide all the required fields'));
+  console.log(req.body);
+  req.body.agent={
+    "name": "John Doe",
+    "contact": {
+        "phone": "555-123-4567",
+        "email": "johndoe@example.com"
     }
-    //console.log("enter")
-    const newProperty = await Property.create(req.body);
-    console.log(newProperty)
-    if (req.file) {
-        console.log(req.file)
-        
-        const fileName = `property-${Date.now()}-${newProperty._id}.jpg`;
-        sharp(req.file.buffer)
+}
+  const { title, propertyType, location, price, description, area,agent } = req.body;
+  if (!title || !propertyType || !price || !description || !area || !location || !agent) {
+      return next(new AppError(400, 'Please provide all the required fields'));
+  }
+  const newProperty = await Property.create(req.body);
+  console.log(newProperty);
+
+  if (req.file) {
+      console.log(req.file);
+
+      const fileName = `property-${Date.now()}-${newProperty._id}.jpg`;
+      await sharp(req.file.buffer)
           .resize(500, 300)
           .toFormat("jpeg")
           .jpeg({ quality: 80 })
           .toFile(`public/img/properties/${fileName}`);
-          newProperty.images = `img/properties/${fileName}`;
-        await newProperty.save();
-      }
-    res.status(201).json({
-        status: 'success',
-        property: newProperty
-    });
 
-  const { title, propertyType, location, price, description, area, agent } =
-    req.body;
-  if (!title || !propertyType || !price || !description || !location || !area) {
-    return next(new AppError(400, "Please provide all the required fields"));
+
+      newProperty.images = `img/properties/${fileName}`;
+      await newProperty.save();
   }
-  const newProperty = await Property.create(req.body);
   res.status(201).json({
-    status: "success",
-    property: newProperty,
+      status: 'success',
+      property: newProperty
   });
-
 });
+
 
 //actual getProperties---------->>>>>
 // exports.getProperties = asyncHandler(async (req, res, next) => {

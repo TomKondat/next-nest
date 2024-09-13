@@ -18,6 +18,7 @@ const AddProperty = () => {
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [area, setArea] = useState("");
+  const [images, setImages] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,6 +36,7 @@ const AddProperty = () => {
       bedrooms,
       bathrooms,
       area,
+      images,
     };
     console.log(formData);
 
@@ -177,6 +179,17 @@ const AddProperty = () => {
                         onChange={(e) => setArea(e.target.value)}
                       />
                     </Form.Group>
+
+                    <Form.Group controlId="formImage" className="mb-3">
+                      <Form.Label>Image</Form.Label>
+                      <Form.Control
+                        type= "file"
+                        placeholder="Enter image"
+                        value={images}
+                        onChange={(e) => setImages(e.target.value)}
+                      />
+                    </Form.Group>
+
                   </Col>
                 </Row>
 
