@@ -9,7 +9,8 @@ import AddProperty from "./components/AddProperties";
 import ProfilePage from "./components/ProfilePage";
 import HomePage from "./components/HomePage";
 import PropertyDetail from "./components/PropertyDetail";
-import 'leaflet/dist/leaflet.css';
+import SavedProperties from "./components/SavedProperties";
+import "leaflet/dist/leaflet.css";
 import "./index.css";
 
 const App = () => (
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/addproperties" element={<AddProperty />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/properties/:id" element={<PropertyDetail />} />{" "}
+          <Route path="/SavedProperties" element={<SavedProperties />} />
         </Routes>
       </div>
       <Footer />

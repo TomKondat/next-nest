@@ -60,7 +60,6 @@ const LoginRegisterPage = () => {
       email,
       password,
     };
-    console.log("Form Data Submitted:", formData);
     try {
       const userData = await login(formData).unwrap();
 
@@ -88,7 +87,6 @@ const LoginRegisterPage = () => {
       password: regPassword,
       confirmPassword: regConfirmPassword,
     };
-    console.log("Form Data Submitted:", formData);
     try {
       await register(formData).unwrap();
       console.log("Form Data Submitted:", formData);
