@@ -2,6 +2,7 @@
 const Property = require("../models/propertyModel.js");
 const asyncHandler = require("express-async-handler");
 const AppError = require("./../utils/AppError");
+const APImethods = require('../utils/APImethods.js')
 
 exports.addProperty = asyncHandler(async (req, res, next) => {
     const { title, propertyType, location, price, description, area, agent } = req.body;
@@ -15,34 +16,23 @@ exports.addProperty = asyncHandler(async (req, res, next) => {
     });
 });
 
-//actual getProperties---------->>>>>
-// exports.getProperties = asyncHandler(async (req, res, next) => {
-//     const properties = await Property.find();
-//     if (!properties || properties.length === 0) {
-//         return next(new AppError(404, 'No properties found'));
-//     }
-
-//     res.status(200).json({
-//         status: 'success',
-//         properties
-//     });
-// });
-
-// getProperties for debugging---------->>>>>
 exports.getProperties = asyncHandler(async (req, res, next) => {
-    const properties = await Property.find();
+    let filter = {};
+    if (req.params.propertyId) {
+        filter = { _id: req.params.propertyId };
+    }
+    const apimethods = new APImethods(Property.find(filter), req.query);
+    apimethods.filter().sort().selectFields().makePagination();
+
+    const properties = await apimethods.query;
     if (!properties || properties.length === 0) {
         return next(new AppError(404, 'No properties found'));
     }
-
-    const reorderedProperties = properties.map(property => {
-        const { _id, ...rest } = property.toObject();
-        return { _id, ...rest };
-    });
-
+    const totalProperties = await Property.countDocuments(filter);
     res.status(200).json({
         status: 'success',
-        properties: reorderedProperties
+        totalProperties,
+        properties
     });
 });
 
