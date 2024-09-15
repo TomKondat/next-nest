@@ -5,12 +5,18 @@ import logo from "../../images/NNlogo.png";
 import "../styles/navbar.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useLogoutMutation } from "./../slices/userApiSlice";
+import { useSelector } from "react-redux";
 
 const NavbarComponent = () => {
   const [logout] = useLogoutMutation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [showElements, setShowElements] = useState(false); // State to manage timeout for showing elements
+
+  // Get userId from Redux store
+  const user = useSelector((state) => state.user);
+
+  const userId = user ? user.userId : null;
 
   // Function to check login status from localStorage
   const checkLoginStatus = () => {
@@ -112,7 +118,10 @@ const NavbarComponent = () => {
                   </h5>
                   {/* Profile link only visible when logged in */}
                   <Nav className="me-2">
-                    <Nav.Link as={Link} to="/profile">
+                    <Nav.Link
+                      as={Link}
+                      to={userId ? `/profile/${userId}` : "#"}
+                    >
                       <i
                         className="bi bi-person-circle"
                         style={{

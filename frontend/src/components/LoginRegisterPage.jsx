@@ -14,11 +14,14 @@ import {
   useLoginMutation,
   useRegisterMutation,
 } from "./../slices/userApiSlice";
+import { useDispatch } from "react-redux";
+import { setUser } from "./../slices/userSlice";
 import "../styles/logreg.css";
 
 const LoginRegisterPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [key, setKey] = useState("login");
 
   // login states
@@ -53,7 +56,6 @@ const LoginRegisterPage = () => {
   };
 
   // Login Submission
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
@@ -65,9 +67,17 @@ const LoginRegisterPage = () => {
       const userData = await login(formData).unwrap();
 
       // Store username in localStorage
-
       localStorage.setItem("username", userData.data.username);
       localStorage.setItem("isLoggedIn", "true");
+
+      // Dispatch setUser action to update Redux store
+      dispatch(
+        setUser({
+          userId: userData.data.userId,
+          username: userData.data.username,
+        })
+      );
+
       // Immediately trigger event for Navbar to update
       window.dispatchEvent(new Event("storage"));
       setTimeout(() => {
@@ -78,8 +88,8 @@ const LoginRegisterPage = () => {
       alert("Failed to log in.");
     }
   };
-  // Register Submission
 
+  // Register Submission
   const handleRegister = async (e) => {
     e.preventDefault();
     const formData = {
@@ -100,6 +110,7 @@ const LoginRegisterPage = () => {
       alert("Failed to Register in.");
     }
   };
+
   return (
     <div className="overlay-container">
       {/* Background overlay */}
@@ -154,7 +165,6 @@ const LoginRegisterPage = () => {
                   </Tab>
 
                   {/* register form */}
-
                   <Tab eventKey="register" title="Register">
                     <Form onSubmit={handleRegister}>
                       <Form.Group controlId="formRegisterName" className="mb-3">
