@@ -44,6 +44,13 @@ const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    // Saved user properties
+
+    getSavedPropertiesById: builder.query({
+      query: () => ({
+        url: `${USER_URL}/get-saved-properties`,
+      }),
+    }),
   }),
 });
 
@@ -52,4 +59,5 @@ export const {
   useRegisterMutation,
   useLogoutMutation,
   useUpdateUserProfileMutation,
+  useGetSavedPropertiesByIdQuery,
 } = userApiSlice;
