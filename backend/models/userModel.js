@@ -47,21 +47,18 @@ const userSchema = new mongoose.Schema(
       },
       default: "buyer",
     },
-
     managedProperties: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "Property",
       },
     ],
-
     savedProperties: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "Property",
       },
     ],
-
     passwordResetToken: String,
     passwordResetExpires: Date,
     passwordChangedAt: Date,
