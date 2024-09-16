@@ -85,6 +85,9 @@ const NavbarComponent = () => {
             <Nav.Link as={Link} to="/addproperties">
               Add Property
             </Nav.Link>
+            <Nav.Link as={Link} to="/SavedProperties">
+              Saved Properties
+            </Nav.Link>
           </Nav>
 
           <Nav>
