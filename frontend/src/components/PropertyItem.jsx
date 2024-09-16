@@ -9,11 +9,7 @@ const PropertyItem = (props) => {
         <div className="image-wrapper">
           <Card.Img
             variant="top"
-            src={
-              props.image
-                ? props.image
-                : "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko="
-            }
+            src={props.images[0]}
             alt={props.title ? props.title : "No title available"}
             className="property-image"
           />

@@ -1,33 +1,56 @@
 import { useState } from "react";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
+import { useAddPropertyMutation } from "../slices/propertyApiSlice";
+import { useNavigate } from "react-router-dom"; // Import useNavigate to redirect
 import "../styles/addProperty.css";
 
 const AddProperty = () => {
+  const navigate = useNavigate(); // Initialize navigate function
+  const [addProperty, { isLoading, isSuccess, isError, error }] =
+    useAddPropertyMutation();
   const [title, setTitle] = useState("");
   const [propertyType, setPropertyType] = useState("");
-  const [address, setAddress] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [area, setArea] = useState("");
+  const [images, setImages] = useState([]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formData = {
       title,
       propertyType,
-      address,
-      city,
+      location: {
+        houseNumber,
+        street,
+        city,
+      },
       price,
       description,
       bedrooms,
       bathrooms,
       area,
+      images,
     };
-    console.log("Form Data Submitted:", formData);
-    alert("Property has been added!");
+    console.log(formData);
+
+    try {
+      // Call the addProperty mutation with the form data
+      await addProperty(formData).unwrap();
+      alert("Property added successfully!");
+
+      // Redirect to the homepage after successful submission
+      navigate("/");
+    } catch (err) {
+      console.error("Failed to add property:", err);
+      alert("Error adding property. Please try again.");
+    }
   };
 
   return (
@@ -62,19 +85,31 @@ const AddProperty = () => {
                         <option value="" disabled hidden>
                           Choose Property Type
                         </option>
-                        <option value="Residential">Residential</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Land">Land</option>
+                        <option value="residential">Residential</option>
+                        <option value="commercial">Commercial</option>
+                        <option value="industrial">Industrial</option>
+                        <option value="land">Land</option>
                       </Form.Control>
                     </Form.Group>
 
-                    <Form.Group controlId="formAddress" className="mb-3">
-                      <Form.Label>Address</Form.Label>
+                    <Form.Group controlId="formHouseNumber" className="mb-3">
+                      <Form.Label>House Number</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="Enter address"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="Enter house number"
+                        value={houseNumber}
+                        onChange={(e) => setHouseNumber(e.target.value)}
+                        required
+                      />
+                    </Form.Group>
+
+                    <Form.Group controlId="formStreet" className="mb-3">
+                      <Form.Label>Street</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Enter street"
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
                         required
                       />
                     </Form.Group>
@@ -89,6 +124,7 @@ const AddProperty = () => {
                         required
                       />
                     </Form.Group>
+
                     <Form.Group controlId="formDescription" className="mb-3">
                       <Form.Label>Description</Form.Label>
                       <Form.Control
@@ -97,6 +133,7 @@ const AddProperty = () => {
                         placeholder="Enter description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                        required
                       />
                     </Form.Group>
                   </Col>
@@ -142,14 +179,36 @@ const AddProperty = () => {
                         onChange={(e) => setArea(e.target.value)}
                       />
                     </Form.Group>
+
+                    <Form.Group controlId="formImage" className="mb-3">
+                      <Form.Label>Image</Form.Label>
+                      <Form.Control
+                        type= "file"
+                        placeholder="Enter image"
+                        value={images}
+                        onChange={(e) => setImages(e.target.value)}
+                      />
+                    </Form.Group>
+
                   </Col>
                 </Row>
 
                 <div className="d-flex justify-content-center mt-4">
                   <Button variant="primary" type="submit" className="w-50">
-                    Add Property
+                    {isLoading ? "Adding..." : "Add Property"}
                   </Button>
                 </div>
+
+                {isError && (
+                  <div className="text-danger mt-3">
+                    {error?.data?.message || "Something went wrong"}
+                  </div>
+                )}
+                {isSuccess && (
+                  <div className="text-success mt-3">
+                    Property added successfully!
+                  </div>
+                )}
               </Form>
             </Card.Body>
           </Card>

@@ -1,9 +1,10 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import markerIcon from "../../images/marker-icon.png";
+import "../styles/map.css";
 
 const customIcon = new L.Icon({
-  iconUrl: markerIcon, 
+  iconUrl: markerIcon,
   iconSize: [50, 50],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -46,6 +47,7 @@ const PropertyMap = ({ latitude, longitude, zoom, title }) => {
       zoom={zoom}
       style={{ height: "350px", width: "100%", position: "relative" }} 
       attributionControl={false}
+      className="mapcontainer"
     >
       <RecenterButton latitude={latitude} longitude={longitude} zoom={zoom} />
       <TileLayer
