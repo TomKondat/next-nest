@@ -65,11 +65,12 @@ exports.getSavedProperties = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new AppError(404, "user not found"));
   }
-  const userManagedPropertiesLength = user.managedProperties.length
+  const userSavedPropertiesLength = user.savedProperties.length
+
   await user.populate('savedProperties');
 
   const validProperties = user.savedProperties.filter(property => property !== null);
-  if (validProperties.length !== userManagedPropertiesLength) {
+  if (validProperties.length !== userSavedPropertiesLength) {
     await User.findByIdAndUpdate(userId, {
       savedProperties: validProperties.map(property => property._id),
     });
