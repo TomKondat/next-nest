@@ -24,8 +24,18 @@ exports.addProperty = asyncHandler(async (req, res, next) => {
     if (req.user.role !== "agent") {
         return next(new AppError(403, "Only agents can add properties"));
     }
+
+    console.log(`12 ${req.file}`);
+  req.body.agent={
+    "name": "John Doe",
+    "contact": {
+        "phone": "555-123-4567",
+        "email": "johndoe@example.com"
+    }
+}
     const { title, propertyType, location, price, description, area, agent } = req.body;
-    if (!title || !propertyType || !price || !description || !area || !location || !agent) {
+    console.log( agent ) 
+    if (!title || !propertyType || !price || !description || !area ) {
         return next(new AppError(400, 'Please provide all the required fields'));
     }
     req.body.agent = {
