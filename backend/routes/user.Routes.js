@@ -19,6 +19,9 @@ router.route("/delete-from-managed-properties/:propertyId")
 router.route("/delete-from-saved-properties/:propertyId")
     .delete(authControllers.protect, authControllers.restrictByRole("buyer"), userControllers.deleteFromSavedProperties);
 
+router.route("/get-user-info")
+    .get(authControllers.protect, userControllers.getUserInfo);
+
 router.route("/:id")
     .get(/* authControllers.restrictByRole("agent"), */ userControllers.getUserById)
     .patch(authControllers.protect, authControllers.restrictByRole("agent"), authControllers.updateUser)

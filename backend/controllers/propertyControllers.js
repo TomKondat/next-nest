@@ -16,37 +16,37 @@ const fileFilter = (req, file, cb) => {
     else cb(null, true);
 };
 const upload = multer({ memoryStorage, fileFilter });
-
 exports.uploadPropertyImage = upload.single("image");
+
 const APImethods = require('../utils/APImethods.js')
 
 exports.addProperty = asyncHandler(async (req, res, next) => {
-    console.log(req.body);
-    req.body.agent = {
-        "name": "John Doe",
-        "contact": {
-            "phone": "555-123-4567",
-            "email": "johndoe@example.com"
-        }
+    if (req.user.role !== "agent") {
+        return next(new AppError(403, "Only agents can add properties"));
     }
     const { title, propertyType, location, price, description, area, agent } = req.body;
     if (!title || !propertyType || !price || !description || !area || !location || !agent) {
         return next(new AppError(400, 'Please provide all the required fields'));
     }
+    req.body.agent = {
+        name: req.user.username,
+        contact: {
+            phone: req.user.phone,
+            email: req.user.email,
+        }
+    }
     const newProperty = await Property.create(req.body);
-    console.log(newProperty);
+
+    req.user.managedProperties.push(newProperty._id);
+    await req.user.save({ validateBeforeSave: false });
 
     if (req.file) {
-        console.log(req.file);
-
         const fileName = `property-${Date.now()}-${newProperty._id}.jpg`;
         await sharp(req.file.buffer)
             .resize(500, 300)
             .toFormat("jpeg")
             .jpeg({ quality: 80 })
             .toFile(`public/img/properties/${fileName}`);
-
-
         newProperty.images = `img/properties/${fileName}`;
         await newProperty.save();
     }
