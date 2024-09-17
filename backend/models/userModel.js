@@ -1,8 +1,8 @@
-
 const mongoose = require("mongoose");
 const validator = require("validator");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
+const AppError = require("../utils/AppError");
 
 const userSchema = new mongoose.Schema(
   {
@@ -47,6 +47,9 @@ const userSchema = new mongoose.Schema(
       },
       default: "buyer",
     },
+    phone: {
+      type: String,
+    },
     managedProperties: [
       {
         type: mongoose.Schema.ObjectId,
@@ -68,6 +71,12 @@ const userSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+userSchema.post("save", function (error, doc, next) {
+  if (error.name === "MongoServerError" && error.code === 11000) {
+    return next(new AppError(400, "Email already exists. Please use another one."));
+  }
+  next();
+});
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
@@ -107,4 +116,3 @@ userSchema.virtual("properties", {
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
-

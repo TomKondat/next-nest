@@ -78,22 +78,22 @@ const propertySchema = new mongoose.Schema(
       },
       default: "available",
     },
-    // agent: {
-    //     name: {
-    //         type: String,
-    //         required: [true, 'The property must have an agent name']
-    //     },
-    //     contact: {
-    //         phone: {
-    //             type: String,
-    //             required: [true, 'The property must have an agent contact phone']
-    //         },
-    //         email: {
-    //             type: String,
-    //             required: [true, 'The property must have an agent contact email']
-    //         }
-    //     }
-    // },
+    agent: {
+      name: {
+        type: String,
+        required: [true, 'The property must have an agent name']
+      },
+      contact: {
+        phone: {
+          type: String,
+          required: [true, 'The property must have an agent contact phone']
+        },
+        email: {
+          type: String,
+          required: [true, 'The property must have an agent contact email']
+        }
+      }
+    },
     // virtualTour: {
     //   type: String,
     // },

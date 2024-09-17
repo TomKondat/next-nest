@@ -6,12 +6,12 @@ const { promisify } = require("util");
 const asyncHandler = require("express-async-handler");
 
 exports.registerUser = asyncHandler(async (req, res, next) => {
-    const { username, email, password, confirmPassword } = req.body;
+    const { username, email, phone, password, confirmPassword } = req.body;
     if (!email || !password || !confirmPassword || !username) {
         return next(new AppError(403, "Please fill all the fields"));
     }
 
-    const newUser = await User.create({ username, email, password, confirmPassword });
+    const newUser = await User.create({ username, email, phone, password, confirmPassword });
 
     res.status(201).json({
         status: "success",
@@ -20,6 +20,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
             user: {
                 username: newUser.username,
                 email: newUser.email,
+                phone: newUser.phone,
                 userId: newUser._id
             }
         }

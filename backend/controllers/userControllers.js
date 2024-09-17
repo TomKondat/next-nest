@@ -87,6 +87,7 @@ exports.getSavedProperties = asyncHandler(async (req, res, next) => {
     },
   });
 });
+
 exports.addManagedProperty = asyncHandler(async (req, res, next) => {
   const { propertyId } = req.params;
   const userId = req.user._id;
@@ -135,6 +136,28 @@ exports.addSavedProperty = asyncHandler(async (req, res, next) => {
     data: {
       user: updatedUser
     }
+  });
+});
+
+exports.getUserInfo = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id).select('_id username email phone role managedProperties savedProperties');
+  if (!user) {
+    return next(new AppError(404, 'User not found'));
+  }
+  const userInfo = {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    role: user.role,
+    phone: user.phone
+  };
+  (user.role === 'agent') ? userInfo.managedProperties = user.managedProperties
+    : userInfo.savedProperties = user.savedProperties
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: userInfo,
+    },
   });
 });
 
