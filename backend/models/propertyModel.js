@@ -86,7 +86,6 @@ const propertySchema = new mongoose.Schema(
       contact: {
         phone: {
           type: String,
-          required: [true, 'The property must have an agent contact phone']
         },
         email: {
           type: String,
