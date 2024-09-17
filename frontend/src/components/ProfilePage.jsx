@@ -9,12 +9,15 @@ import {
   Modal,
   Form,
 } from "react-bootstrap";
-import { useGetUserInfoQuery } from "../slices/userApiSlice";
+import {
+  useGetUserInfoQuery,
+  useUpdateUserProfileMutation,
+} from "../slices/userApiSlice";
 import "../styles/profilePage.css";
 
 const ProfilePage = () => {
   const { data, error, isLoading } = useGetUserInfoQuery();
-  console.log(data?.data.user.username);
+  const [editUser] = useUpdateUserProfileMutation();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -25,7 +28,19 @@ const ProfilePage = () => {
 
   const handleSaveChanges = async (e) => {
     e.preventDefault();
-    alert("Changes Saved");
+    const formData = {
+      username,
+      email,
+    };
+
+    try {
+      await editUser(formData).unwrap();
+      alert("User information updated successfully!");
+      handleClose();
+    } catch (err) {
+      console.error("Failed to update user information:", err);
+      alert("Failed to update user information.");
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -73,7 +88,7 @@ const ProfilePage = () => {
             <Form.Group controlId="email" className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
-                type="text"
+                type="email"
                 placeholder="Change Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
