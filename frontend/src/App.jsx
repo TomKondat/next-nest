@@ -1,4 +1,8 @@
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Provider } from "react-redux"; // Import Provider from react-redux
+import { PersistGate } from "redux-persist/integration/react"; // Import PersistGate
+import store, { persistor } from "./store"; // Import store and persistor
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import FaqSupportPage from "./components/FaqSupportPage";
@@ -14,24 +18,28 @@ import "leaflet/dist/leaflet.css";
 import "./index.css";
 
 const App = () => (
-  <div className="content-wrapper">
-    <Router>
-      <Navbar />
-      <div>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/faq-support" element={<FaqSupportPage />} />
-          <Route path="/login" element={<LoginRegisterPage />} />{" "}
-          <Route path="/register" element={<LoginRegisterPage />} />{" "}
-          <Route path="/addproperties" element={<AddProperty />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/properties/:id" element={<PropertyDetail />} />{" "}
-          <Route path="/SavedProperties" element={<SavedProperties />} />
-        </Routes>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <div className="content-wrapper">
+        <Router>
+          <Navbar />
+          <div>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/faq-support" element={<FaqSupportPage />} />
+              <Route path="/login" element={<LoginRegisterPage />} />
+              <Route path="/register" element={<LoginRegisterPage />} />
+              <Route path="/addproperties" element={<AddProperty />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/properties/:id" element={<PropertyDetail />} />
+              <Route path="/SavedProperties" element={<SavedProperties />} />
+            </Routes>
+          </div>
+          <Footer />
+        </Router>
       </div>
-      <Footer />
-    </Router>
-  </div>
+    </PersistGate>
+  </Provider>
 );
 
 export default App;

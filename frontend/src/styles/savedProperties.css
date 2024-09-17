@@ -1,0 +1,16 @@
+.savedproperties {
+  background-color: rgba(250, 235, 215, 0.735);
+  padding-top: 20px;
+}
+
+.saved-properties-container {
+  padding-top: 80px;
+}
+
+.saved-card-image {
+  object-fit: cover;
+  height: 200px;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 15px;
+}
