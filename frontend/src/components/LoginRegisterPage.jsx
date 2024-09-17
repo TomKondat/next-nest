@@ -71,7 +71,7 @@ const LoginRegisterPage = () => {
       window.dispatchEvent(new Event("storage"));
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, 1000);
     } catch (err) {
       console.error("Failed to log in:", err);
       alert("Failed to log in.");
@@ -92,7 +92,7 @@ const LoginRegisterPage = () => {
       console.log("Form Data Submitted:", formData);
       setTimeout(() => {
         navigate("/login"); // Redirect to the home page ("/")
-      }, 2000);
+      }, 1000);
     } catch (err) {
       console.error("Failed to register:", err);
       alert("Failed to Register in.");
