@@ -18,10 +18,11 @@ const AddProperty = () => {
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [area, setArea] = useState("");
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
     const formData = {
       title,
@@ -40,18 +41,57 @@ const AddProperty = () => {
     };
     console.log(formData);
 
+  //   try {
+  //     // Call the addProperty mutation with the form data
+  //     await addProperty(formData).unwrap();
+  //     alert("Property added successfully!");
+
+  //     // Redirect to the homepage after successful submission
+  //     navigate("/");
+  //   } catch (err) {
+  //     console.error("Failed to add property:", err);
+  //     alert("Error adding property. Please try again.");
+  //   }
+  // };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append("title", title);
+    console.log(formData)
+    formData.append("propertyType", propertyType);
+    formData.append("location[houseNumber]", houseNumber);
+    formData.append("location[street]", street);
+    formData.append("location[city]", city);
+    formData.append("price", price);
+    formData.append("description", description);
+    formData.append("bedrooms", bedrooms);
+    formData.append("bathrooms", bathrooms);
+    formData.append("area", area);
+    
+    // Handle single or multiple files
+    if (images) {
+      if (images.length) {
+        Array.from(images).forEach((image) => {
+          formData.append("image", image); // Append each file individually
+        });
+      } else {
+        formData.append("image", images); // Append single file
+      }
+    }
+    console.log(formData);
     try {
-      // Call the addProperty mutation with the form data
       await addProperty(formData).unwrap();
       alert("Property added successfully!");
-
-      // Redirect to the homepage after successful submission
       navigate("/");
     } catch (err) {
       console.error("Failed to add property:", err);
       alert("Error adding property. Please try again.");
     }
   };
+  
 
   return (
     <Container className="my-5">
@@ -180,15 +220,15 @@ const AddProperty = () => {
                       />
                     </Form.Group>
 
+                    
                     <Form.Group controlId="formImage" className="mb-3">
                       <Form.Label>Image</Form.Label>
                       <Form.Control
-                        type= "file"
-                        placeholder="Enter image"
-                        value={images}
-                        onChange={(e) => setImages(e.target.value)}
-                      />
-                    </Form.Group>
+                      type="file"
+                      multiple // Allow multiple image selection
+                      onChange={(e) => setImages(e.target.files)} // Store all selected files
+                      accept="image/*"
+                      /></Form.Group>
 
                   </Col>
                 </Row>
