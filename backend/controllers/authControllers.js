@@ -118,14 +118,16 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateUser = asyncHandler(async (req, res, next) => {
+    const userId = req.user._id;
     if (!req.body || Object.keys(req.body).length === 0) {
         return next(new AppError(400, "No data provided to update the user"));
     }
     const allowedFields = {
         username: req.body.newUsername,
         email: req.body.newEmail,
+        phone: req.body.newphone
     };
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, allowedFields, {
+    const updatedUser = await User.findByIdAndUpdate(userId, allowedFields, {
         new: true,
         runValidators: true,
     });

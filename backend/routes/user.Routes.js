@@ -22,10 +22,12 @@ router.route("/delete-from-saved-properties/:propertyId")
 router.route("/get-user-info")
     .get(authControllers.protect, userControllers.getUserInfo);
 
-router.route("/:id")
-    .get(/* authControllers.restrictByRole("agent"), */ userControllers.getUserById)
-    .patch(authControllers.protect, authControllers.restrictByRole("agent"), authControllers.updateUser)
-    .delete(authControllers.protect, authControllers.restrictByRole("agent"), authControllers.deleteUser);
+// router.route("/:id")
+// .get(/* authControllers.restrictByRole("agent"), */ userControllers.getUserById)
+// .delete(authControllers.protect, authControllers.restrictByRole("agent"), authControllers.deleteUser);
+
+router.route("/updateUser")
+    .patch(authControllers.protect, authControllers.updateUser)
 
 //  FIX WHEN NEEDED------------>>>>>>
 // router.post('/forgotPassword', authControllers.forgotPassword)
