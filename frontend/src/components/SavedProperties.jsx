@@ -1,15 +1,30 @@
 import React from "react";
-import { useGetSavedPropertiesByIdQuery } from "../slices/userApiSlice";
-import { Card, Button, Container, Row, Col } from "react-bootstrap";
+import {
+  useGetUserInfoQuery,
+  useGetSavedPropertiesByIdQuery,
+} from "../slices/userApiSlice";
+import { Card, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import "../styles/SavedProperties.css";
 
 const SavedProperties = () => {
   // Fetch the saved properties for this user
-  const { data } = useGetSavedPropertiesByIdQuery();
-  console.log(data.data.savedProperties);
+  const user = useGetUserInfoQuery();
+  const userRole = user.data.data.user.role;
 
-  // Safely access saved properties, falling back to an empty array if not available
+  const { data } = useGetSavedPropertiesByIdQuery();
   const propertiesArr = data.data.savedProperties || [];
+  console.log(propertiesArr);
+
+  // // Only allow access if the role is 'buyer'
+  if (userRole !== "buyer") {
+    return (
+      <Container className="mt-5">
+        <Alert variant="danger">
+          Access Denied: Only buyers can view this page.
+        </Alert>
+      </Container>
+    );
+  }
 
   return (
     <Container className="saved-properties-container mt-5">
