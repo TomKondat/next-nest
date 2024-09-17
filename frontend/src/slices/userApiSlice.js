@@ -51,6 +51,12 @@ const userApiSlice = apiSlice.injectEndpoints({
         url: `${USER_URL}/get-saved-properties`,
       }),
     }),
+
+    getUserInfo: builder.query({
+      query: () => ({
+        url: `${USER_URL}/get-user-info`,
+      }),
+    }),
   }),
 });
 
@@ -60,4 +66,5 @@ export const {
   useLogoutMutation,
   useUpdateUserProfileMutation,
   useGetSavedPropertiesByIdQuery,
+  useGetUserInfoQuery,
 } = userApiSlice;
