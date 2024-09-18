@@ -16,6 +16,7 @@ import PropertyDetail from "./components/PropertyDetail";
 import SavedProperties from "./components/SavedProperties";
 import "leaflet/dist/leaflet.css";
 import "./index.css";
+import ManagedProperties from "./components/ManagedProperties";
 
 const App = () => (
   <Provider store={store}>
@@ -33,6 +34,10 @@ const App = () => (
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/properties/:id" element={<PropertyDetail />} />
               <Route path="/SavedProperties" element={<SavedProperties />} />
+              <Route
+                path="/ManagedProperties"
+                element={<ManagedProperties />}
+              />
             </Routes>
           </div>
           <Footer />

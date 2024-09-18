@@ -30,7 +30,7 @@ const NavbarComponent = () => {
       // Delay showing the elements after login
       const timer = setTimeout(() => {
         setShowElements(true);
-      }, 2000);
+      }, 500);
       return () => clearTimeout(timer);
     } else {
       setShowElements(false);
@@ -87,6 +87,9 @@ const NavbarComponent = () => {
             </Nav.Link>
             <Nav.Link as={Link} to="/SavedProperties">
               Saved Properties
+            </Nav.Link>
+            <Nav.Link as={Link} to="/ManagedProperties">
+              Managed Properties
             </Nav.Link>
           </Nav>
 
