@@ -1,8 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Provider } from "react-redux"; // Import Provider from react-redux
-import { PersistGate } from "redux-persist/integration/react"; // Import PersistGate
-import store, { persistor } from "./store"; // Import store and persistor
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import FaqSupportPage from "./components/FaqSupportPage";
@@ -18,8 +15,6 @@ import "leaflet/dist/leaflet.css";
 import "./index.css";
 
 const App = () => (
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
       <div className="content-wrapper">
         <Router>
           <Navbar />
@@ -38,8 +33,6 @@ const App = () => (
           <Footer />
         </Router>
       </div>
-    </PersistGate>
-  </Provider>
 );
 
 export default App;
