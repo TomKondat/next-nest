@@ -1,7 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Container, Row, Col, Form, Button, Tab, Tabs, Card } from "react-bootstrap";
-import { useLoginMutation, useRegisterMutation, useGetUserInfoQuery } from "./../slices/userApiSlice";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Tab,
+  Tabs,
+  Card,
+} from "react-bootstrap";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+  useGetUserInfoQuery,
+} from "./../slices/userApiSlice";
 import "../styles/logreg.css";
 
 const LoginRegisterPage = () => {
@@ -10,7 +23,7 @@ const LoginRegisterPage = () => {
   const [key, setKey] = useState("login");
 
   // Add user state
-  const [user, setUser] = useState(null); 
+  const [user, setUser] = useState(null);
 
   // Login states
   const [login] = useLoginMutation();
@@ -63,13 +76,13 @@ const LoginRegisterPage = () => {
       localStorage.setItem("isLoggedIn", "true");
 
       window.dispatchEvent(new Event("storage"));
-      
+
       // Refetch user info after login
       refetch();
-      
+
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, 1000);
     } catch (err) {
       console.error("Failed to log in:", err);
       alert("Failed to log in.");
@@ -91,16 +104,16 @@ const LoginRegisterPage = () => {
       console.log("Form Data Submitted:", formData);
       setTimeout(() => {
         navigate("/login"); // Redirect to the login page
-      }, 2000);
+      }, 1000);
     } catch (err) {
       console.error("Failed to register:", err);
       alert("Failed to Register.");
     }
   };
-  
-  const {data} = useGetUserInfoQuery();
+
+  const { data } = useGetUserInfoQuery();
   console.log(data);
-  
+
   return (
     <div className="overlay-container">
       {/* Background overlay */}
@@ -134,7 +147,10 @@ const LoginRegisterPage = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group controlId="formBasicPassword" className="mb-3">
+                      <Form.Group
+                        controlId="formBasicPassword"
+                        className="mb-3"
+                      >
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                           type="password"
@@ -165,7 +181,10 @@ const LoginRegisterPage = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group controlId="formRegisterEmail" className="mb-3">
+                      <Form.Group
+                        controlId="formRegisterEmail"
+                        className="mb-3"
+                      >
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
                           type="email"
@@ -176,7 +195,10 @@ const LoginRegisterPage = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group controlId="formRegisterPassword" className="mb-3">
+                      <Form.Group
+                        controlId="formRegisterPassword"
+                        className="mb-3"
+                      >
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                           type="password"
@@ -187,14 +209,19 @@ const LoginRegisterPage = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group controlId="formConfirmPassword" className="mb-3">
+                      <Form.Group
+                        controlId="formConfirmPassword"
+                        className="mb-3"
+                      >
                         <Form.Label>Confirm Password</Form.Label>
                         <Form.Control
                           type="password"
                           placeholder="Confirm password"
                           required
                           value={regConfirmPassword}
-                          onChange={(e) => setRegConfirmPassword(e.target.value)}
+                          onChange={(e) =>
+                            setRegConfirmPassword(e.target.value)
+                          }
                         />
                       </Form.Group>
 
