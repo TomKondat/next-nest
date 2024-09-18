@@ -1,19 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Tab,
-  Tabs,
-  Card,
-} from "react-bootstrap";
-import {
-  useLoginMutation,
-  useRegisterMutation,
-} from "./../slices/userApiSlice";
+import { Container, Row, Col, Form, Button, Tab, Tabs, Card } from "react-bootstrap";
+import { useLoginMutation, useRegisterMutation, useGetUserInfoQuery } from "./../slices/userApiSlice";
 import "../styles/logreg.css";
 
 const LoginRegisterPage = () => {
@@ -21,18 +9,29 @@ const LoginRegisterPage = () => {
   const navigate = useNavigate();
   const [key, setKey] = useState("login");
 
-  // login states
+  // Add user state
+  const [user, setUser] = useState(null); 
+
+  // Login states
   const [login] = useLoginMutation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // register states
   const [register] = useRegisterMutation();
-
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
   const [regConfirmPassword, setRegConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
+
+  // Fetch user data using useGetUserInfoQuery
+  const { data: userInfo, refetch } = useGetUserInfoQuery();
+
+  // Update user state when data is fetched
+  useEffect(() => {
+    if (userInfo) {
+      setUser(userInfo);
+    }
+  }, [userInfo]);
 
   useEffect(() => {
     if (location.pathname === "/register") {
@@ -42,7 +41,6 @@ const LoginRegisterPage = () => {
     }
   }, [location.pathname]);
 
-  // Handle tab switching and navigation
   const handleSelect = (k) => {
     setKey(k);
     if (k === "register") {
@@ -52,23 +50,23 @@ const LoginRegisterPage = () => {
     }
   };
 
-  // Login Submission
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = {
-      email,
-      password,
-    };
+    const formData = { email, password };
+
     try {
       const userData = await login(formData).unwrap();
 
-      // Store username in localStorage
+      setUser(userData.data);
 
       localStorage.setItem("username", userData.data.username);
       localStorage.setItem("isLoggedIn", "true");
-      // Immediately trigger event for Navbar to update
+
       window.dispatchEvent(new Event("storage"));
+      
+      // Refetch user info after login
+      refetch();
+      
       setTimeout(() => {
         navigate("/");
       }, 2000);
@@ -77,8 +75,8 @@ const LoginRegisterPage = () => {
       alert("Failed to log in.");
     }
   };
-  // Register Submission
 
+  // Register Submission
   const handleRegister = async (e) => {
     e.preventDefault();
     const formData = {
@@ -87,17 +85,22 @@ const LoginRegisterPage = () => {
       password: regPassword,
       confirmPassword: regConfirmPassword,
     };
+
     try {
       await register(formData).unwrap();
       console.log("Form Data Submitted:", formData);
       setTimeout(() => {
-        navigate("/login"); // Redirect to the home page ("/")
+        navigate("/login"); // Redirect to the login page
       }, 2000);
     } catch (err) {
       console.error("Failed to register:", err);
-      alert("Failed to Register in.");
+      alert("Failed to Register.");
     }
   };
+  
+  const {data} = useGetUserInfoQuery();
+  console.log(data);
+  
   return (
     <div className="overlay-container">
       {/* Background overlay */}
@@ -131,10 +134,7 @@ const LoginRegisterPage = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group
-                        controlId="formBasicPassword"
-                        className="mb-3"
-                      >
+                      <Form.Group controlId="formBasicPassword" className="mb-3">
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                           type="password"
@@ -151,12 +151,11 @@ const LoginRegisterPage = () => {
                     </Form>
                   </Tab>
 
-                  {/* register form */}
-
+                  {/* Register form */}
                   <Tab eventKey="register" title="Register">
                     <Form onSubmit={handleRegister}>
                       <Form.Group controlId="formRegisterName" className="mb-3">
-                        <Form.Label>UserName</Form.Label>
+                        <Form.Label>Username</Form.Label>
                         <Form.Control
                           type="text"
                           placeholder="Enter your Username"
@@ -166,10 +165,7 @@ const LoginRegisterPage = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group
-                        controlId="formRegisterEmail"
-                        className="mb-3"
-                      >
+                      <Form.Group controlId="formRegisterEmail" className="mb-3">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
                           type="email"
@@ -180,10 +176,7 @@ const LoginRegisterPage = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group
-                        controlId="formRegisterPassword"
-                        className="mb-3"
-                      >
+                      <Form.Group controlId="formRegisterPassword" className="mb-3">
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                           type="password"
@@ -194,19 +187,14 @@ const LoginRegisterPage = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group
-                        controlId="formConfirmPassword"
-                        className="mb-3"
-                      >
+                      <Form.Group controlId="formConfirmPassword" className="mb-3">
                         <Form.Label>Confirm Password</Form.Label>
                         <Form.Control
                           type="password"
                           placeholder="Confirm password"
                           required
                           value={regConfirmPassword}
-                          onChange={(e) =>
-                            setRegConfirmPassword(e.target.value)
-                          }
+                          onChange={(e) => setRegConfirmPassword(e.target.value)}
                         />
                       </Form.Group>
 
