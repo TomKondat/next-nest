@@ -65,6 +65,12 @@ const userApiSlice = apiSlice.injectEndpoints({
         url: `${USER_URL}/get-user-info`,
       }),
     }),
+
+    getUserInfo: builder.query({
+      query: () => ({
+        url: `${USER_URL}/get-user-info`,
+      }),
+    }),
   }),
 });
 
