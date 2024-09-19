@@ -1,20 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   useGetUserInfoQuery,
   useGetManagedPropertiesByIdQuery,
 } from "../slices/userApiSlice";
-import {
-  Card,
-  Button,
-  Container,
-  Row,
-  Col,
-  Alert,
-  Spinner,
-} from "react-bootstrap";
-import "../styles/SavedProperties.css";
+import { Container, Row, Col, Alert, Spinner } from "react-bootstrap";
+import "../styles/propertyItem.css"; // Using the updated CSS styles
 
 const ManagedProperties = () => {
+  const navigate = useNavigate();
+
   // Fetch user info
   const {
     data: userInfo,
@@ -33,9 +28,7 @@ const ManagedProperties = () => {
   if (userInfoLoading || managedPropertiesLoading) {
     return (
       <Container className="mt-5 text-center">
-        <Spinner animation="border" role="status">
-          <span className="sr-only">Loading...</span>
-        </Spinner>
+        <Spinner animation="border" role="status"></Spinner>
       </Container>
     );
   }
@@ -64,33 +57,38 @@ const ManagedProperties = () => {
   // Get managed properties data
   const propertiesArr = managedPropertiesData?.data?.managedProperties || [];
 
+  const handleCardClick = (propertyId) => {
+    navigate(`/properties/${propertyId}`);
+  };
+
   return (
-    <Container className="managed-properties-container mt-5">
-      <h1 className="text-center mb-4">Managed Properties</h1>
-      <Row>
+    <Container fluid className="property-list-wrapper pt-5">
+      <h4>Managed Properties</h4>
+      <Row className="g-3">
         {propertiesArr.length > 0 ? (
           propertiesArr.map((property) => (
-            <Col md={4} key={property._id} className="mb-4">
-              <Card className="property-card h-100 shadow-sm">
-                <Card.Img
-                  variant="top"
-                  src={property.image}
-                  alt={property.name}
-                  className="card-image"
-                />
-                <Card.Body className="d-flex flex-column">
-                  <Card.Title>{property.name}</Card.Title>
-                  <Card.Text className="flex-grow-1">
-                    {property.description}
-                  </Card.Text>
-                  <Card.Text>
-                    <strong>Price:</strong> ${property.price}
-                  </Card.Text>
-                  <Button variant="primary" className="mt-auto">
-                    View Property
-                  </Button>
-                </Card.Body>
-              </Card>
+            <Col key={property._id} xs={12} sm={6} md={4} lg={3} xl={3}>
+              <div
+                className="property-item clickable-card"
+                onClick={() => handleCardClick(property._id)}
+                role="button"
+                tabIndex="0"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") handleCardClick(property._id);
+                }}
+              >
+                <div className="image-wrapper">
+                  <img
+                    src={property.images[0]}
+                    alt={property.name}
+                    className="property-image"
+                  />
+                </div>
+                <div className="property-card-body">
+                  <h5 className="property-title">{property.title}</h5>
+                  <p className="property-price">${property.price}</p>
+                </div>
+              </div>
             </Col>
           ))
         ) : (
