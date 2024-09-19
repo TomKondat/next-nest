@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Row,
   Col,
-  Card,
   Button,
   Image,
   Modal,
@@ -16,27 +15,47 @@ import {
 import "../styles/profilePage.css";
 
 const ProfilePage = () => {
-  const { data, error, isLoading } = useGetUserInfoQuery();
+  const { data, error, isLoading, refetch } = useGetUserInfoQuery(); // Add refetch here
   const [editUser] = useUpdateUserProfileMutation();
 
+  // State for username and email
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
+  // Show/Hide modal
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // Populate the form with existing user data
+  useEffect(() => {
+    if (data) {
+      setUsername(data?.data.user.username);
+      setEmail(data?.data.user.email);
+    }
+  }, [data]);
+
+  // Handle saving changes
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     const formData = {
-      username,
-      email,
+      newUsername: username,
+      newEmail: email,
     };
+    console.log("formData:", formData);
 
     try {
+      // Update user data in the backend
       await editUser(formData).unwrap();
+
+      // Optimistically update the UI
       alert("User information updated successfully!");
+
+      // Close the modal
       handleClose();
+
+      // Refetch the updated data to ensure UI is updated
+      refetch();
     } catch (err) {
       console.error("Failed to update user information:", err);
       alert("Failed to update user information.");
@@ -64,11 +83,13 @@ const ProfilePage = () => {
               roundedCircle
               className="profile-image"
             />
-            <h2 className="profile-name">{data?.data.user.username}</h2>
-            <p className="profile-email">{data?.data.user.email}</p>
+            <h2 className="profile-name">{username}</h2>{" "}
+            {/* Use updated state */}
+            <p className="profile-email">{email}</p> {/* Use updated state */}
           </div>
         </Col>
       </Row>
+
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit User</Modal.Title>
