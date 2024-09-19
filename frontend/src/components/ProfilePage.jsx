@@ -15,23 +15,29 @@ import {
 import "../styles/profilePage.css";
 
 const ProfilePage = () => {
-  const { data, error, isLoading, refetch } = useGetUserInfoQuery(); // Add refetch here
+  const { data, error, isLoading, refetch } = useGetUserInfoQuery();
   const [editUser] = useUpdateUserProfileMutation();
 
-  // State for username and email
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [displayUsername, setDisplayUsername] = useState("");
+  const [displayEmail, setDisplayEmail] = useState("");
 
-  // Show/Hide modal
+  const [editUsername, setEditUsername] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    // Populate modal fields with the current data
+    setEditUsername(displayUsername);
+    setEditEmail(displayEmail);
+    setShow(true);
+  };
 
-  // Populate the form with existing user data
+  // Populate the profile with fetched user data
   useEffect(() => {
     if (data) {
-      setUsername(data?.data.user.username);
-      setEmail(data?.data.user.email);
+      setDisplayUsername(data?.data.user.username);
+      setDisplayEmail(data?.data.user.email);
     }
   }, [data]);
 
@@ -39,22 +45,20 @@ const ProfilePage = () => {
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     const formData = {
-      newUsername: username,
-      newEmail: email,
+      newUsername: editUsername,
+      newEmail: editEmail,
     };
-    console.log("formData:", formData);
 
     try {
-      // Update user data in the backend
       await editUser(formData).unwrap();
+      setDisplayUsername(editUsername);
+      setDisplayEmail(editEmail);
 
-      // Optimistically update the UI
-      alert("User information updated successfully!");
-
-      // Close the modal
       handleClose();
 
-      // Refetch the updated data to ensure UI is updated
+      setEditUsername("");
+      setEditEmail("");
+
       refetch();
     } catch (err) {
       console.error("Failed to update user information:", err);
@@ -83,9 +87,8 @@ const ProfilePage = () => {
               roundedCircle
               className="profile-image"
             />
-            <h2 className="profile-name">{username}</h2>{" "}
-            {/* Use updated state */}
-            <p className="profile-email">{email}</p> {/* Use updated state */}
+            <h2 className="profile-name">{displayUsername}</h2>
+            <p className="profile-email">{displayEmail}</p>
           </div>
         </Col>
       </Row>
@@ -101,8 +104,8 @@ const ProfilePage = () => {
               <Form.Control
                 type="text"
                 placeholder="Change Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={editUsername}
+                onChange={(e) => setEditUsername(e.target.value)}
               />
             </Form.Group>
 
@@ -111,8 +114,8 @@ const ProfilePage = () => {
               <Form.Control
                 type="email"
                 placeholder="Change Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={editEmail}
+                onChange={(e) => setEditEmail(e.target.value)}
               />
             </Form.Group>
 
