@@ -13,6 +13,7 @@ import {
 import {
   useLoginMutation,
   useRegisterMutation,
+  useGetUserInfoQuery,
 } from "./../slices/userApiSlice";
 import "../styles/logreg.css";
 
