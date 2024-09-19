@@ -1,6 +1,5 @@
 .property-item {
   background-color: white; /* Set cards to white */
-
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -132,4 +131,12 @@
 }
 .property-details-row {
   width: 100%;
+}
+.addproperty {
+  background-color: rgba(250, 235, 215, 0.735);
+}
+.property-form-box {
+  margin-top: 100px;
+  margin-bottom: 20px;
+  background-color: #313a4fda;
 }
