@@ -2,12 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useGetUserInfoQuery,
-  useGetSavedPropertiesByIdQuery,
+  useGetManagedPropertiesByIdQuery,
 } from "../slices/userApiSlice";
 import { Container, Row, Col, Alert, Spinner } from "react-bootstrap";
-import "../styles/propertyItem.css"; // Reusing the updated CSS styles
+import "../styles/propertyItem.css"; // Using the updated CSS styles
 
-const SavedProperties = () => {
+const ManagedProperties = () => {
   const navigate = useNavigate();
 
   // Fetch user info
@@ -17,15 +17,15 @@ const SavedProperties = () => {
     isError: userInfoError,
   } = useGetUserInfoQuery();
 
-  // Fetch saved properties (only for buyers)
+  // Fetch managed properties (only for agents)
   const {
-    data: savedPropertiesData,
-    isLoading: savedPropertiesLoading,
-    isError: savedPropertiesError,
-  } = useGetSavedPropertiesByIdQuery();
+    data: managedPropertiesData,
+    isLoading: managedPropertiesLoading,
+    isError: managedPropertiesError,
+  } = useGetManagedPropertiesByIdQuery();
 
   // Loading states
-  if (userInfoLoading || savedPropertiesLoading) {
+  if (userInfoLoading || managedPropertiesLoading) {
     return (
       <Container className="mt-5 text-center">
         <Spinner animation="border" role="status"></Spinner>
@@ -34,7 +34,7 @@ const SavedProperties = () => {
   }
 
   // Error handling
-  if (userInfoError || savedPropertiesError) {
+  if (userInfoError || managedPropertiesError) {
     return (
       <Container className="mt-5">
         <Alert variant="danger">Error: Failed to load data.</Alert>
@@ -42,20 +42,20 @@ const SavedProperties = () => {
     );
   }
 
-  // Check if the user is a buyer
+  // Check if the user is an agent
   const userRole = userInfo?.data?.user?.role;
-  if (userRole !== "buyer") {
+  if (userRole !== "agent") {
     return (
       <Container className="mt-5">
         <Alert variant="danger">
-          Access Denied: Only buyers can view this page.
+          Access Denied: Only agents can view this page.
         </Alert>
       </Container>
     );
   }
 
-  // Get saved properties data
-  const propertiesArr = savedPropertiesData?.data?.savedProperties || [];
+  // Get managed properties data
+  const propertiesArr = managedPropertiesData?.data?.managedProperties || [];
 
   const handleCardClick = (propertyId) => {
     navigate(`/properties/${propertyId}`);
@@ -63,7 +63,7 @@ const SavedProperties = () => {
 
   return (
     <Container fluid className="property-list-wrapper pt-5">
-      <h4>Saved Properties</h4>
+      <h4>Managed Properties</h4>
       <Row className="g-3">
         {propertiesArr.length > 0 ? (
           propertiesArr.map((property) => (
@@ -92,11 +92,11 @@ const SavedProperties = () => {
             </Col>
           ))
         ) : (
-          <p className="text-center">No saved properties yet.</p>
+          <p className="text-center">No managed properties yet.</p>
         )}
       </Row>
     </Container>
   );
 };
 
-export default SavedProperties;
+export default ManagedProperties;

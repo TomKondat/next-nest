@@ -1,8 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Provider } from "react-redux"; // Import Provider from react-redux
-import { PersistGate } from "redux-persist/integration/react"; // Import PersistGate
-import store, { persistor } from "./store"; // Import store and persistor
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import FaqSupportPage from "./components/FaqSupportPage";
@@ -16,10 +13,9 @@ import PropertyDetail from "./components/PropertyDetail";
 import SavedProperties from "./components/SavedProperties";
 import "leaflet/dist/leaflet.css";
 import "./index.css";
+import ManagedProperties from "./components/ManagedProperties";
 
 const App = () => (
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
       <div className="content-wrapper">
         <Router>
           <Navbar />
@@ -33,13 +29,15 @@ const App = () => (
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/properties/:id" element={<PropertyDetail />} />
               <Route path="/SavedProperties" element={<SavedProperties />} />
+              <Route
+                path="/ManagedProperties"
+                element={<ManagedProperties />}
+              />
             </Routes>
           </div>
           <Footer />
         </Router>
       </div>
-    </PersistGate>
-  </Provider>
 );
 
 export default App;

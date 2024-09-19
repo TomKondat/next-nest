@@ -141,7 +141,7 @@ exports.addSavedProperty = asyncHandler(async (req, res, next) => {
 });
 
 exports.getUserInfo = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user._id).select('_id username email phone role managedProperties savedProperties');
+  const user = req.user
   if (!user) {
     return next(new AppError(404, 'User not found'));
   }
