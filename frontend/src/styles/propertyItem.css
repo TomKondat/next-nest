@@ -1,19 +1,20 @@
 .property-item {
-  background-color: white; /* Set cards to white */
-  border-radius: 10px;
+  background-color: rgba(195, 195, 195, 0.29);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 1px rgb(22, 22, 22) !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 15px;
   max-width: 450px;
+  min-height: 200px;
 }
 
 .property-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.505) !important;
 }
 
 .image-wrapper {
@@ -57,14 +58,21 @@
   background-color: rgba(250, 235, 215, 0.735);
   padding: 20px;
   min-height: 100vh;
+  text-align: center;
 }
 .property-list-wrapper h4 {
-  display: flex;
+  display: inline-block;
   justify-content: center;
   align-items: center;
-  margin: 40px;
+  margin: 40px auto;
+  padding: 20px;
   font-weight: 700;
   font-size: xx-large;
+  border-radius: 12px;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(100, 100, 100, 0.432);
+  box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.747) !important;
+  background-color: rgba(231, 214, 140, 0.354);
 }
 
 .property-link {
