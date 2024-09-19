@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import {
   useGetPropertiesQuery,
@@ -48,6 +48,11 @@ const PropertyDetail = () => {
 
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Scroll to top when component is mounted (route changes)
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to top
+  }, []);
 
   if (!property) {
     return <h2 className="text-center">Property not found</h2>;
