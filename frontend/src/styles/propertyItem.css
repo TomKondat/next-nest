@@ -1,4 +1,6 @@
 .property-item {
+  background-color: white; /* Set cards to white */
+
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -55,6 +57,7 @@
 .property-list-wrapper {
   background-color: rgba(250, 235, 215, 0.735);
   padding: 20px;
+  min-height: 100vh;
 }
 .property-list-wrapper h4 {
   display: flex;
