@@ -1,10 +1,20 @@
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { useState } from "react";
+import { Container, Row, Col, Form, Button, Modal } from "react-bootstrap";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "../styles/footer.css";
 import logo from "../../images/NNlogo.png";
 
 const Footer = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    setShowModal(true); // Show the modal on subscribe
+  };
+
+  const handleClose = () => setShowModal(false);
+
   return (
     <footer className="footer bg-dark text-white py-4">
       <Container>
@@ -47,7 +57,7 @@ const Footer = () => {
           <Col md={4} className="d-flex justify-content-md-end">
             <div>
               <h5>Newsletter</h5>
-              <Form>
+              <Form onSubmit={handleSubscribe}>
                 <Row>
                   <Col xs={8} sm={9}>
                     <Form.Group controlId="formEmail">
@@ -93,6 +103,22 @@ const Footer = () => {
           </Col>
         </Row>
       </Container>
+
+      {/* Subscribe Modal */}
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Subscription Successful</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Thank you for subscribing to NextNest! You will now receive updates
+          and newsletters about the latest properties for sale and rent.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </footer>
   );
 };
