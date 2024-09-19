@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import {
   useGetPropertiesQuery,
   useEditPropertyMutation,
@@ -19,6 +19,7 @@ import "../styles/propertyItem.css";
 
 const PropertyDetail = () => {
   const { id } = useParams();
+  const { state } = useLocation(); // Get the state passed from ManagedProperties
   const { data } = useGetPropertiesQuery();
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
@@ -55,10 +56,7 @@ const PropertyDetail = () => {
   // Handle Edit Property
   const handleEditSubmit = async () => {
     try {
-      // Build the address query from the form inputs
       const addressQuery = `${houseNumber} ${street}, ${city}`;
-
-      // Function to fetch coordinates using an external geocoding API (e.g., OpenStreetMap Nominatim API)
       const fetchCoordinates = async (query) => {
         const response = await fetch(
           `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
@@ -69,7 +67,6 @@ const PropertyDetail = () => {
         return data.length > 0 ? { lat: data[0].lat, lng: data[0].lon } : null;
       };
 
-      // Fetch coordinates for the new address
       const coordinates = await fetchCoordinates(addressQuery);
 
       if (!coordinates) {
@@ -77,7 +74,6 @@ const PropertyDetail = () => {
         return;
       }
 
-      // Construct the updated property object including the new coordinates
       const updatedProperty = {
         title,
         propertyType,
@@ -97,7 +93,6 @@ const PropertyDetail = () => {
         area,
       };
 
-      // Update the property using Redux mutation
       await editProperty({ data: updatedProperty, propertyId: id }).unwrap();
 
       alert("Property updated successfully!");
@@ -131,109 +126,110 @@ const PropertyDetail = () => {
             className="shadow-lg carddetail"
             style={{ padding: "20px", fontSize: "1.2rem" }}
           >
-            <div className="editdeletebtn d-flex justify-content-end mb-2">
-              <Button
-                variant="outline-danger"
-                className="editbtn"
-                onClick={() => setShowEditModal(true)}
-              >
-                Edit
-              </Button>
-              <Button
-                variant="outline-danger"
-                className="deletebtn"
-                onClick={() => setShowDeleteModal(true)}
-              >
-                Delete
-              </Button>
-            </div>
-            <Card.Img
-              variant="top"
-              src={
-                property.images[0] ||
-                "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko="
-              }
-              alt={property.title}
-              className="property-detail-image"
-            />
-            <Card.Body>
-              <div className="cardbody">
-                <Card.Title className="text-center display-5">
-                  {property.title}
-                </Card.Title>
+            {/* Buttons for Edit and Delete (shown only for managed properties) */}
+            {state?.isManaged && (
+              <div className="editdeletebtn d-flex justify-content-end mb-2">
+                <Button
+                  variant="outline-danger"
+                  className="editbtn"
+                  onClick={() => setShowEditModal(true)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  className="deletebtn"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  Delete
+                </Button>
+              </div>
+            )}
+            {/* Property Title */}
+            <Card.Title className="text-center display-5 mb-4">
+              {property.title}
+            </Card.Title>
 
-                <Row className="my-4">
-                  <Col xs={12} md={6}>
-                    <Card.Text>
-                      <strong>Property Type:</strong> {property.propertyType}
-                    </Card.Text>
-                    <Card.Text>
-                      <strong>House Number:</strong>{" "}
-                      {property.location.houseNumber}
-                    </Card.Text>
-                    <Card.Text>
-                      <strong>Street:</strong> {property.location.street}
-                    </Card.Text>
-                    <Card.Text>
-                      <strong>City:</strong> {property.location.city}
-                    </Card.Text>
-                  </Col>
-
-                  <Col xs={12} md={6}>
-                    <Card.Text>
-                      <strong>Price:</strong> ${property.price}
-                    </Card.Text>
-                    <Card.Text>
-                      <strong>Bedrooms:</strong> {property.bedrooms}
-                    </Card.Text>
-                    <Card.Text>
-                      <strong>Bathrooms:</strong> {property.bathrooms}
-                    </Card.Text>
-                    <Card.Text>
-                      <strong>Area:</strong> {property.area} sq. ft.
-                    </Card.Text>
-                  </Col>
-                </Row>
-
-                <Card.Text className="my-4">
-                  <strong>Description:</strong> {property.description}
+            <Row className="property-details-row mb-4">
+              <Col xs={12} md={8}>
+                <Card.Img
+                  variant="top"
+                  src={
+                    property.images[0] ||
+                    "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko="
+                  }
+                  alt={property.title}
+                  className="property-detail-image"
+                />
+              </Col>
+              <Col xs={12} md={4} className="property-details-container">
+                <Card.Text className="property-detail-item">
+                  <strong>Property Type:</strong> {property.propertyType}
                 </Card.Text>
+                <Card.Text className="property-detail-item">
+                  <strong>House Number:</strong> {property.location.houseNumber}
+                </Card.Text>
+                <Card.Text className="property-detail-item">
+                  <strong>Street:</strong> {property.location.street}
+                </Card.Text>
+                <Card.Text className="property-detail-item">
+                  <strong>City:</strong> {property.location.city}
+                </Card.Text>
+                <Card.Text className="property-detail-item">
+                  <strong>Price:</strong> ${property.price}
+                </Card.Text>
+                <Card.Text className="property-detail-item">
+                  <strong>Bedrooms:</strong> {property.bedrooms}
+                </Card.Text>
+                <Card.Text className="property-detail-item">
+                  <strong>Bathrooms:</strong> {property.bathrooms}
+                </Card.Text>
+                <Card.Text className="property-detail-item">
+                  <strong>Area:</strong> {property.area} sq. ft.
+                </Card.Text>
+              </Col>
+            </Row>
 
-                <div className="d-flex justify-content-center flex-wrap">
-                  <Link className="m-2" to="/">
-                    <Button variant="warning" size="md">
-                      View More Properties
-                    </Button>
-                  </Link>
-                  <Link className="m-2" to="/profile">
-                    <Button variant="warning" size="md">
-                      Contact the Seller
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-              <div className="mt-4 map-wrapper">
-                {property?.location?.coordinates?.lat &&
-                property?.location?.coordinates?.lng ? (
-                  <PropertyMap
-                    latitude={property.location.coordinates.lat}
-                    longitude={property.location.coordinates.lng}
-                    zoom={property.location.zoom}
-                    title={property.title}
-                  />
-                ) : (
-                  <p className="text-center">
-                    Map information is not available for this property
-                  </p>
-                )}
-              </div>
-            </Card.Body>
+            {/* Description Section */}
+            <Card.Text className="my-4 text-center">
+              <strong>Description:</strong> {property.description}
+            </Card.Text>
+
+            {/* Map Section */}
+            <div className="mt-4 map-wrapper">
+              {property?.location?.coordinates?.lat &&
+              property?.location?.coordinates?.lng ? (
+                <PropertyMap
+                  latitude={property.location.coordinates.lat}
+                  longitude={property.location.coordinates.lng}
+                  zoom={property.location.zoom}
+                  title={property.title}
+                />
+              ) : (
+                <p className="text-center">
+                  Map information is not available for this property
+                </p>
+              )}
+            </div>
+
+            {/* Buttons Section */}
+            <div className="d-flex justify-content-center flex-wrap mt-4">
+              <Link className="m-2" to="/">
+                <Button variant="warning" size="md">
+                  View More Properties
+                </Button>
+              </Link>
+              <Link className="m-2" to="/profile">
+                <Button variant="warning" size="md">
+                  Contact the Seller
+                </Button>
+              </Link>
+            </div>
           </Card>
         </Col>
       </Row>
 
       {/* ----------------Edit Modal---------------- */}
-
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Property</Modal.Title>
@@ -241,7 +237,6 @@ const PropertyDetail = () => {
         <Modal.Body>
           <Form>
             <Row>
-              {/* First Column */}
               <Col md={6}>
                 <Form.Group className="mb-3" controlId="formTitle">
                   <Form.Label>Title</Form.Label>
@@ -289,7 +284,6 @@ const PropertyDetail = () => {
                 </Form.Group>
               </Col>
 
-              {/* Second Column */}
               <Col md={6}>
                 <Form.Group className="mb-3" controlId="formPropertyType">
                   <Form.Label>Property Type</Form.Label>
