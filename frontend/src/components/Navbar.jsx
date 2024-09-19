@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import logo from "../../images/NNlogo.png";
 import "../styles/navbar.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux"; // To clear the user state on logout
 const NavbarComponent = () => {
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
+  const location = useLocation(); // To detect route change
   const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
@@ -31,6 +32,11 @@ const NavbarComponent = () => {
       setUsername(storedUsername);
     }
   };
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to the top of the page on route change
+  }, [location.pathname]); // Triggered whenever the path changes
 
   // Check login status initially and every time localStorage changes
   useEffect(() => {
