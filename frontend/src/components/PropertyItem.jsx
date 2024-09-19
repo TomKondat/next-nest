@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/propertyItem.css";
 
 const PropertyItem = (props) => {
-  //console.log (props.images)
-  let urlimage=`http://localhost:8000/${props.images}`
-  //console.log(urlimage)
+  let urlimage = `http://localhost:8000/${props.images}`;
 
   return (
     <Link to={`/properties/${props.id}`} className="property-link">

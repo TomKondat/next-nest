@@ -57,8 +57,11 @@ const ManagedProperties = () => {
   // Get managed properties data
   const propertiesArr = managedPropertiesData?.data?.managedProperties || [];
 
-  const handleCardClick = (propertyId) => {
-    navigate(`/properties/${propertyId}`);
+  const handleCardClick = (property) => {
+    // Navigate to PropertyDetail with property information as state
+    navigate(`/properties/${property._id}`, {
+      state: { isManaged: true, property },
+    });
   };
 
   return (
@@ -70,11 +73,11 @@ const ManagedProperties = () => {
             <Col key={property._id} xs={12} sm={6} md={4} lg={3} xl={3}>
               <div
                 className="property-item clickable-card"
-                onClick={() => handleCardClick(property._id)}
+                onClick={() => handleCardClick(property)}
                 role="button"
                 tabIndex="0"
                 onKeyPress={(e) => {
-                  if (e.key === "Enter") handleCardClick(property._id);
+                  if (e.key === "Enter") handleCardClick(property);
                 }}
               >
                 <div className="image-wrapper">
