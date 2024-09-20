@@ -101,7 +101,6 @@ const LoginRegisterPage = () => {
 
     try {
       await register(formData).unwrap();
-      console.log("Form Data Submitted:", formData);
       setTimeout(() => {
         navigate("/login"); // Redirect to the login page
       }, 1000);
@@ -110,9 +109,6 @@ const LoginRegisterPage = () => {
       alert("Failed to Register.");
     }
   };
-
-  const { data } = useGetUserInfoQuery();
-  console.log(data);
 
   return (
     <div className="overlay-container">

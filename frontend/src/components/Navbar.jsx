@@ -1,16 +1,27 @@
 import { useEffect, useState } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import logo from "../../images/NNlogo.png";
 import "../styles/navbar.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { useLogoutMutation } from "./../slices/userApiSlice";
+import {
+  useLogoutMutation,
+  useGetUserInfoQuery,
+} from "./../slices/userApiSlice";
+import { useDispatch } from "react-redux"; // To clear the user state on logout
 
 const NavbarComponent = () => {
   const [logout] = useLogoutMutation();
+  const navigate = useNavigate();
+  const location = useLocation(); // To detect route change
+  const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
-  const [showElements, setShowElements] = useState(false); // State to manage timeout for showing elements
+  const [showElements, setShowElements] = useState(false);
+
+  // Fetch user info
+  const { data: userInfo } = useGetUserInfoQuery();
+  const userRole = userInfo?.data?.user?.role || null;
 
   // Function to check login status from localStorage
   const checkLoginStatus = () => {
@@ -21,6 +32,11 @@ const NavbarComponent = () => {
       setUsername(storedUsername);
     }
   };
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to the top of the page on route change
+  }, [location.pathname]); // Triggered whenever the path changes
 
   // Check login status initially and every time localStorage changes
   useEffect(() => {
@@ -51,6 +67,13 @@ const NavbarComponent = () => {
       localStorage.removeItem("isLoggedIn");
       setIsLoggedIn(false);
       setShowElements(false); // Hide the elements after logout
+
+      // Clear role-related UI after logout
+      dispatch({ type: "user/clearUserInfo" }); // Action to clear user info
+
+      // Redirect to homepage after logout
+      navigate("/");
+
       alert("Logged out.");
       console.log("You have been logged out!");
     } catch (err) {
@@ -82,15 +105,23 @@ const NavbarComponent = () => {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/addproperties">
-              Add Property
-            </Nav.Link>
-            <Nav.Link as={Link} to="/SavedProperties">
-              Saved Properties
-            </Nav.Link>
-            <Nav.Link as={Link} to="/ManagedProperties">
-              Managed Properties
-            </Nav.Link>
+
+            {/* Conditionally render NavLinks based on user role */}
+            {isLoggedIn && userRole === "agent" && (
+              <>
+                <Nav.Link as={Link} to="/addproperties">
+                  Add Property
+                </Nav.Link>
+                <Nav.Link as={Link} to="/ManagedProperties">
+                  Managed Properties
+                </Nav.Link>
+              </>
+            )}
+            {isLoggedIn && userRole === "buyer" && (
+              <Nav.Link as={Link} to="/SavedProperties">
+                Saved Properties
+              </Nav.Link>
+            )}
           </Nav>
 
           <Nav>
@@ -101,56 +132,55 @@ const NavbarComponent = () => {
             )}
           </Nav>
 
-          {isLoggedIn &&
-            showElements && ( // Only show elements after 2 seconds
-              <>
-                <div
-                  className="d-flex align-items-center"
-                  style={{ fontFamily: '"Montserrat", sans-serif' }}
+          {isLoggedIn && showElements && (
+            <>
+              <div
+                className="d-flex align-items-center"
+                style={{ fontFamily: '"Montserrat", sans-serif' }}
+              >
+                <h5
+                  className="text-white mb-0 me-2"
+                  style={{
+                    fontFamily: '"Montserrat",sans-serif',
+                  }}
                 >
-                  <h5
-                    className="text-white mb-0 me-2"
-                    style={{
-                      fontFamily: '"Montserrat",sans-serif',
-                    }}
-                  >
-                    Hi, {username}
-                  </h5>
-                  {/* Profile link only visible when logged in */}
-                  <Nav className="me-2">
-                    <Nav.Link as={Link} to="/profile">
-                      <i
-                        className="bi bi-person-circle"
-                        style={{
-                          fontSize: "1.75rem",
-                          color: "white",
-                        }}
-                      ></i>
-                    </Nav.Link>
-                  </Nav>
-                  <Button
-                    onClick={handleSubmit}
-                    variant="danger"
-                    className="d-flex align-items-center justify-content-center"
-                    style={{
-                      width: "35px",
-                      height: "35px",
-                      borderRadius: "50%",
-                      padding: 0,
-                    }}
-                  >
+                  Hi, {username}
+                </h5>
+                {/* Profile link only visible when logged in */}
+                <Nav className="me-2">
+                  <Nav.Link as={Link} to="/profile">
                     <i
-                      className="bi bi-box-arrow-right"
+                      className="bi bi-person-circle"
                       style={{
-                        fontSize: "1.1rem",
-                        size: "1rem",
+                        fontSize: "1.75rem",
                         color: "white",
                       }}
                     ></i>
-                  </Button>
-                </div>
-              </>
-            )}
+                  </Nav.Link>
+                </Nav>
+                <Button
+                  onClick={handleSubmit}
+                  variant="danger"
+                  className="d-flex align-items-center justify-content-center"
+                  style={{
+                    width: "35px",
+                    height: "35px",
+                    borderRadius: "50%",
+                    padding: 0,
+                  }}
+                >
+                  <i
+                    className="bi bi-box-arrow-right"
+                    style={{
+                      fontSize: "1.1rem",
+                      size: "1rem",
+                      color: "white",
+                    }}
+                  ></i>
+                </Button>
+              </div>
+            </>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>
