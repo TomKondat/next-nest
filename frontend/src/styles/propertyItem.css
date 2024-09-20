@@ -151,8 +151,9 @@
 
 .page-button-wrapper {
   display: flex;
-  justify-content: center;  /* Center the buttons */
-  margin: 20px 0;  /* Vertical space around the buttons */
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px;
 }
 
 .page-button {
@@ -163,16 +164,31 @@
   border: none;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease;  /* Smooth background change */
+  transition: background-color 0.3s ease;
 }
 
 .page-button:hover {
-  background-color: #45a049;  /* Darken on hover */
+  background-color: #45a049;
 }
 
 .page-button:disabled {
-  background-color: #cccccc;  /* Light gray background for disabled */
-  color: #666666;  /* Darker text color */
-  cursor: not-allowed;  /* Show that the button can't be clicked */
-  opacity: 0.6;  /* Make it look faded */
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.sort-wrapper {
+  margin-bottom: 20px;
+}
+
+.sort-wrapper label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.sort-wrapper select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }

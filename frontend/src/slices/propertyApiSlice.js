@@ -4,8 +4,8 @@ import { apiSlice } from "./apiSlice";
 export const propertyApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProperties: builder.query({
-      query: ({ page = 1, limit = RESAULT_NUM } = {}) => ({
-        url: `${PROPERTY_URL}?page=${page}&limit=${limit}`,
+      query: ({ page = 1, limit = RESAULT_NUM, sort } = {}) => ({
+        url: `${PROPERTY_URL}?page=${page}&limit=${limit}&sort=${sort}`,
       }),
       providesTags: ["Property"],
     }),

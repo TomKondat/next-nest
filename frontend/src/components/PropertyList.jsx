@@ -1,13 +1,16 @@
-import { Row, Col } from "react-bootstrap";
-import { useGetPropertiesQuery } from "./../slices/propertyApiSlice";
-import PropertyItem from "./PropertyItem";
-import "../styles/propertyItem.css";
 import { useState } from 'react';
+import { Row, Col } from "react-bootstrap";
+
+import "../styles/propertyItem.css";
 import { RESAULT_NUM } from "../slices/urlConstrains";
+import PropertyItem from "./PropertyItem";
+import { useGetPropertiesQuery } from "./../slices/propertyApiSlice";
 
 const PropertyList = () => {
   const [page, setPage] = useState(1);
-  const { data, error, isLoading } = useGetPropertiesQuery({ page });
+  const [sortOrder, setSortOrder] = useState("price");
+  
+  const { data, error, isLoading } = useGetPropertiesQuery({ page, sort: sortOrder });
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -21,10 +24,21 @@ const PropertyList = () => {
       setPage(newPage);
     }
   };
+  
+  const handleSortChange = (e) => {
+    setSortOrder(e.target.value);
+  };
 
   return (
     <div className="property-list-wrapper">
       <h4>Searched Properties</h4>
+      <div className="sort-wrapper">
+        <label htmlFor="sort">Sort by: </label>
+        <select id="sort" value={sortOrder} onChange={handleSortChange}>
+          <option value="price">Price (Low to High)</option>
+          <option value="-price">Price (High to Low)</option>
+        </select>
+      </div>
       <Row className="g-3">
         {propertiesArr.length > 0 ? (
           propertiesArr.map((property) => (
