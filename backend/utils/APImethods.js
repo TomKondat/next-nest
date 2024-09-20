@@ -21,7 +21,7 @@ module.exports = class APIMmethods {
       const sortBy = this.queryString.sort.split(",").join(" ");
       this.query = this.query.sort(sortBy);
     } else {
-      this.query = this.query.sort("price");
+      this.query = this.query.sort("-price");
     }
     return this;
   }
@@ -38,7 +38,7 @@ module.exports = class APIMmethods {
 
   makePagination() {
     const page = parseInt(this.queryString.page, 10) || 1;
-    const perPage = parseInt(this.queryString.limit, 10) || 10;
+    const perPage = parseInt(this.queryString.limit, 10) || 8;
     const skipResults = (page - 1) * perPage;
     this.query = this.query.skip(skipResults).limit(perPage);
     return this;

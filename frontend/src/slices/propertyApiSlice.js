@@ -1,11 +1,11 @@
-import { PROPERTY_URL } from "./urlConstrains";
+import { PROPERTY_URL, RESAULT_NUM } from "./urlConstrains";
 import { apiSlice } from "./apiSlice";
 
 export const propertyApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProperties: builder.query({
-      query: () => ({
-        url: PROPERTY_URL,
+      query: ({ page = 1, limit = RESAULT_NUM } = {}) => ({
+        url: `${PROPERTY_URL}?page=${page}&limit=${limit}`,
       }),
       providesTags: ["Property"],
     }),

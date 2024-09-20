@@ -108,3 +108,31 @@
   align-items: center;
   flex-direction: column;
 }
+
+.page-button-wrapper {
+  display: flex;
+  justify-content: center;  /* Center the buttons */
+  margin: 20px 0;  /* Vertical space around the buttons */
+}
+
+.page-button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;  /* Smooth background change */
+}
+
+.page-button:hover {
+  background-color: #45a049;  /* Darken on hover */
+}
+
+.page-button:disabled {
+  background-color: #cccccc;  /* Light gray background for disabled */
+  color: #666666;  /* Darker text color */
+  cursor: not-allowed;  /* Show that the button can't be clicked */
+  opacity: 0.6;  /* Make it look faded */
+}
