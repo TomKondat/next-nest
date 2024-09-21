@@ -11,6 +11,10 @@ import {
 import { useDispatch } from "react-redux"; // To clear the user state on logout
 
 const NavbarComponent = () => {
+  // Fetch user info
+  const { data: userInfo } = useGetUserInfoQuery();
+  const userRole = userInfo?.data?.user?.role || null;
+
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
   const location = useLocation(); // To detect route change
@@ -19,19 +23,18 @@ const NavbarComponent = () => {
   const [username, setUsername] = useState("");
   const [showElements, setShowElements] = useState(false);
 
-  // Fetch user info
-  const { data: userInfo } = useGetUserInfoQuery();
-  const userRole = userInfo?.data?.user?.role || null;
-
   // Function to check login status from localStorage
   const checkLoginStatus = () => {
     const loginStatus = localStorage.getItem("isLoggedIn");
-    const storedUsername = localStorage.getItem("username");
     setIsLoggedIn(loginStatus === "true");
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
   };
+
+  // Set the username when userInfo is available
+  useEffect(() => {
+    if (userInfo?.data?.user?.username) {
+      setUsername(userInfo.data.user.username);
+    }
+  }, [userInfo]);
 
   // Scroll to top on route change
   useEffect(() => {
@@ -63,7 +66,6 @@ const NavbarComponent = () => {
   const handleSubmit = async () => {
     try {
       await logout().unwrap();
-      localStorage.removeItem("username");
       localStorage.removeItem("isLoggedIn");
       setIsLoggedIn(false);
       setShowElements(false); // Hide the elements after logout
