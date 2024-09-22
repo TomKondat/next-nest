@@ -16,28 +16,25 @@ import "./index.css";
 import ManagedProperties from "./components/ManagedProperties";
 
 const App = () => (
-      <div className="content-wrapper">
-        <Router>
-          <Navbar />
-          <div>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/faq-support" element={<FaqSupportPage />} />
-              <Route path="/login" element={<LoginRegisterPage />} />
-              <Route path="/register" element={<LoginRegisterPage />} />
-              <Route path="/addproperties" element={<AddProperty />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/properties/:id" element={<PropertyDetail />} />
-              <Route path="/SavedProperties" element={<SavedProperties />} />
-              <Route
-                path="/ManagedProperties"
-                element={<ManagedProperties />}
-              />
-            </Routes>
-          </div>
-          <Footer />
-        </Router>
+  <div className="content-wrapper">
+    <Router>
+      <Navbar />
+      <div className="content">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/faq-support" element={<FaqSupportPage />} />
+          <Route path="/login" element={<LoginRegisterPage />} />
+          <Route path="/register" element={<LoginRegisterPage />} />
+          <Route path="/addproperties" element={<AddProperty />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/properties/:id" element={<PropertyDetail />} />
+          <Route path="/SavedProperties" element={<SavedProperties />} />
+          <Route path="/ManagedProperties" element={<ManagedProperties />} />
+        </Routes>
       </div>
+      <Footer />
+    </Router>
+  </div>
 );
 
 export default App;
