@@ -114,7 +114,7 @@ const Footer = () => {
           and newsletters about the latest properties for sale and rent.
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="warning" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>

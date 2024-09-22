@@ -14,6 +14,7 @@ import {
   Button,
   Modal,
   Form,
+  Image,
 } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import PropertyMap from "./PropertyMap";
@@ -56,6 +57,7 @@ const PropertyDetail = () => {
   const [area, setArea] = useState(property?.area || "");
   const agentName = property?.agent?.name || "Unavailable";
   const agentEmail = property?.agent?.contact?.email || "Unavailable";
+  const agentPhone = property?.agent?.contact?.phone || "+1 123 123 123";
 
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -238,33 +240,33 @@ const PropertyDetail = () => {
               onHide={() => setShowContactModal(false)}
               centered
             >
-              <Modal.Header closeButton>
-                <Modal.Title className="d-flex align-items-center">
-                  <img
-                    src="https://via.placeholder.com/40"
-                    roundedCircle
-                    alt="Agent"
-                    className="me-3"
-                  />
-                  Agent: {agentName}
-                </Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Row className="my-3">
-                  <Col md={12}>
-                    <h5>Email:</h5>
-                    <p>{agentEmail}</p>
-                  </Col>
-                </Row>
+              <Modal.Body className="text-center">
+                {/* Circular Image */}
+                <Image
+                  src="https://via.placeholder.com/100"
+                  roundedCircle
+                  alt="Agent"
+                  className="mb-3"
+                />
+
+                <h4>{agentName}</h4>
                 <hr />
-                <Row className="my-3">
-                  <Col md={12}>
-                    <h5>Phone:</h5>
-                    <p>+1 123 123 123</p>
-                  </Col>
-                </Row>
+
+                <div className="mb-3">
+                  <h6>Email:</h6>
+                  <a href={`mailto:${agentEmail}`} className="text-warning">
+                    {agentEmail}
+                  </a>
+                </div>
+
+                <div className="mb-3">
+                  <h6>Phone:</h6>
+                  <a href={`tel:${agentPhone}`} className="text-warning">
+                    {agentPhone}
+                  </a>
+                </div>
               </Modal.Body>
-              <Modal.Footer>
+              <Modal.Footer className="justify-content-center">
                 <Button
                   variant="warning"
                   onClick={() => setShowContactModal(false)}

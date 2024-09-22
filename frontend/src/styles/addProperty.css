@@ -21,14 +21,9 @@
   color: white;
 }
 
-.property-form-box .btn-primary {
+.property-form-box {
   background-color: #ff8c00;
   border-color: #ff8c00;
-}
-
-.property-form-box .btn-primary:hover {
-  background-color: #ff6700;
-  border-color: #ff6700;
 }
 
 #backgcontainer {
