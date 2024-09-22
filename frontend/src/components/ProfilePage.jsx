@@ -12,6 +12,7 @@ import {
   useGetUserInfoQuery,
   useUpdateUserProfileMutation,
 } from "../slices/userApiSlice";
+import * as Icon from "react-bootstrap-icons";
 import "../styles/profilePage.css";
 
 const ProfilePage = () => {
@@ -73,8 +74,8 @@ const ProfilePage = () => {
     <Container className="profile-page border-container">
       {/* Edit Button to trigger the modal */}
       <div className="d-flex justify-content-end">
-        <Button variant="outline-danger" onClick={handleShow}>
-          Edit
+        <Button variant="outline-secondary" onClick={handleShow}>
+          <Icon.Pencil />
         </Button>
       </div>
 
@@ -95,7 +96,7 @@ const ProfilePage = () => {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit User</Modal.Title>
+          <Modal.Title>Edit User </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSaveChanges}>

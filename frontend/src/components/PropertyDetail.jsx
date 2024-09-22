@@ -15,6 +15,7 @@ import {
   Modal,
   Form,
 } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
 import { useGetUserInfoQuery } from "../slices/userApiSlice";
@@ -152,38 +153,25 @@ const PropertyDetail = () => {
             className="shadow-lg carddetail"
             style={{ padding: "20px", fontSize: "1.2rem" }}
           >
-            <div className="d-flex justify-content-end">
-              {/* Save Button for "buyer" role */}
-              {userRole === "buyer" && (
+            {/* Buttons for Edit and Delete (shown only for managed properties) */}
+            {state?.isManaged && (
+              <div className="editdeletebtn d-flex justify-content-end mb-2">
                 <Button
-                  variant="outline-warning"
-                  className="me-2"
-                  onClick={handleSave}
+                  variant="outline-secondary"
+                  className="editbtn"
+                  onClick={() => setShowEditModal(true)}
                 >
-                  Save
+                  <Icon.Pencil />
                 </Button>
-              )}
-              {/* Buttons for Edit and Delete (shown only for managed properties) */}
-              {state?.isManaged && (
-                <>
-                  <Button
-                    variant="outline-danger"
-                    className="editbtn me-2"
-                    onClick={() => setShowEditModal(true)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outline-danger"
-                    className="deletebtn"
-                    onClick={() => setShowDeleteModal(true)}
-                  >
-                    Delete
-                  </Button>
-                </>
-              )}
-            </div>
-
+                <Button
+                  variant="outline-danger"
+                  className="deletebtn"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  <Icon.Trash />
+                </Button>
+              </div>
+            )}
             {/* Property Title */}
             <Card.Title className="text-center display-5 mb-4">
               {property.title}
