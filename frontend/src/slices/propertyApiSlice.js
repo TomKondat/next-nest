@@ -41,6 +41,13 @@ export const propertyApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Property"],
     }),
+    saveProperty: builder.mutation({
+      query: (propertyId) => ({
+        url: `${PROPERTY_URL}/${propertyId}/save`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Property"],
+    }),
   }),
 });
 export const {
@@ -49,4 +56,5 @@ export const {
   useAddPropertyMutation,
   useEditPropertyMutation,
   useDeletePropertyMutation,
+  useSavePropertyMutation,
 } = propertyApiSlice;

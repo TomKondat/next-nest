@@ -4,6 +4,7 @@ import {
   useGetPropertiesQuery,
   useEditPropertyMutation,
   useDeletePropertyMutation,
+  useSavePropertyMutation, // Import the save property mutation
 } from "./../slices/propertyApiSlice";
 import {
   Container,
@@ -16,6 +17,7 @@ import {
 } from "react-bootstrap";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
+import { useGetUserInfoQuery } from "../slices/userApiSlice"; // Assuming you have this to get user info
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -23,6 +25,7 @@ const PropertyDetail = () => {
   const { data } = useGetPropertiesQuery();
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
+  const [saveProperty] = useSavePropertyMutation(); // Save mutation hook
   const navigate = useNavigate();
 
   const property = data?.properties.find((p) => p._id === id);
@@ -30,6 +33,10 @@ const PropertyDetail = () => {
   // Modal state for Edit and Contact Agent
   const [showEditModal, setShowEditModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+
+  // Fetch user info to check role
+  const { data: userInfo } = useGetUserInfoQuery();
+  const userRole = userInfo?.data?.user?.role || null;
 
   // Initialize state variables for the form fields
   const [title, setTitle] = useState(property?.title || "");
@@ -60,6 +67,17 @@ const PropertyDetail = () => {
   if (!property) {
     return <h2 className="text-center">Property not found</h2>;
   }
+
+  // Handle Save Property for buyers
+  const handleSave = async () => {
+    try {
+      await saveProperty(id).unwrap();
+      alert("Property saved successfully!");
+    } catch (err) {
+      console.error("Failed to save the property:", err);
+      alert("Failed to save the property.");
+    }
+  };
 
   // Handle Edit Property
   const handleEditSubmit = async () => {
@@ -134,25 +152,38 @@ const PropertyDetail = () => {
             className="shadow-lg carddetail"
             style={{ padding: "20px", fontSize: "1.2rem" }}
           >
-            {/* Buttons for Edit and Delete (shown only for managed properties) */}
-            {state?.isManaged && (
-              <div className="editdeletebtn d-flex justify-content-end mb-2">
+            <div className="d-flex justify-content-end">
+              {/* Save Button for "buyer" role */}
+              {userRole === "buyer" && (
                 <Button
-                  variant="outline-danger"
-                  className="editbtn"
-                  onClick={() => setShowEditModal(true)}
+                  variant="outline-warning"
+                  className="me-2"
+                  onClick={handleSave}
                 >
-                  Edit
+                  Save
                 </Button>
-                <Button
-                  variant="outline-danger"
-                  className="deletebtn"
-                  onClick={() => setShowDeleteModal(true)}
-                >
-                  Delete
-                </Button>
-              </div>
-            )}
+              )}
+              {/* Buttons for Edit and Delete (shown only for managed properties) */}
+              {state?.isManaged && (
+                <>
+                  <Button
+                    variant="outline-danger"
+                    className="editbtn me-2"
+                    onClick={() => setShowEditModal(true)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    className="deletebtn"
+                    onClick={() => setShowDeleteModal(true)}
+                  >
+                    Delete
+                  </Button>
+                </>
+              )}
+            </div>
+
             {/* Property Title */}
             <Card.Title className="text-center display-5 mb-4">
               {property.title}
