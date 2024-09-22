@@ -144,6 +144,7 @@ const NavbarComponent = () => {
                   className="text-white mb-0 me-2"
                   style={{
                     fontFamily: '"Montserrat",sans-serif',
+                    textTransform: "capitalize",
                   }}
                 >
                   Hi, {username}
