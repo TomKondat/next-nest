@@ -4,7 +4,7 @@ import {
   useGetPropertiesQuery,
   useEditPropertyMutation,
   useDeletePropertyMutation,
-  useSavePropertyMutation, // Import the save property mutation
+  useAddSavePropertyMutation,
 } from "./../slices/propertyApiSlice";
 import {
   Container,
@@ -17,15 +17,15 @@ import {
 } from "react-bootstrap";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
-import { useGetUserInfoQuery } from "../slices/userApiSlice"; // Assuming you have this to get user info
+import { useGetUserInfoQuery } from "../slices/userApiSlice";
 
 const PropertyDetail = () => {
   const { id } = useParams();
-  const { state } = useLocation(); // Get the state passed from ManagedProperties
+  const { state } = useLocation();
   const { data } = useGetPropertiesQuery();
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
-  const [saveProperty] = useSavePropertyMutation(); // Save mutation hook
+  const [addSaveProperty] = useAddSavePropertyMutation();
   const navigate = useNavigate();
 
   const property = data?.properties.find((p) => p._id === id);
@@ -71,7 +71,7 @@ const PropertyDetail = () => {
   // Handle Save Property for buyers
   const handleSave = async () => {
     try {
-      await saveProperty(id).unwrap();
+      await addSaveProperty(id).unwrap();
       alert("Property saved successfully!");
     } catch (err) {
       console.error("Failed to save the property:", err);
