@@ -14,6 +14,7 @@ import {
   Modal,
   Form,
 } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
 
@@ -135,18 +136,18 @@ const PropertyDetail = () => {
             {state?.isManaged && (
               <div className="editdeletebtn d-flex justify-content-end mb-2">
                 <Button
-                  variant="outline-danger"
+                  variant="outline-secondary"
                   className="editbtn"
                   onClick={() => setShowEditModal(true)}
                 >
-                  Edit
+                  <Icon.Pencil />
                 </Button>
                 <Button
                   variant="outline-danger"
                   className="deletebtn"
                   onClick={() => setShowDeleteModal(true)}
                 >
-                  Delete
+                  <Icon.Trash />
                 </Button>
               </div>
             )}
