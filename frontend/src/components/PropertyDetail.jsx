@@ -27,8 +27,9 @@ const PropertyDetail = () => {
 
   const property = data?.properties.find((p) => p._id === id);
 
-  // Modal state for Edit
+  // Modal state for Edit and Contact Agent
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   // Initialize state variables for the form fields
   const [title, setTitle] = useState(property?.title || "");
@@ -45,6 +46,8 @@ const PropertyDetail = () => {
   const [bedrooms, setBedrooms] = useState(property?.bedrooms || "");
   const [bathrooms, setBathrooms] = useState(property?.bathrooms || "");
   const [area, setArea] = useState(property?.area || "");
+  const agentName = property?.agent?.name || "Unavailable";
+  const agentEmail = property?.agent?.contact?.email || "Unavailable";
 
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -200,6 +203,58 @@ const PropertyDetail = () => {
               <strong>Description:</strong> {property.description}
             </Card.Text>
 
+            {/* Contact Agent Button */}
+            <Button
+              variant="warning"
+              size="md"
+              onClick={() => setShowContactModal(true)}
+              className="d-block mx-auto"
+            >
+              Contact Agent
+            </Button>
+
+            {/* Contact Agent Modal */}
+            <Modal
+              show={showContactModal}
+              onHide={() => setShowContactModal(false)}
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title className="d-flex align-items-center">
+                  <img
+                    src="https://via.placeholder.com/40"
+                    roundedCircle
+                    alt="Agent"
+                    className="me-3"
+                  />
+                  Agent: {agentName}
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Row className="my-3">
+                  <Col md={12}>
+                    <h5>Email:</h5>
+                    <p>{agentEmail}</p>
+                  </Col>
+                </Row>
+                <hr />
+                <Row className="my-3">
+                  <Col md={12}>
+                    <h5>Phone:</h5>
+                    <p>+1 123 123 123</p>
+                  </Col>
+                </Row>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="warning"
+                  onClick={() => setShowContactModal(false)}
+                >
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
             {/* Map Section */}
             <div className="mt-4 map-wrapper">
               {property?.location?.coordinates?.lat &&
@@ -222,11 +277,6 @@ const PropertyDetail = () => {
               <Link className="m-2" to="/">
                 <Button variant="warning" size="md">
                   View More Properties
-                </Button>
-              </Link>
-              <Link className="m-2" to="/profile">
-                <Button variant="warning" size="md">
-                  Contact the Seller
                 </Button>
               </Link>
             </div>
