@@ -1,18 +1,19 @@
 .content-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: end;
   min-height: 100vh;
 }
 
 .content {
   flex: 1;
+  background-color: rgba(250, 235, 215, 0.735);
 }
 
 .footer {
   background-color: #343a40;
   color: #ffffff;
   padding: 20px 0;
+  width: 100%;
 }
 
 #subscribe {
@@ -22,6 +23,7 @@
 #social a {
   transition: 0.3s ease-in-out;
 }
+
 #social a:hover {
   color: rgb(1, 207, 203) !important;
 }
