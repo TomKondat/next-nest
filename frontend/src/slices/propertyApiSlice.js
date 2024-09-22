@@ -48,6 +48,13 @@ export const propertyApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Property"],
     }),
+    removeSaveProperty: builder.mutation({
+      query: (propertyId) => ({
+        url: `${PROPERTY_URL}/add-saved-property/${propertyId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["SavedProperty"],
+    }),
   }),
 });
 export const {
@@ -57,4 +64,5 @@ export const {
   useEditPropertyMutation,
   useDeletePropertyMutation,
   useAddSavePropertyMutation,
+  useRemoveSavePropertyMutation,
 } = propertyApiSlice;

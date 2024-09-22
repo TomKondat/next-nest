@@ -5,6 +5,7 @@ import {
   useEditPropertyMutation,
   useDeletePropertyMutation,
   useAddSavePropertyMutation,
+  useRemoveSavePropertyMutation,
 } from "./../slices/propertyApiSlice";
 import {
   Container,
@@ -28,6 +29,7 @@ const PropertyDetail = () => {
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
   const [addSaveProperty] = useAddSavePropertyMutation();
+  const [removeSaveProperty] = useRemoveSavePropertyMutation(); // Unsave property mutation
   const navigate = useNavigate();
 
   const property = data?.properties.find((p) => p._id === id);
@@ -39,6 +41,10 @@ const PropertyDetail = () => {
   // Fetch user info to check role
   const { data: userInfo } = useGetUserInfoQuery();
   const userRole = userInfo?.data?.user?.role || null;
+  const savedProperties = userInfo?.data?.user?.savedProperties || [];
+
+  // Check if the current property is already saved
+  const isPropertySaved = savedProperties.includes(id);
 
   // Initialize state variables for the form fields
   const [title, setTitle] = useState(property?.title || "");
@@ -79,6 +85,17 @@ const PropertyDetail = () => {
     } catch (err) {
       console.error("Failed to save the property:", err);
       alert("Failed to save the property.");
+    }
+  };
+
+  // Handle Unsave Property for buyers
+  const handleUnsave = async () => {
+    try {
+      await removeSaveProperty(id).unwrap();
+      alert("Property unsaved successfully!");
+    } catch (err) {
+      console.error("Failed to unsave the property:", err);
+      alert("Failed to unsave the property.");
     }
   };
 
@@ -152,28 +169,24 @@ const PropertyDetail = () => {
       <Row className="w-100 d-flex justify-content-center">
         <Col xs={12} md={10} lg={8}>
           <Card
-            className="shadow-lg carddetail"
+            className="shadow-lg carddetail position-relative"
             style={{ padding: "20px", fontSize: "1.2rem" }}
           >
-            {/* Buttons for Edit and Delete (shown only for managed properties) */}
-            {state?.isManaged && (
-              <div className="editdeletebtn d-flex justify-content-end mb-2">
-                <Button
-                  variant="outline-secondary"
-                  className="editbtn"
-                  onClick={() => setShowEditModal(true)}
-                >
-                  <Icon.Pencil />
-                </Button>
-                <Button
-                  variant="outline-danger"
-                  className="deletebtn"
-                  onClick={() => setShowDeleteModal(true)}
-                >
-                  <Icon.Trash />
-                </Button>
+            {/* Save/Unsave Buttons for Buyers */}
+            {userRole === "buyer" && (
+              <div className="position-absolute top-0 end-0 p-3">
+                {isPropertySaved ? (
+                  <Button variant="danger" onClick={handleUnsave}>
+                    Unsave
+                  </Button>
+                ) : (
+                  <Button variant="warning" onClick={handleSave}>
+                    Save
+                  </Button>
+                )}
               </div>
             )}
+
             {/* Property Title */}
             <Card.Title className="text-center display-5 mb-4">
               {property.title}
