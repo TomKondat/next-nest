@@ -34,6 +34,7 @@ const LoginRegisterPage = () => {
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
   const [regConfirmPassword, setRegConfirmPassword] = useState("");
+  const [regPhone, setRegPhone] = useState("");
   const [username, setUsername] = useState("");
 
   // Fetch user data using useGetUserInfoQuery
@@ -97,6 +98,7 @@ const LoginRegisterPage = () => {
       email: regEmail,
       password: regPassword,
       confirmPassword: regConfirmPassword,
+      phone: regPhone,
     };
 
     try {
@@ -181,13 +183,27 @@ const LoginRegisterPage = () => {
                         controlId="formRegisterEmail"
                         className="mb-3"
                       >
-                        <Form.Label>Email address</Form.Label>
+                        <Form.Label>Email Address</Form.Label>
                         <Form.Control
                           type="email"
                           placeholder="Enter email"
                           required
                           value={regEmail}
                           onChange={(e) => setRegEmail(e.target.value)}
+                        />
+                      </Form.Group>
+
+                      <Form.Group
+                        controlId="formRegisterPhone"
+                        className="mb-3"
+                      >
+                        <Form.Label>Phone Number</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="Enter phone number"
+                          required
+                          value={regPhone}
+                          onChange={(e) => setRegPhone(e.target.value)}
                         />
                       </Form.Group>
 
