@@ -19,6 +19,7 @@ import {
 } from "react-bootstrap";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
+import { UPLOADS_URL } from "../slices/urlConstrains";
 import { useGetUserInfoQuery } from "../slices/userApiSlice";
 
 const PropertyDetail = () => {
