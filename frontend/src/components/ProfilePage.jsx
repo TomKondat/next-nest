@@ -140,7 +140,7 @@ const ProfilePage = () => {
               />
             </Form.Group>
 
-            <Button variant="success" type="submit">
+            <Button variant="warning" type="submit">
               Save Changes
             </Button>
           </Form>
@@ -158,7 +158,7 @@ const ProfilePage = () => {
               <Form.Label>Select new profile image</Form.Label>
               <Form.Control type="file" onChange={handleImageChange} />
             </Form.Group>
-            <Button variant="success" onClick={handleImageClose}>
+            <Button variant="warning" onClick={handleImageClose}>
               Save Image
             </Button>
           </Form>
