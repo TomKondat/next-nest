@@ -4,9 +4,15 @@ import { apiSlice } from "./apiSlice";
 export const propertyApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProperties: builder.query({
-      query: ({ page = 1, limit = RESAULT_NUM, sort } = {}) => ({
-        url: `${PROPERTY_URL}?page=${page}&limit=${limit}&sort=${sort}`,
-      }),
+      query: ({ page = 1, limit = RESAULT_NUM, propertyType, priceRange, bedrooms, saleType, sort }) => {
+        let queryParams = `?page=${page}&limit=${limit}`;
+        if (sort) queryParams += `&sort=${sort}`;
+        if (propertyType) queryParams += `&propertyType=${propertyType.toLowerCase()}`;
+        if (priceRange) queryParams += `&priceRange=${priceRange}`;
+        if (bedrooms) queryParams += `&bedrooms=${bedrooms}`;
+        if (saleType) queryParams += `&saleType=${saleType}`;
+        return { url: `${PROPERTY_URL}${queryParams}` };
+      },
       providesTags: ["Property"],
     }),
 

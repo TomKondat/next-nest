@@ -1,19 +1,18 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { Row, Col } from "react-bootstrap";
-
 import "../styles/propertyItem.css";
 import { RESAULT_NUM } from "../slices/urlConstrains";
 import PropertyItem from "./PropertyItem";
 import { useGetPropertiesQuery } from "./../slices/propertyApiSlice";
 
-const PropertyList = () => {
+const PropertyList = ({ searchParams }) => {
   const [page, setPage] = useState(1);
   const [sortOrder, setSortOrder] = useState("price");
-  
-  const { data, error, isLoading } = useGetPropertiesQuery({ page, sort: sortOrder });
+
+  const { data, error, isLoading } = useGetPropertiesQuery({ page, sort: sortOrder, ...searchParams });
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div>Error: {error?.data?.message}</div>;
 
   const propertiesArr = data?.properties || [];
   const totalProperties = data?.totalProperties || 0;
@@ -24,7 +23,7 @@ const PropertyList = () => {
       setPage(newPage);
     }
   };
-  
+
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
   };
@@ -32,6 +31,8 @@ const PropertyList = () => {
   return (
     <div className="property-list-wrapper">
       <h4>Searched Properties</h4>
+
+      {/* Sort by dropdown */}
       <div className="sort-wrapper">
         <label htmlFor="sort">Sort by: </label>
         <select id="sort" value={sortOrder} onChange={handleSortChange}>
@@ -39,6 +40,7 @@ const PropertyList = () => {
           <option value="-price">Price (High to Low)</option>
         </select>
       </div>
+
       <Row className="g-3">
         {propertiesArr.length > 0 ? (
           propertiesArr.map((property) => (
@@ -58,11 +60,19 @@ const PropertyList = () => {
 
       {/* Pagination controls */}
       <div className="pagination-controls page-button-wrapper">
-        <button className="page-button"  onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
+        <button
+          className="page-button"
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}
+        >
           Previous
         </button>
-        <span>{   }Page {page} of {totalPages}{   }</span>
-        <button className="page-button" onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>
+        <span>Page {page} of {totalPages}</span>
+        <button
+          className="page-button"
+          onClick={() => handlePageChange(page + 1)}
+          disabled={page === totalPages}
+        >
           Next
         </button>
       </div>

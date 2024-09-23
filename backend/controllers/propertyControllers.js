@@ -25,8 +25,8 @@ exports.addProperty = asyncHandler(async (req, res, next) => {
         return next(new AppError(403, "Only agents can add properties"));
     }
 
-    const { title, propertyType, price, description, area } = req.body;
-    if (!title || !propertyType || !price || !description || !area) {
+    const { title, propertyType, price, description, area, saleType } = req.body;
+    if (!title || !propertyType || !price || !description || !area || !saleType) {
         return next(new AppError(400, 'Please provide all the required fields'));
     }
     req.body.agent = {
@@ -58,18 +58,16 @@ exports.addProperty = asyncHandler(async (req, res, next) => {
 });
 
 exports.getProperties = asyncHandler(async (req, res, next) => {
-    let filter = {};
-    if (req.params.propertyId) {
-        filter = { _id: req.params.propertyId };
-    }
-    const apimethods = new APImethods(Property.find(filter), req.query);
-    apimethods.filter().sort().selectFields().makePagination();
+    const apimethods = new APImethods(Property.find(), req.query);
+    apimethods.filter().sort().selectFields();
+
+    const totalProperties = await apimethods.query.clone().countDocuments();
+    apimethods.makePagination();
 
     const properties = await apimethods.query;
     if (!properties || properties.length === 0) {
         return next(new AppError(404, 'No properties found'));
     }
-    const totalProperties = await Property.countDocuments(filter);
     res.status(200).json({
         status: 'success',
         totalProperties,
@@ -95,7 +93,6 @@ exports.getPropertyById = asyncHandler(async (req, res, next) => {
 });
 
 exports.editPropertyById = asyncHandler(async (req, res, next) => {
-    console.log(req.params);
 
     const { id: property_Id } = req.params;
     if (!property_Id) {
