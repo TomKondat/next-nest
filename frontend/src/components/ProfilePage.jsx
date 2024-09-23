@@ -17,14 +17,17 @@ import "../styles/profilePage.css";
 
 const ProfilePage = () => {
   const { data, error, isLoading, refetch } = useGetUserInfoQuery();
+
   const [editUser] = useUpdateUserProfileMutation();
 
   const [displayUsername, setDisplayUsername] = useState("");
   const [displayEmail, setDisplayEmail] = useState("");
+  const [displayPhone, setDisplayPhone] = useState("");
   const [profileImage, setProfileImage] = useState("../../images/aip.webp");
 
   const [editUsername, setEditUsername] = useState("");
   const [editEmail, setEditEmail] = useState("");
+  const [editPhone, setEditPhone] = useState("");
 
   const [show, setShow] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -35,6 +38,7 @@ const ProfilePage = () => {
     // Populate modal fields with the current data
     setEditUsername(displayUsername);
     setEditEmail(displayEmail);
+    setEditPhone(displayPhone);
     setShow(true);
   };
 
@@ -51,6 +55,7 @@ const ProfilePage = () => {
     if (data) {
       setDisplayUsername(data?.data.user.username);
       setDisplayEmail(data?.data.user.email);
+      setDisplayPhone(data?.data.user.phone);
     }
   }, [data]);
 
@@ -60,17 +65,19 @@ const ProfilePage = () => {
     const formData = {
       newUsername: editUsername,
       newEmail: editEmail,
+      newPhone: editPhone,
     };
 
     try {
       await editUser(formData).unwrap();
       setDisplayUsername(editUsername);
       setDisplayEmail(editEmail);
-
+      setDisplayPhone(editPhone);
       handleClose();
 
       setEditUsername("");
       setEditEmail("");
+      setEditPhone("");
 
       refetch();
     } catch (err) {
@@ -107,8 +114,12 @@ const ProfilePage = () => {
               />
             </div>
             <h2 className="profile-name"> {displayUsername}</h2>
-            <p className="profile-email">Email: {displayEmail}</p>
-            <p className="profile-email">Phone: {displayEmail}</p>
+            <p className="profile-email">
+              <strong>Email:</strong> {displayEmail}
+            </p>
+            <p className="profile-email">
+              <strong>Phone:</strong> {displayPhone}
+            </p>
           </div>
         </Col>
       </Row>
@@ -137,6 +148,16 @@ const ProfilePage = () => {
                 placeholder="Change Email"
                 value={editEmail}
                 onChange={(e) => setEditEmail(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="phone" className="mb-3">
+              <Form.Label>Phone</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Change Phone Number"
+                value={editPhone}
+                onChange={(e) => setEditPhone(e.target.value)}
               />
             </Form.Group>
 

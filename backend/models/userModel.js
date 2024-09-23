@@ -47,8 +47,17 @@ const userSchema = new mongoose.Schema(
       },
       default: "buyer",
     },
+
     phone: {
       type: String,
+      required: [true, "The user must have a phone number"],
+      validate: {
+        validator: function (phone) {
+          return phone.length === 10;
+        },
+        message: "Phone number must be exactly 10 characters",
+      },
+      default: "0000000000",
     },
     managedProperties: [
       {
@@ -73,7 +82,9 @@ const userSchema = new mongoose.Schema(
 );
 userSchema.post("save", function (error, doc, next) {
   if (error.name === "MongoServerError" && error.code === 11000) {
-    return next(new AppError(400, "Email already exists. Please use another one."));
+    return next(
+      new AppError(400, "Email already exists. Please use another one.")
+    );
   }
   next();
 });
