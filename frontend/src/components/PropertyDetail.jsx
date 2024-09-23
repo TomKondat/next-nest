@@ -46,6 +46,9 @@ const PropertyDetail = () => {
   // Check if the current property is already saved
   const isPropertySaved = savedProperties.includes(id);
 
+  // State to control the visibility of the Save button
+  const [showSaveButton, setShowSaveButton] = useState(!isPropertySaved);
+
   // Initialize state variables for the form fields
   const [title, setTitle] = useState(property?.title || "");
   const [propertyType, setPropertyType] = useState(
@@ -81,6 +84,7 @@ const PropertyDetail = () => {
   const handleSave = async () => {
     try {
       await addSaveProperty(id).unwrap();
+      setShowSaveButton(false); // Hide the save button after clicking
       alert("Property saved successfully!");
     } catch (err) {
       console.error("Failed to save the property:", err);
@@ -175,13 +179,13 @@ const PropertyDetail = () => {
             {/* Save/Unsave Buttons for Buyers */}
             {userRole === "buyer" && (
               <div className="position-absolute top-0 end-0 p-3">
-                {isPropertySaved ? (
-                  <Button variant="danger" onClick={handleUnsave}>
-                    Unsave
-                  </Button>
-                ) : (
+                {showSaveButton ? (
                   <Button variant="warning" onClick={handleSave}>
                     Save
+                  </Button>
+                ) : (
+                  <Button variant="danger" onClick={handleUnsave}>
+                    Unsave
                   </Button>
                 )}
               </div>
@@ -304,15 +308,6 @@ const PropertyDetail = () => {
                   Map information is not available for this property
                 </p>
               )}
-            </div>
-
-            {/* Buttons Section */}
-            <div className="d-flex justify-content-center flex-wrap mt-4">
-              <Link className="m-2" to="/">
-                <Button variant="warning" size="md">
-                  View More Properties
-                </Button>
-              </Link>
             </div>
           </Card>
         </Col>
