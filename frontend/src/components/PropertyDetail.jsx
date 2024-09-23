@@ -17,7 +17,6 @@ import {
   Form,
   Image,
 } from "react-bootstrap";
-import * as Icon from "react-bootstrap-icons";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
 import { useGetUserInfoQuery } from "../slices/userApiSlice";
@@ -26,10 +25,11 @@ const PropertyDetail = () => {
   const { id } = useParams();
   const { state } = useLocation();
   const { data } = useGetPropertiesQuery();
+
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
   const [addSaveProperty] = useAddSavePropertyMutation();
-  const [removeSaveProperty] = useRemoveSavePropertyMutation(); // Unsave property mutation
+  const [removeSaveProperty] = useRemoveSavePropertyMutation();
   const navigate = useNavigate();
 
   const property = data?.properties.find((p) => p._id === id);
@@ -66,7 +66,7 @@ const PropertyDetail = () => {
   const [area, setArea] = useState(property?.area || "");
   const agentName = property?.agent?.name || "Unavailable";
   const agentEmail = property?.agent?.contact?.email || "Unavailable";
-  const agentPhone = property?.agent?.contact?.phone || "+1 123 123 123";
+  const agentPhone = property?.agent?.contact?.phone || "";
 
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
