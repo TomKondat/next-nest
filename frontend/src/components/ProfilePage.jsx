@@ -8,6 +8,7 @@ import {
   Modal,
   Form,
 } from "react-bootstrap";
+import { Link } from "react-router-dom"; // Import Link for navigation
 import {
   useGetUserInfoQuery,
   useUpdateUserProfileMutation,
@@ -17,6 +18,7 @@ import "../styles/profilePage.css";
 
 const ProfilePage = () => {
   const { data, error, isLoading, refetch } = useGetUserInfoQuery();
+  const userRole = data?.data?.user?.role || null;
 
   const [editUser] = useUpdateUserProfileMutation();
 
@@ -35,7 +37,6 @@ const ProfilePage = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
-    // Populate modal fields with the current data
     setEditUsername(displayUsername);
     setEditEmail(displayEmail);
     setEditPhone(displayPhone);
@@ -45,12 +46,10 @@ const ProfilePage = () => {
   const handleImageClose = () => setShowImageModal(false);
   const handleImageShow = () => setShowImageModal(true);
 
-  // Handle profile image change
   const handleImageChange = (e) => {
     alert("Image selected");
   };
 
-  // Populate the profile with fetched user data
   useEffect(() => {
     if (data) {
       setDisplayUsername(data?.data.user.username);
@@ -59,7 +58,6 @@ const ProfilePage = () => {
     }
   }, [data]);
 
-  // Handle saving changes
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     const formData = {
@@ -91,7 +89,6 @@ const ProfilePage = () => {
 
   return (
     <Container className="profile-page border-container">
-      {/* Edit Button to trigger the modal */}
       <div className="d-flex justify-content-end ">
         <Button variant="outline-dark" onClick={handleImageShow}>
           <Icon.Camera />
@@ -102,7 +99,6 @@ const ProfilePage = () => {
         </Button>
       </div>
 
-      {/* User Info */}
       <Row className="justify-content-center">
         <Col xs={12} md={8} className="text-center">
           <div className="profile-header">
@@ -123,6 +119,32 @@ const ProfilePage = () => {
           </div>
         </Col>
       </Row>
+
+      {/* Agent-Specific Buttons */}
+      {userRole === "agent" && (
+        <div className="mb-3 text-center">
+          <Button
+            as={Link}
+            to="/addproperties"
+            variant="warning"
+            className="me-2"
+          >
+            Add Property
+          </Button>
+          <Button as={Link} to="/ManagedProperties" variant="warning">
+            Managed Properties
+          </Button>
+        </div>
+      )}
+
+      {/* Buyer-Specific Buttons */}
+      {userRole === "buyer" && (
+        <div className="mb-3 text-center">
+          <Button as={Link} to="/SavedProperties" variant="warning">
+            Saved Properties
+          </Button>
+        </div>
+      )}
 
       {/* Edit Profile Modal */}
       <Modal show={show} onHide={handleClose}>

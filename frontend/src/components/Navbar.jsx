@@ -126,34 +126,6 @@ const NavbarComponent = () => {
             <Nav.Link as={Link} to="/" onClick={handleNavLinkClick}>
               Home
             </Nav.Link>
-
-            {isLoggedIn && userRole === "agent" && (
-              <>
-                <Nav.Link
-                  as={Link}
-                  to="/addproperties"
-                  onClick={handleNavLinkClick}
-                >
-                  Add Property
-                </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/ManagedProperties"
-                  onClick={handleNavLinkClick}
-                >
-                  Managed Properties
-                </Nav.Link>
-              </>
-            )}
-            {isLoggedIn && userRole === "buyer" && (
-              <Nav.Link
-                as={Link}
-                to="/SavedProperties"
-                onClick={handleNavLinkClick}
-              >
-                Saved Properties
-              </Nav.Link>
-            )}
           </Nav>
 
           <Nav>

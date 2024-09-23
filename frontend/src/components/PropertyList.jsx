@@ -15,7 +15,7 @@ const PropertyList = () => {
 
   return (
     <div className="property-list-wrapper">
-      <h4>Searched Properties</h4>
+      <h4>Properties</h4>
       <Row className="g-3">
         {" "}
         {/* Add gap between rows and columns */}
