@@ -1,7 +1,7 @@
 .profile-page {
   margin-top: 80px !important;
   padding: 30px;
-  background-color: #e9eaeb;
+  background-color: rgba(255, 255, 255, 0.461);
 }
 
 .border-container {
@@ -15,10 +15,21 @@
   margin-bottom: 30px;
 }
 
+.profile-image-container {
+  position: relative;
+  cursor: pointer;
+}
+
 .profile-image {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border: 3px solid #6c757d;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.profile-image:hover {
+  transform: scale(1.05);
 }
 
 .profile-name {

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Import useLocation
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../images/NNlogo.png";
 import "../styles/navbar.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -11,6 +11,9 @@ import {
 import { useDispatch } from "react-redux"; // To clear the user state on logout
 
 const NavbarComponent = () => {
+  const { data: userInfo } = useGetUserInfoQuery();
+  const userRole = userInfo?.data?.user?.role || null;
+
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
   const location = useLocation(); // To detect route change
@@ -18,32 +21,29 @@ const NavbarComponent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [showElements, setShowElements] = useState(false);
+  const [expanded, setExpanded] = useState(false); // State for navbar expanded
 
-  // Fetch user info
-  const { data: userInfo } = useGetUserInfoQuery();
-  const userRole = userInfo?.data?.user?.role || null;
+  const navbarRef = useRef(null); // Ref for detecting click outside
 
-  // Function to check login status from localStorage
   const checkLoginStatus = () => {
     const loginStatus = localStorage.getItem("isLoggedIn");
-    const storedUsername = localStorage.getItem("username");
     setIsLoggedIn(loginStatus === "true");
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
   };
 
-  // Scroll to top on route change
+  useEffect(() => {
+    if (userInfo?.data?.user?.username) {
+      setUsername(userInfo.data.user.username);
+    }
+  }, [userInfo]);
+
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to the top of the page on route change
-  }, [location.pathname]); // Triggered whenever the path changes
+  }, [location.pathname]);
 
-  // Check login status initially and every time localStorage changes
   useEffect(() => {
     checkLoginStatus();
 
     if (localStorage.getItem("isLoggedIn") === "true") {
-      // Delay showing the elements after login
       const timer = setTimeout(() => {
         setShowElements(true);
       }, 500);
@@ -52,7 +52,6 @@ const NavbarComponent = () => {
       setShowElements(false);
     }
 
-    // Watch for changes in localStorage to update login status dynamically
     window.addEventListener("storage", checkLoginStatus);
 
     return () => {
@@ -60,18 +59,33 @@ const NavbarComponent = () => {
     };
   }, [isLoggedIn]);
 
+  // Detect click outside to collapse the navbar
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+        setExpanded(false); // Collapse the navbar
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleNavLinkClick = () => {
+    setExpanded(false); // Collapse the navbar when a NavLink is clicked
+  };
+
   const handleSubmit = async () => {
     try {
       await logout().unwrap();
-      localStorage.removeItem("username");
       localStorage.removeItem("isLoggedIn");
       setIsLoggedIn(false);
-      setShowElements(false); // Hide the elements after logout
+      setShowElements(false);
 
-      // Clear role-related UI after logout
-      dispatch({ type: "user/clearUserInfo" }); // Action to clear user info
+      dispatch({ type: "user/clearUserInfo" });
 
-      // Redirect to homepage after logout
       navigate("/");
 
       alert("Logged out.");
@@ -83,7 +97,13 @@ const NavbarComponent = () => {
   };
 
   return (
-    <Navbar expand="lg" fixed="top" className="navbar-transparent">
+    <Navbar
+      expand="lg"
+      fixed="top"
+      className="navbar-transparent"
+      expanded={expanded} // Controls whether the navbar is expanded or collapsed
+      ref={navbarRef} // Attach the ref to the navbar
+    >
       <Container fluid>
         <Navbar.Brand as={Link} to="/" className="text-white">
           <img
@@ -99,34 +119,18 @@ const NavbarComponent = () => {
           aria-controls="navbar-nav"
           className="bg-white"
           id="hamburger"
+          onClick={() => setExpanded(!expanded)} // Toggle expanded state
         />
         <Navbar.Collapse id="navbar-nav" className="justify-content-center">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={Link} to="/" onClick={handleNavLinkClick}>
               Home
             </Nav.Link>
-
-            {/* Conditionally render NavLinks based on user role */}
-            {isLoggedIn && userRole === "agent" && (
-              <>
-                <Nav.Link as={Link} to="/addproperties">
-                  Add Property
-                </Nav.Link>
-                <Nav.Link as={Link} to="/ManagedProperties">
-                  Managed Properties
-                </Nav.Link>
-              </>
-            )}
-            {isLoggedIn && userRole === "buyer" && (
-              <Nav.Link as={Link} to="/SavedProperties">
-                Saved Properties
-              </Nav.Link>
-            )}
           </Nav>
 
           <Nav>
             {!isLoggedIn && (
-              <Nav.Link as={Link} to="/login">
+              <Nav.Link as={Link} to="/login" onClick={handleNavLinkClick}>
                 Login/Register
               </Nav.Link>
             )}
@@ -142,13 +146,17 @@ const NavbarComponent = () => {
                   className="text-white mb-0 me-2"
                   style={{
                     fontFamily: '"Montserrat",sans-serif',
+                    textTransform: "capitalize",
                   }}
                 >
                   Hi, {username}
                 </h5>
-                {/* Profile link only visible when logged in */}
                 <Nav className="me-2">
-                  <Nav.Link as={Link} to="/profile">
+                  <Nav.Link
+                    as={Link}
+                    to="/profile"
+                    onClick={handleNavLinkClick}
+                  >
                     <i
                       className="bi bi-person-circle"
                       style={{

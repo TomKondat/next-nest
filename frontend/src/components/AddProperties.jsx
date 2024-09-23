@@ -215,7 +215,7 @@ const AddProperty = () => {
                   </Row>
 
                   <div className="d-flex justify-content-center mt-4">
-                    <Button variant="primary" type="submit" className="w-50">
+                    <Button variant="warning" type="submit" className="w-50">
                       {isLoading ? "Adding..." : "Add Property"}
                     </Button>
                   </div>

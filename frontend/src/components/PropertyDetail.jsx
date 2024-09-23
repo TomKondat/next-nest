@@ -4,6 +4,8 @@ import {
   useGetPropertiesQuery,
   useEditPropertyMutation,
   useDeletePropertyMutation,
+  useAddSavePropertyMutation,
+  useRemoveSavePropertyMutation,
 } from "./../slices/propertyApiSlice";
 import {
   Container,
@@ -13,23 +15,40 @@ import {
   Button,
   Modal,
   Form,
+  Image,
 } from "react-bootstrap";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
 import { UPLOADS_URL } from "../slices/urlConstrains";
+import { useGetUserInfoQuery } from "../slices/userApiSlice";
 
 const PropertyDetail = () => {
   const { id } = useParams();
-  const { state } = useLocation(); // Get the state passed from ManagedProperties
+  const { state } = useLocation();
   const { data } = useGetPropertiesQuery();
+
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
+  const [addSaveProperty] = useAddSavePropertyMutation();
+  const [removeSaveProperty] = useRemoveSavePropertyMutation();
   const navigate = useNavigate();
 
   const property = data?.properties.find((p) => p._id === id);
 
-  // Modal state for Edit
+  // Modal state for Edit and Contact Agent
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+
+  // Fetch user info to check role
+  const { data: userInfo } = useGetUserInfoQuery();
+  const userRole = userInfo?.data?.user?.role || null;
+  const savedProperties = userInfo?.data?.user?.savedProperties || [];
+
+  // Check if the current property is already saved
+  const isPropertySaved = savedProperties.includes(id);
+
+  // State to control the visibility of the Save button
+  const [showSaveButton, setShowSaveButton] = useState(!isPropertySaved);
 
   // Initialize state variables for the form fields
   const [title, setTitle] = useState(property?.title || "");
@@ -46,6 +65,9 @@ const PropertyDetail = () => {
   const [bedrooms, setBedrooms] = useState(property?.bedrooms || "");
   const [bathrooms, setBathrooms] = useState(property?.bathrooms || "");
   const [area, setArea] = useState(property?.area || "");
+  const agentName = property?.agent?.name || "Unavailable";
+  const agentEmail = property?.agent?.contact?.email || "Unavailable";
+  const agentPhone = property?.agent?.contact?.phone || "";
 
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -58,6 +80,29 @@ const PropertyDetail = () => {
   if (!property) {
     return <h2 className="text-center">Property not found</h2>;
   }
+
+  // Handle Save Property for buyers
+  const handleSave = async () => {
+    try {
+      await addSaveProperty(id).unwrap();
+      setShowSaveButton(false); // Hide the save button after clicking
+      alert("Property saved successfully!");
+    } catch (err) {
+      console.error("Failed to save the property:", err);
+      alert("Failed to save the property.");
+    }
+  };
+
+  // Handle Unsave Property for buyers
+  const handleUnsave = async () => {
+    try {
+      await removeSaveProperty(id).unwrap();
+      alert("Property unsaved successfully!");
+    } catch (err) {
+      console.error("Failed to unsave the property:", err);
+      alert("Failed to unsave the property.");
+    }
+  };
 
   // Handle Edit Property
   const handleEditSubmit = async () => {
@@ -129,28 +174,24 @@ const PropertyDetail = () => {
       <Row className="w-100 d-flex justify-content-center">
         <Col xs={12} md={10} lg={8}>
           <Card
-            className="shadow-lg carddetail"
+            className="shadow-lg carddetail position-relative"
             style={{ padding: "20px", fontSize: "1.2rem" }}
           >
-            {/* Buttons for Edit and Delete (shown only for managed properties) */}
-            {state?.isManaged && (
-              <div className="editdeletebtn d-flex justify-content-end mb-2">
-                <Button
-                  variant="outline-danger"
-                  className="editbtn"
-                  onClick={() => setShowEditModal(true)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="outline-danger"
-                  className="deletebtn"
-                  onClick={() => setShowDeleteModal(true)}
-                >
-                  Delete
-                </Button>
+            {/* Save/Unsave Buttons for Buyers */}
+            {userRole === "buyer" && (
+              <div className="position-absolute top-0 end-0 p-3">
+                {showSaveButton ? (
+                  <Button variant="warning" onClick={handleSave}>
+                    Save
+                  </Button>
+                ) : (
+                  <Button variant="danger" onClick={handleUnsave}>
+                    Unsave
+                  </Button>
+                )}
               </div>
             )}
+
             {/* Property Title */}
             <Card.Title className="text-center display-5 mb-4">
               {property.title}
@@ -201,6 +242,58 @@ const PropertyDetail = () => {
               <strong>Description:</strong> {property.description}
             </Card.Text>
 
+            {/* Contact Agent Button */}
+            <Button
+              variant="warning"
+              size="md"
+              onClick={() => setShowContactModal(true)}
+              className="d-block mx-auto"
+            >
+              Contact Agent
+            </Button>
+
+            {/* Contact Agent Modal */}
+            <Modal
+              show={showContactModal}
+              onHide={() => setShowContactModal(false)}
+              centered
+            >
+              <Modal.Body className="text-center">
+                {/* Circular Image */}
+                <Image
+                  src="https://via.placeholder.com/100"
+                  roundedCircle
+                  alt="Agent"
+                  className="mb-3"
+                />
+
+                <h4>{agentName}</h4>
+                <hr />
+
+                <div className="mb-3">
+                  <h6>Email:</h6>
+                  <a href={`mailto:${agentEmail}`} className="text-warning">
+                    {agentEmail}
+                  </a>
+                </div>
+
+                <div className="mb-3">
+                  <h6>Phone:</h6>
+                  <a href={`tel:${agentPhone}`} className="text-warning">
+                    {agentPhone}
+                  </a>
+                </div>
+              </Modal.Body>
+              <Modal.Footer className="justify-content-center">
+                <Button
+                  variant="warning"
+                  onClick={() => setShowContactModal(false)}
+                >
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
             {/* Map Section */}
             <div className="mt-4 map-wrapper">
               {property?.location?.coordinates?.lat &&
@@ -216,20 +309,6 @@ const PropertyDetail = () => {
                   Map information is not available for this property
                 </p>
               )}
-            </div>
-
-            {/* Buttons Section */}
-            <div className="d-flex justify-content-center flex-wrap mt-4">
-              <Link className="m-2" to="/">
-                <Button variant="warning" size="md">
-                  View More Properties
-                </Button>
-              </Link>
-              <Link className="m-2" to="/profile">
-                <Button variant="warning" size="md">
-                  Contact the Seller
-                </Button>
-              </Link>
             </div>
           </Card>
         </Col>
