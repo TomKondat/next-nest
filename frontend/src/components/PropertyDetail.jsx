@@ -1,14 +1,22 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
-  useGetPropertiesQuery,
   useEditPropertyMutation,
   useDeletePropertyMutation,
   useAddSavePropertyMutation,
   useRemoveSavePropertyMutation,
   useGetPropertyByIdQuery,
 } from "./../slices/propertyApiSlice";
-import { Container, Row, Col, Card, Button, Modal, Form, Image } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Modal,
+  Form,
+  Image,
+} from "react-bootstrap";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
 import { UPLOADS_URL } from "../slices/urlConstrains";
@@ -17,10 +25,9 @@ import { useGetUserInfoQuery } from "../slices/userApiSlice";
 const PropertyDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { state } = useLocation();
 
   const { data: property, refetch } = useGetPropertyByIdQuery(id);
-console.log(property);
+  console.log(property?.property.agent.username);
 
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
@@ -66,17 +73,17 @@ console.log(property);
   const [area, setArea] = useState(property?.property.area || "");
 
   // Initialize state variables for the agent fields
-  const [agentName, setAgentName] = useState(
-    property?.property.agent.username || "Unavailable"
-  );
-  const [agentEmail, setAgentEmail] = useState(
-    property?.property.agent.email || "Unavailable"
-  );
-  const [agentPhone, setAgentPhone] = useState(
-    property?.property.agent.phone || ""
-  );
+  const [agentName, setAgentName] = useState("");
+  const [agentEmail, setAgentEmail] = useState("");
+  const [agentPhone, setAgentPhone] = useState("");
 
-
+  useEffect(() => {
+    if (property) {
+      setAgentName(property?.property.agent.username);
+      setAgentEmail(property?.property.agent.email);
+      setAgentPhone(property?.property.agent.phone);
+    }
+  }, [property]);
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -84,7 +91,6 @@ console.log(property);
     window.scrollTo(0, 0); // Scroll to top
     refetch(); // Refetch property data on component mount
   }, [id, refetch]); // Adding id to the dependency array ensures refetching when the id changes
-
 
   if (!property) {
     return <h2 className="text-center">Property not found</h2>;
