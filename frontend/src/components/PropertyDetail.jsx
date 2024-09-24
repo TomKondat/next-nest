@@ -8,16 +8,7 @@ import {
   useRemoveSavePropertyMutation,
   useGetPropertyByIdQuery,
 } from "./../slices/propertyApiSlice";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Button,
-  Modal,
-  Form,
-  Image,
-} from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Modal, Form, Image } from "react-bootstrap";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
 import { UPLOADS_URL } from "../slices/urlConstrains";
@@ -25,15 +16,16 @@ import { useGetUserInfoQuery } from "../slices/userApiSlice";
 
 const PropertyDetail = () => {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const { state } = useLocation();
-  const { data: property } = useGetPropertyByIdQuery(id);
+
+  const { data: property, refetch } = useGetPropertyByIdQuery(id);
+console.log(property);
 
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
   const [addSaveProperty] = useAddSavePropertyMutation();
   const [removeSaveProperty] = useRemoveSavePropertyMutation();
-  const navigate = useNavigate();
 
   // Modal state for Edit and Contact Agent
   const [showEditModal, setShowEditModal] = useState(false);
@@ -75,24 +67,24 @@ const PropertyDetail = () => {
 
   // Initialize state variables for the agent fields
   const [agentName, setAgentName] = useState(
-    property?.property.agent.name || "Unavailable"
+    property?.property.agent.username || "Unavailable"
   );
   const [agentEmail, setAgentEmail] = useState(
-    property?.property.agent.contact.email || "Unavailable"
+    property?.property.agent.email || "Unavailable"
   );
   const [agentPhone, setAgentPhone] = useState(
-    property?.property.agent.contact.phone || ""
+    property?.property.agent.phone || ""
   );
 
-  console.log(property?.property.bedrooms);
 
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // Scroll to top when component is mounted (route changes)
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to top
-  }, []);
+    refetch(); // Refetch property data on component mount
+  }, [id, refetch]); // Adding id to the dependency array ensures refetching when the id changes
+
 
   if (!property) {
     return <h2 className="text-center">Property not found</h2>;
@@ -219,7 +211,7 @@ const PropertyDetail = () => {
                 <Card.Img
                   variant="top"
                   src={
-                    property?.property.images[0] ||
+                    `${UPLOADS_URL}/${property?.property.images[0]}` ||
                     "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko="
                   }
                   alt={property?.property.title}

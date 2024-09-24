@@ -57,7 +57,6 @@ const userSchema = new mongoose.Schema(
         },
         message: "Phone number must be exactly 10 characters",
       },
-      default: "0000000000",
     },
     managedProperties: [
       {

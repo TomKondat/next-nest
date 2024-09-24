@@ -29,13 +29,7 @@ exports.addProperty = asyncHandler(async (req, res, next) => {
     if (!title || !propertyType || !price || !description || !area || !saleType) {
         return next(new AppError(400, 'Please provide all the required fields'));
     }
-    req.body.agent = {
-        name: req.user.username,
-        contact: {
-            phone: req.user.phone,
-            email: req.user.email,
-        }
-    }
+    req.body.agent = req.user._id;
     const newProperty = await Property.create(req.body);
 
     req.user.managedProperties.push(newProperty._id);
@@ -80,12 +74,13 @@ exports.getPropertyById = asyncHandler(async (req, res, next) => {
     if (!id) {
         return next(new AppError(400, "No property ID provided"));
     }
-
-    const property = await Property.findById(id);
+    const property = await Property.findById(id).populate({
+        path: 'agent',
+        select: 'username email phone'
+    });
     if (!property) {
         return next(new AppError(404, "Property not found"));
     }
-
     res.status(200).json({
         status: "success",
         property,

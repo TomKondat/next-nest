@@ -87,19 +87,9 @@ const propertySchema = new mongoose.Schema(
       required: [true, "The property must specify if it's for sale or rent"],
     },
     agent: {
-      name: {
-        type: String,
-        required: [true, 'The property must have an agent name']
-      },
-      contact: {
-        phone: {
-          type: String,
-        },
-        email: {
-          type: String,
-          required: [true, 'The property must have an agent contact email']
-        }
-      }
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'The property must have an agent'],
     },
     // virtualTour: {
     //   type: String,

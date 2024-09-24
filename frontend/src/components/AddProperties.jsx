@@ -19,30 +19,13 @@ const AddProperty = () => {
   const [bathrooms, setBathrooms] = useState("");
   const [area, setArea] = useState("");
   const [images, setImages] = useState(null);
-
-  const formData = {
-    title,
-    propertyType,
-    location: {
-      houseNumber,
-      street,
-      city,
-    },
-    price,
-    description,
-    bedrooms,
-    bathrooms,
-    area,
-    images,
-  };
-  console.log(formData);
+  const [saleType, setSaleType] = useState("");  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
     formData.append("title", title);
-    console.log(formData);
     formData.append("propertyType", propertyType);
     formData.append("location[houseNumber]", houseNumber);
     formData.append("location[street]", street);
@@ -52,8 +35,8 @@ const AddProperty = () => {
     formData.append("bedrooms", bedrooms);
     formData.append("bathrooms", bathrooms);
     formData.append("area", area);
+    formData.append("saleType", saleType); 
 
-    // Handle single or multiple files
     if (images) {
       if (images.length) {
         Array.from(images).forEach((image) => {
@@ -63,7 +46,6 @@ const AddProperty = () => {
         formData.append("image", images);
       }
     }
-    console.log(formData);
     try {
       await addProperty(formData).unwrap();
       alert("Property added successfully!");
@@ -76,7 +58,7 @@ const AddProperty = () => {
 
   return (
     <div className="addproperty">
-      <Container className="">
+      <Container>
         <Row className="justify-content-center">
           <Col md={10}>
             <Card className="property-form-box shadow-lg">
@@ -200,6 +182,22 @@ const AddProperty = () => {
                           value={area}
                           onChange={(e) => setArea(e.target.value)}
                         />
+                      </Form.Group>
+
+                      <Form.Group controlId="formSaleType" className="mb-3"> {/* Sale Type */}
+                        <Form.Label>Sale Type</Form.Label>
+                        <Form.Control
+                          as="select"
+                          value={saleType}
+                          onChange={(e) => setSaleType(e.target.value)}
+                          required
+                        >
+                          <option value="" disabled hidden>
+                            Choose Sale Type
+                          </option>
+                          <option value="sell">Sell</option>
+                          <option value="rent">Rent</option>
+                        </Form.Control>
                       </Form.Group>
 
                       <Form.Group controlId="formImage" className="mb-3">
