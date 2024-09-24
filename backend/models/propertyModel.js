@@ -78,6 +78,14 @@ const propertySchema = new mongoose.Schema(
       },
       default: "available",
     },
+    saleType: {
+      type: String,
+      enum: {
+        values: ["sell", "rent"],
+        message: "Sale type must be either 'sell' or 'rent'",
+      },
+      required: [true, "The property must specify if it's for sale or rent"],
+    },
     agent: {
       name: {
         type: String,

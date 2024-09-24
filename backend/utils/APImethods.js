@@ -1,4 +1,4 @@
-module.exports = class APIMmethods {
+module.exports = class APImethods {
   constructor(query, queryString) {
     this.query = query;
     this.queryString = queryString;
@@ -6,13 +6,27 @@ module.exports = class APIMmethods {
 
   filter() {
     const filterQueryObj = { ...this.queryString };
+
     const forbiddenFields = ["sort", "fields", "page", "limit"];
     forbiddenFields.forEach((field) => delete filterQueryObj[field]);
 
+    if (filterQueryObj.priceRange) {
+      const [minPrice, maxPrice] = filterQueryObj.priceRange.split("-");
+      delete filterQueryObj.priceRange
+      filterQueryObj.price = { gte: minPrice, lte: maxPrice };
+      console.log(filterQueryObj.price);
+
+    }
+
+    if (filterQueryObj.bedrooms) {
+      const roomsValue = parseInt(filterQueryObj.bedrooms, 10);
+      filterQueryObj.bedrooms = roomsValue === 3 ? { gte: 3 } : roomsValue;
+    }
     let queryStr = JSON.stringify(filterQueryObj);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
 
     this.query = this.query.find(JSON.parse(queryStr));
+
     return this;
   }
 
@@ -38,7 +52,7 @@ module.exports = class APIMmethods {
 
   makePagination() {
     const page = parseInt(this.queryString.page, 10) || 1;
-    const perPage = parseInt(this.queryString.limit, 10) || 10;
+    const perPage = parseInt(this.queryString.limit, 10) || 8;
     const skipResults = (page - 1) * perPage;
     this.query = this.query.skip(skipResults).limit(perPage);
     return this;
