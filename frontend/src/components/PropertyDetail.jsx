@@ -5,6 +5,7 @@ import {
   useDeletePropertyMutation,
   useGetPropertyByIdQuery,
 } from "./../slices/propertyApiSlice";
+import * as Icon from "react-bootstrap-icons";
 import {
   Container,
   Row,
