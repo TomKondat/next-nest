@@ -1,14 +1,22 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
-  useGetPropertiesQuery,
   useEditPropertyMutation,
   useDeletePropertyMutation,
-  useAddSavePropertyMutation,
-  useRemoveSavePropertyMutation,
   useGetPropertyByIdQuery,
 } from "./../slices/propertyApiSlice";
-import { Container, Row, Col, Card, Button, Modal, Form, Image } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
+
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Modal,
+  Form,
+  Image,
+} from "react-bootstrap";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
 import { UPLOADS_URL } from "../slices/urlConstrains";
@@ -20,12 +28,8 @@ const PropertyDetail = () => {
   const { state } = useLocation();
 
   const { data: property, refetch } = useGetPropertyByIdQuery(id);
-console.log(property);
-
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
-  const [addSaveProperty] = useAddSavePropertyMutation();
-  const [removeSaveProperty] = useRemoveSavePropertyMutation();
 
   // Modal state for Edit and Contact Agent
   const [showEditModal, setShowEditModal] = useState(false);
@@ -33,15 +37,7 @@ console.log(property);
 
   // Fetch user info to check role
   const { data: userInfo } = useGetUserInfoQuery();
-
   const userRole = userInfo?.data?.user?.role || null;
-  const savedProperties = userInfo?.data?.user?.savedProperties || [];
-
-  // Check if the current property is already saved
-  const isPropertySaved = savedProperties.includes(id);
-
-  // State to control the visibility of the Save button
-  const [showSaveButton, setShowSaveButton] = useState(!isPropertySaved);
 
   // Initialize state variables for the form fields
   const [title, setTitle] = useState(property?.property.title || "");
@@ -76,7 +72,6 @@ console.log(property);
     property?.property.agent.phone || ""
   );
 
-
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -85,38 +80,15 @@ console.log(property);
     refetch(); // Refetch property data on component mount
   }, [id, refetch]); // Adding id to the dependency array ensures refetching when the id changes
 
-
   if (!property) {
     return <h2 className="text-center">Property not found</h2>;
   }
-
-  // Handle Save Property for buyers
-  const handleSave = async () => {
-    try {
-      await addSaveProperty(id).unwrap();
-      setShowSaveButton(false); // Hide the save button after clicking
-      alert("Property saved successfully!");
-    } catch (err) {
-      console.error("Failed to save the property:", err);
-      alert("Failed to save the property.");
-    }
-  };
-
-  // Handle Unsave Property for buyers
-  const handleUnsave = async () => {
-    try {
-      await removeSaveProperty(id).unwrap();
-      alert("Property unsaved successfully!");
-    } catch (err) {
-      console.error("Failed to unsave the property:", err);
-      alert("Failed to unsave the property.");
-    }
-  };
 
   // Handle Edit Property
   const handleEditSubmit = async () => {
     try {
       const addressQuery = `${houseNumber} ${street}, ${city}`;
+
       const fetchCoordinates = async (query) => {
         const response = await fetch(
           `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
@@ -186,18 +158,22 @@ console.log(property);
             className="shadow-lg carddetail position-relative"
             style={{ padding: "20px", fontSize: "1.2rem" }}
           >
-            {/* Save/Unsave Buttons for Buyers */}
-            {userRole === "buyer" && (
-              <div className="position-absolute top-0 end-0 p-3">
-                {showSaveButton ? (
-                  <Button variant="warning" onClick={handleSave}>
-                    Save
-                  </Button>
-                ) : (
-                  <Button variant="danger" onClick={handleUnsave}>
-                    Unsave
-                  </Button>
-                )}
+            {/* Edit and Delete Button in Top Right for Agents */}
+            {userRole === "agent" && (
+              <div className="position-absolute top-0 end-0 m-3">
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setShowEditModal(true)}
+                  className="me-2"
+                >
+                  <Icon.Pencil />
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  <Icon.Trash />
+                </Button>
               </div>
             )}
 
@@ -442,7 +418,7 @@ console.log(property);
           <Button variant="secondary" onClick={() => setShowEditModal(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleEditSubmit}>
+          <Button variant="warning" onClick={handleEditSubmit}>
             Save Changes
           </Button>
         </Modal.Footer>
