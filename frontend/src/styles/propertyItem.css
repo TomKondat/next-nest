@@ -1,5 +1,5 @@
 .property-item {
-  background-color: rgba(195, 195, 195, 0.29);
+  background-color: rgba(241, 241, 241, 0.386);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 1px 1px rgb(22, 22, 22) !important;
@@ -166,7 +166,7 @@
 .page-button {
   padding: 10px 20px;
   border-radius: 10px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   cursor: pointer;
