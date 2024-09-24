@@ -6,6 +6,7 @@ import {
 } from "../slices/userApiSlice";
 import { Container, Row, Col, Alert, Spinner } from "react-bootstrap";
 import "../styles/propertyItem.css"; // Using the updated CSS styles
+import { UPLOADS_URL } from "../slices/urlConstrains";
 
 const ManagedProperties = () => {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const ManagedProperties = () => {
               >
                 <div className="image-wrapper">
                   <img
-                    src={property.images[0]}
+                    src={`${UPLOADS_URL}/${property?.images[0]}`}
                     alt={property.name}
                     className="property-image"
                   />
