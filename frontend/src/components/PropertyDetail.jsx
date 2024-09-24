@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   useEditPropertyMutation,
   useDeletePropertyMutation,
   useGetPropertyByIdQuery,
 } from "./../slices/propertyApiSlice";
 import * as Icon from "react-bootstrap-icons";
-
 import {
   Container,
   Row,
@@ -25,7 +24,6 @@ import { useGetUserInfoQuery } from "../slices/userApiSlice";
 const PropertyDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { state } = useLocation();
 
   const { data: property, refetch } = useGetPropertyByIdQuery(id);
   const [editProperty] = useEditPropertyMutation();
@@ -62,16 +60,17 @@ const PropertyDetail = () => {
   const [area, setArea] = useState(property?.property.area || "");
 
   // Initialize state variables for the agent fields
-  const [agentName, setAgentName] = useState(
-    property?.property.agent.username || "Unavailable"
-  );
-  const [agentEmail, setAgentEmail] = useState(
-    property?.property.agent.email || "Unavailable"
-  );
-  const [agentPhone, setAgentPhone] = useState(
-    property?.property.agent.phone || ""
-  );
+  const [agentName, setAgentName] = useState("");
+  const [agentEmail, setAgentEmail] = useState("");
+  const [agentPhone, setAgentPhone] = useState("");
 
+  useEffect(() => {
+    if (property) {
+      setAgentName(property?.property.agent.username);
+      setAgentEmail(property?.property.agent.email);
+      setAgentPhone(property?.property.agent.phone);
+    }
+  }, [property]);
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
