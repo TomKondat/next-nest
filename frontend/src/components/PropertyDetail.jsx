@@ -34,22 +34,23 @@ const PropertyDetail = () => {
   const [removeSaveProperty] = useRemoveSavePropertyMutation();
   const navigate = useNavigate();
 
-  // // Modal state for Edit and Contact Agent
+  // Modal state for Edit and Contact Agent
   const [showEditModal, setShowEditModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
 
-  // // Fetch user info to check role
+  // Fetch user info to check role
   const { data: userInfo } = useGetUserInfoQuery();
 
   const userRole = userInfo?.data?.user?.role || null;
   const savedProperties = userInfo?.data?.user?.savedProperties || [];
 
-  // // Check if the current property is already saved
+  // Check if the current property is already saved
   const isPropertySaved = savedProperties.includes(id);
 
-  // // State to control the visibility of the Save button
+  // State to control the visibility of the Save button
   const [showSaveButton, setShowSaveButton] = useState(!isPropertySaved);
-  // // Initialize state variables for the form fields
+
+  // Initialize state variables for the form fields
   const [title, setTitle] = useState(property?.property.title || "");
   const [propertyType, setPropertyType] = useState(
     property?.property.propertyType || ""
@@ -65,16 +66,22 @@ const PropertyDetail = () => {
   const [description, setDescription] = useState(
     property?.property.description || ""
   );
-
   const [bedrooms, setBedrooms] = useState(property?.property.bedrooms || "");
   const [bathrooms, setBathrooms] = useState(
     property?.property.bathrooms || ""
   );
   const [area, setArea] = useState(property?.property.area || "");
 
-  const agentName = property?.property.agent.name || "Unavailable";
-  const agentEmail = property?.property.agent.contact.email || "Unavailable";
-  const agentPhone = property?.agent?.contact?.phone || "";
+  // Initialize state variables for the agent fields
+  const [agentName, setAgentName] = useState(
+    property?.property.agent.name || "Unavailable"
+  );
+  const [agentEmail, setAgentEmail] = useState(
+    property?.property.agent.contact.email || "Unavailable"
+  );
+  const [agentPhone, setAgentPhone] = useState(
+    property?.property.agent.contact.phone || ""
+  );
 
   console.log(property?.property.bedrooms);
 
