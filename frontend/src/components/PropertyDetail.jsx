@@ -6,6 +6,7 @@ import {
   useDeletePropertyMutation,
   useAddSavePropertyMutation,
   useRemoveSavePropertyMutation,
+  useGetPropertyByIdQuery,
 } from "./../slices/propertyApiSlice";
 import {
   Container,
@@ -23,8 +24,9 @@ import { useGetUserInfoQuery } from "../slices/userApiSlice";
 
 const PropertyDetail = () => {
   const { id } = useParams();
+
   const { state } = useLocation();
-  const { data } = useGetPropertiesQuery();
+  const { data: property } = useGetPropertyByIdQuery(id);
 
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
@@ -32,41 +34,49 @@ const PropertyDetail = () => {
   const [removeSaveProperty] = useRemoveSavePropertyMutation();
   const navigate = useNavigate();
 
-  const property = data?.properties.find((p) => p._id === id);
-
-  // Modal state for Edit and Contact Agent
+  // // Modal state for Edit and Contact Agent
   const [showEditModal, setShowEditModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
 
-  // Fetch user info to check role
+  // // Fetch user info to check role
   const { data: userInfo } = useGetUserInfoQuery();
+
   const userRole = userInfo?.data?.user?.role || null;
   const savedProperties = userInfo?.data?.user?.savedProperties || [];
 
-  // Check if the current property is already saved
+  // // Check if the current property is already saved
   const isPropertySaved = savedProperties.includes(id);
 
-  // State to control the visibility of the Save button
+  // // State to control the visibility of the Save button
   const [showSaveButton, setShowSaveButton] = useState(!isPropertySaved);
-
-  // Initialize state variables for the form fields
-  const [title, setTitle] = useState(property?.title || "");
+  // // Initialize state variables for the form fields
+  const [title, setTitle] = useState(property?.property.title || "");
   const [propertyType, setPropertyType] = useState(
-    property?.propertyType || ""
+    property?.property.propertyType || ""
   );
   const [houseNumber, setHouseNumber] = useState(
-    property?.location?.houseNumber || ""
+    property?.property.location.houseNumber || ""
   );
-  const [street, setStreet] = useState(property?.location?.street || "");
-  const [city, setCity] = useState(property?.location?.city || "");
-  const [price, setPrice] = useState(property?.price || "");
-  const [description, setDescription] = useState(property?.description || "");
-  const [bedrooms, setBedrooms] = useState(property?.bedrooms || "");
-  const [bathrooms, setBathrooms] = useState(property?.bathrooms || "");
-  const [area, setArea] = useState(property?.area || "");
-  const agentName = property?.agent?.name || "Unavailable";
-  const agentEmail = property?.agent?.contact?.email || "Unavailable";
+  const [street, setStreet] = useState(
+    property?.property.location.street || ""
+  );
+  const [city, setCity] = useState(property?.property.location.city || "");
+  const [price, setPrice] = useState(property?.property.price || "");
+  const [description, setDescription] = useState(
+    property?.property.description || ""
+  );
+
+  const [bedrooms, setBedrooms] = useState(property?.property.bedrooms || "");
+  const [bathrooms, setBathrooms] = useState(
+    property?.property.bathrooms || ""
+  );
+  const [area, setArea] = useState(property?.property.area || "");
+
+  const agentName = property?.property.agent.name || "Unavailable";
+  const agentEmail = property?.property.agent.contact.email || "Unavailable";
   const agentPhone = property?.agent?.contact?.phone || "";
+
+  console.log(property?.property.bedrooms);
 
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -193,7 +203,7 @@ const PropertyDetail = () => {
 
             {/* Property Title */}
             <Card.Title className="text-center display-5 mb-4">
-              {property.title}
+              {property?.property.title}
             </Card.Title>
 
             <Row className="property-details-row mb-4">
@@ -201,44 +211,46 @@ const PropertyDetail = () => {
                 <Card.Img
                   variant="top"
                   src={
-                    property.images[0] ||
+                    property?.property.images[0] ||
                     "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko="
                   }
-                  alt={property.title}
+                  alt={property?.property.title}
                   className="property-detail-image"
                 />
               </Col>
               <Col xs={12} md={4} className="property-details-container">
                 <Card.Text className="property-detail-item">
-                  <strong>Property Type:</strong> {property.propertyType}
+                  <strong>Property Type:</strong>{" "}
+                  {property?.property.propertyType}
                 </Card.Text>
                 <Card.Text className="property-detail-item">
-                  <strong>House Number:</strong> {property.location.houseNumber}
+                  <strong>House Number:</strong>{" "}
+                  {property?.property.location.houseNumber}
                 </Card.Text>
                 <Card.Text className="property-detail-item">
-                  <strong>Street:</strong> {property.location.street}
+                  <strong>Street:</strong> {property?.property.location.street}
                 </Card.Text>
                 <Card.Text className="property-detail-item">
-                  <strong>City:</strong> {property.location.city}
+                  <strong>City:</strong> {property?.property.location.city}
                 </Card.Text>
                 <Card.Text className="property-detail-item">
-                  <strong>Price:</strong> ${property.price}
+                  <strong>Price:</strong> ${property?.property.price}
                 </Card.Text>
                 <Card.Text className="property-detail-item">
-                  <strong>Bedrooms:</strong> {property.bedrooms}
+                  <strong>Bedrooms:</strong> {property?.property.bedrooms}
                 </Card.Text>
                 <Card.Text className="property-detail-item">
-                  <strong>Bathrooms:</strong> {property.bathrooms}
+                  <strong>Bathrooms:</strong> {property?.property.bathrooms}
                 </Card.Text>
                 <Card.Text className="property-detail-item">
-                  <strong>Area:</strong> {property.area} sq. ft.
+                  <strong>Area:</strong> {property?.property.area} sq. ft.
                 </Card.Text>
               </Col>
             </Row>
 
             {/* Description Section */}
             <Card.Text className="my-4 text-center">
-              <strong>Description:</strong> {property.description}
+              <strong>Description:</strong> {property?.property.description}
             </Card.Text>
 
             {/* Contact Agent Button */}
@@ -295,13 +307,13 @@ const PropertyDetail = () => {
 
             {/* Map Section */}
             <div className="mt-4 map-wrapper">
-              {property?.location?.coordinates?.lat &&
-              property?.location?.coordinates?.lng ? (
+              {property?.property.location?.coordinates?.lat &&
+              property?.property.location?.coordinates?.lng ? (
                 <PropertyMap
-                  latitude={property.location.coordinates.lat}
-                  longitude={property.location.coordinates.lng}
-                  zoom={property.location.zoom}
-                  title={property.title}
+                  latitude={property?.property.location.coordinates.lat}
+                  longitude={property?.property.location.coordinates.lng}
+                  zoom={property?.property.location.zoom}
+                  title={property?.property.title}
                 />
               ) : (
                 <p className="text-center">
