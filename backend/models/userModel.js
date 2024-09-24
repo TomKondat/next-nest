@@ -47,7 +47,10 @@ const userSchema = new mongoose.Schema(
       },
       default: "buyer",
     },
-
+    image: {
+      type: String,
+      default: "https://via.placeholder.com/300",
+    },
     phone: {
       type: String,
       required: [true, "The user must have a phone number"],

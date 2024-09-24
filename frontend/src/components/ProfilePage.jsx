@@ -15,17 +15,19 @@ import {
 } from "../slices/userApiSlice";
 import * as Icon from "react-bootstrap-icons";
 import "../styles/profilePage.css";
+import { UPLOADS_URL } from "../slices/urlConstrains";
 
 const ProfilePage = () => {
   const { data, error, isLoading, refetch } = useGetUserInfoQuery();
-  const userRole = data?.data?.user?.role || null;
+  console.log(data);
 
+  const userRole = data?.data?.user?.role || null;
   const [editUser] = useUpdateUserProfileMutation();
 
   const [displayUsername, setDisplayUsername] = useState("");
   const [displayEmail, setDisplayEmail] = useState("");
   const [displayPhone, setDisplayPhone] = useState("");
-  const [profileImage, setProfileImage] = useState("../../images/aip.webp");
+  const [profileImage, setProfileImage] = useState("");
 
   const [editUsername, setEditUsername] = useState("");
   const [editEmail, setEditEmail] = useState("");
@@ -33,7 +35,7 @@ const ProfilePage = () => {
 
   const [show, setShow] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -55,6 +57,7 @@ const ProfilePage = () => {
       setDisplayUsername(data?.data.user.username);
       setDisplayEmail(data?.data.user.email);
       setDisplayPhone(data?.data.user.phone);
+      setProfileImage(data?.data.user.image);
     }
   }, [data]);
 
@@ -104,7 +107,7 @@ const ProfilePage = () => {
           <div className="profile-header">
             <div className="profile-image-container" onClick={handleImageShow}>
               <Image
-                src={profileImage}
+                src={`${UPLOADS_URL}/${data?.data.user.image}`}
                 roundedCircle
                 className="profile-image"
               />
