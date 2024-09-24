@@ -26,6 +26,7 @@ const PropertyDetail = () => {
   const navigate = useNavigate();
 
   const { data: property, refetch } = useGetPropertyByIdQuery(id);
+  console.log(property?.property.agent);
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
 
@@ -63,12 +64,14 @@ const PropertyDetail = () => {
   const [agentName, setAgentName] = useState("");
   const [agentEmail, setAgentEmail] = useState("");
   const [agentPhone, setAgentPhone] = useState("");
+  const [agentImage, setAgentImage] = useState("");
 
   useEffect(() => {
     if (property) {
       setAgentName(property?.property.agent.username);
       setAgentEmail(property?.property.agent.email);
       setAgentPhone(property?.property.agent.phone);
+      setAgentImage(property?.property.agent.image);
     }
   }, [property]);
   // Modal state for Delete confirmation
@@ -247,7 +250,7 @@ const PropertyDetail = () => {
               <Modal.Body className="text-center">
                 {/* Circular Image */}
                 <Image
-                  src="https://via.placeholder.com/100"
+                  src={`${UPLOADS_URL}/${agentImage}`}
                   roundedCircle
                   alt="Agent"
                   className="mb-3"

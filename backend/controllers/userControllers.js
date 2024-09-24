@@ -2,13 +2,24 @@ const asyncHandler = require("express-async-handler");
 const AppError = require("./../utils/AppError");
 const User = require("./../models/userModel");
 const Property = require("../models/propertyModel");
+const multer = require("multer");
+
+const memoryStorage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  if (!file.mimetype.startsWith("image"))
+    cb(new AppError(404, "The file is not type image"), false);
+  else cb(null, true);
+};
+const upload = multer({ memoryStorage, fileFilter });
+exports.uploadUserImage = upload.single("image");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
   const users = await User.find();
   res.status(200).json({
     status: "success",
     data: {
-      users
+      users,
     },
   });
 });
@@ -23,7 +34,7 @@ exports.getUserById = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      user
+      user,
     },
   });
 });
@@ -35,13 +46,15 @@ exports.getManagedProperties = asyncHandler(async (req, res, next) => {
   if (!agent) {
     return next(new AppError(404, "Agent not found"));
   }
-  const agentManagedPropertiesLength = agent.managedProperties.length
-  await agent.populate('managedProperties');
+  const agentManagedPropertiesLength = agent.managedProperties.length;
+  await agent.populate("managedProperties");
 
-  const validProperties = agent.managedProperties.filter(property => property !== null);
+  const validProperties = agent.managedProperties.filter(
+    (property) => property !== null
+  );
   if (validProperties.length !== agentManagedPropertiesLength) {
     await User.findByIdAndUpdate(userId, {
-      managedProperties: validProperties.map(property => property._id),
+      managedProperties: validProperties.map((property) => property._id),
     });
   }
   if (validProperties.length === 0) {
@@ -65,14 +78,16 @@ exports.getSavedProperties = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new AppError(404, "user not found"));
   }
-  const userSavedPropertiesLength = user.savedProperties.length
+  const userSavedPropertiesLength = user.savedProperties.length;
 
-  await user.populate('savedProperties');
+  await user.populate("savedProperties");
 
-  const validProperties = user.savedProperties.filter(property => property !== null);
+  const validProperties = user.savedProperties.filter(
+    (property) => property !== null
+  );
   if (validProperties.length !== userSavedPropertiesLength) {
     await User.findByIdAndUpdate(userId, {
-      savedProperties: validProperties.map(property => property._id),
+      savedProperties: validProperties.map((property) => property._id),
     });
   }
   if (validProperties.length === 0) {
@@ -102,7 +117,7 @@ exports.addManagedProperty = asyncHandler(async (req, res, next) => {
     userId,
     { $addToSet: { managedProperties: propertyId } }, // addToSet ensures no duplicates
     { new: true, runValidators: true }
-  ).populate('managedProperties');
+  ).populate("managedProperties");
 
   if (!updatedUser) {
     return next(new AppError(404, "User not found"));
@@ -110,8 +125,8 @@ exports.addManagedProperty = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      user: updatedUser
-    }
+      user: updatedUser,
+    },
   });
 });
 
@@ -128,34 +143,36 @@ exports.addSavedProperty = asyncHandler(async (req, res, next) => {
     userId,
     { $addToSet: { savedProperties: propertyId } },
     { new: true, runValidators: true }
-  ).populate('savedProperties');
+  ).populate("savedProperties");
   if (!updatedUser) {
     return next(new AppError(404, "User not found"));
   }
   res.status(200).json({
     status: "success",
     data: {
-      user: updatedUser
-    }
+      user: updatedUser,
+    },
   });
 });
 
 exports.getUserInfo = asyncHandler(async (req, res, next) => {
-  const user = req.user
+  const user = req.user;
   if (!user) {
-    return next(new AppError(404, 'User not found'));
+    return next(new AppError(404, "User not found"));
   }
   const userInfo = {
     _id: user._id,
     username: user.username,
     email: user.email,
     role: user.role,
-    phone: user.phone
+    phone: user.phone,
+    image: user.image,
   };
-  (user.role === 'agent') ? userInfo.managedProperties = user.managedProperties
-    : userInfo.savedProperties = user.savedProperties
+  user.role === "agent"
+    ? (userInfo.managedProperties = user.managedProperties)
+    : (userInfo.savedProperties = user.savedProperties);
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: {
       user: userInfo,
     },
@@ -168,18 +185,23 @@ exports.deleteFromManagedProperties = async (req, res) => {
 
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).json({ status: "fail", message: "User not found" });
+      return res
+        .status(404)
+        .json({ status: "fail", message: "User not found" });
     }
     if (!user.managedProperties.includes(propertyId)) {
-      return res.status(404).json({ status: "fail", message: "Property not found in managedProperties" });
+      return res.status(404).json({
+        status: "fail",
+        message: "Property not found in managedProperties",
+      });
     }
-    await User.findByIdAndUpdate(
-      req.user.id,
-      {
-        $pull: { managedProperties: propertyId },
-      }
-    );
-    res.status(200).json({ status: "success", message: "Property removed from managedProperties" });
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { managedProperties: propertyId },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "Property removed from managedProperties",
+    });
   } catch (error) {
     res.status(500).json({ status: "error", message: error.message });
   }
@@ -191,18 +213,23 @@ exports.deleteFromSavedProperties = async (req, res) => {
 
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).json({ status: "fail", message: "User not found" });
+      return res
+        .status(404)
+        .json({ status: "fail", message: "User not found" });
     }
     if (!user.savedProperties.includes(propertyId)) {
-      return res.status(404).json({ status: "fail", message: "Property not found in savedProperties" });
+      return res.status(404).json({
+        status: "fail",
+        message: "Property not found in savedProperties",
+      });
     }
-    await User.findByIdAndUpdate(
-      req.user.id,
-      {
-        $pull: { savedProperties: propertyId },
-      }
-    );
-    res.status(200).json({ status: "success", message: "Property removed from savedProperties" });
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { savedProperties: propertyId },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "Property removed from savedProperties",
+    });
   } catch (error) {
     res.status(500).json({ status: "error", message: error.message });
   }
