@@ -18,9 +18,14 @@ const HeroSection = ({ updateSearchParams }) => {
         selectedPropertyType !== "Property Type" ? selectedPropertyType : null,
       priceRange:
         selectedPriceRange !== "Price Range" ? selectedPriceRange : null,
+      propertyType:
+        selectedPropertyType !== "Property Type" ? selectedPropertyType : null,
+      priceRange:
+        selectedPriceRange !== "Price Range" ? selectedPriceRange : null,
       bedrooms: selectedRooms !== "Bedrooms" ? selectedRooms : null,
       saleType: activeButton,
     };
+    console.log(selectedPropertyType);
 
     updateSearchParams(params);
   };

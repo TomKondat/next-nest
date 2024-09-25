@@ -20,6 +20,7 @@ const AddProperty = () => {
   const [area, setArea] = useState("");
   const [images, setImages] = useState(null);
   const [saleType, setSaleType] = useState("");
+  const [saleType, setSaleType] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,10 +90,13 @@ const AddProperty = () => {
                           <option value="" disabled hidden>
                             Choose Property Type
                           </option>
-                          <option value="residential">Residential</option>
-                          <option value="commercial">Commercial</option>
-                          <option value="industrial">Industrial</option>
                           <option value="land">Land</option>
+                          <option value="industrial">Industrial</option>
+                          <option value="commercial">Commercial</option>
+                          <option value="residential">Residential</option>
+                          <option value="mixed-use">Mixed-Use</option>
+                          <option value="retail">Retail</option>
+                          <option value="hospitality">Hospitality</option>
                         </Form.Control>
                       </Form.Group>
 
