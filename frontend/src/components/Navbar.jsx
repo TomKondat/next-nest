@@ -163,7 +163,7 @@ const NavbarComponent = () => {
                           : `${UPLOADS_URL}/${DEFAULT_USER_IMG}`
                       }
                       roundedCircle
-                      alt={userInfo?.data.user.username || "User"}  // Fallback for alt text
+                      alt={userInfo?.data.user.username || "User"}
                       className="navbar-image"
                     />
                   </Nav.Link>

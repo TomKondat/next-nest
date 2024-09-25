@@ -5,6 +5,7 @@ import {
   useGetSavedPropertiesByIdQuery,
 } from "../slices/userApiSlice";
 import { Container, Row, Col, Alert, Spinner } from "react-bootstrap";
+import { DEFAULT_PROPERTY_IMG, UPLOADS_URL } from "../slices/urlConstrains";
 import "../styles/propertyItem.css";
 
 const SavedProperties = () => {
@@ -80,7 +81,11 @@ const SavedProperties = () => {
               >
                 <div className="image-wrapper">
                   <img
-                    src={property.images[0]}
+                    src={
+                      property.images[0]
+                        ? `${UPLOADS_URL}/${property.images[0]}`
+                        : `${UPLOADS_URL}/${DEFAULT_PROPERTY_IMG}`
+                    }
                     alt={property.name}
                     className="property-image"
                   />
