@@ -399,15 +399,6 @@ const PropertyDetail = () => {
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formHouseNumber">
-                  <Form.Label>House Number</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={houseNumber}
-                    onChange={(e) => setHouseNumber(e.target.value)}
-                  />
-                </Form.Group>
-
                 <Form.Group className="mb-3" controlId="formCity">
                   <Form.Label>City</Form.Label>
                   <Form.Control
@@ -417,12 +408,21 @@ const PropertyDetail = () => {
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBedrooms">
-                  <Form.Label>Bedrooms</Form.Label>
+                <Form.Group className="mb-3" controlId="formStreet">
+                  <Form.Label>Street</Form.Label>
                   <Form.Control
-                    type="number"
-                    value={bedrooms}
-                    onChange={(e) => setBedrooms(e.target.value)}
+                    type="text"
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formHouseNumber">
+                  <Form.Label>House Number</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={houseNumber}
+                    onChange={(e) => setHouseNumber(e.target.value)}
                   />
                 </Form.Group>
 
@@ -447,28 +447,22 @@ const PropertyDetail = () => {
                     <option value="" disabled hidden>
                       Choose Property Type
                     </option>
-                    <option value="residential">Residential</option>
-                    <option value="commercial">Commercial</option>
-                    <option value="industrial">Industrial</option>
                     <option value="land">Land</option>
+                    <option value="industrial">Industrial</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="residential">Residential</option>
+                    <option value="mixed-use">Mixed-Use</option>
+                    <option value="retail">Retail</option>
+                    <option value="hospitality">Hospitality</option>
                   </Form.Control>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formStreet">
-                  <Form.Label>Street</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formPrice">
-                  <Form.Label>Price</Form.Label>
+                <Form.Group className="mb-3" controlId="formBedrooms">
+                  <Form.Label>Bedrooms</Form.Label>
                   <Form.Control
                     type="number"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    value={bedrooms}
+                    onChange={(e) => setBedrooms(e.target.value)}
                   />
                 </Form.Group>
 
@@ -478,6 +472,14 @@ const PropertyDetail = () => {
                     type="number"
                     value={bathrooms}
                     onChange={(e) => setBathrooms(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formPrice">
+                  <Form.Label>Price</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
                   />
                 </Form.Group>
 

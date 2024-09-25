@@ -15,7 +15,7 @@ const propertySchema = new mongoose.Schema(
           "commercial",
           "industrial",
           "land",
-          "mixed-Use",
+          "mixed-use",
           "retail",
           "hospitality",
         ],
@@ -88,8 +88,8 @@ const propertySchema = new mongoose.Schema(
     },
     agent: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User',
-      required: [true, 'The property must have an agent'],
+      ref: "User",
+      required: [true, "The property must have an agent"],
     },
     // virtualTour: {
     //   type: String,
