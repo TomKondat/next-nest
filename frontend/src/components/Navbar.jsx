@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Navbar, Nav, Container, Button, Image } from "react-bootstrap";
+import { Navbar, Nav, Container, Button, Image, Alert } from "react-bootstrap"; // Imported Alert component
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../images/NNlogo.png";
 import "../styles/navbar.css";
@@ -22,6 +22,9 @@ const NavbarComponent = () => {
   const [username, setUsername] = useState("");
   const [showElements, setShowElements] = useState(false);
   const [expanded, setExpanded] = useState(false);
+
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertVariant, setAlertVariant] = useState("success");
 
   const navbarRef = useRef(null);
 
@@ -72,6 +75,16 @@ const NavbarComponent = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (alertMessage) {
+      const timer = setTimeout(() => {
+        setAlertMessage(null);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [alertMessage]);
+
   const handleNavLinkClick = () => {
     setExpanded(false);
   };
@@ -87,113 +100,122 @@ const NavbarComponent = () => {
 
       navigate("/");
 
-      alert("Logged out.");
-      console.log("You have been logged out!");
+      setAlertMessage("Logged out successfully.");
+      setAlertVariant("danger");
     } catch (err) {
       console.error("Failed to Logout:", err);
-      alert("Failed to Logout.");
+
+      setAlertMessage("Failed to logout.");
+      setAlertVariant("danger");
     }
   };
 
   return (
-    <Navbar
-      expand="lg"
-      fixed="top"
-      className="navbar-transparent"
-      expanded={expanded}
-      ref={navbarRef}
-    >
-      <Container fluid>
-        <Navbar.Brand as={Link} to="/" className="text-white">
-          <img
-            src={logo}
-            alt="Logo"
-            width="30"
-            height="30"
-            className="d-inline-block align-top color"
+    <>
+      <Navbar
+        expand="lg"
+        fixed="top"
+        className="navbar-transparent"
+        expanded={expanded}
+        ref={navbarRef}
+      >
+        <Container fluid>
+          <Navbar.Brand as={Link} to="/" className="text-white">
+            <img
+              src={logo}
+              alt="Logo"
+              width="30"
+              height="30"
+              className="d-inline-block align-top color"
+            />
+            &nbsp; NextNest
+          </Navbar.Brand>
+          <Navbar.Toggle
+            aria-controls="navbar-nav"
+            className="bg-white"
+            id="hamburger"
+            onClick={() => setExpanded(!expanded)}
           />
-          &nbsp; NextNest
-        </Navbar.Brand>
-        <Navbar.Toggle
-          aria-controls="navbar-nav"
-          className="bg-white"
-          id="hamburger"
-          onClick={() => setExpanded(!expanded)}
-        />
-        <Navbar.Collapse id="navbar-nav" className="justify-content-center">
-          <Nav className="me-auto">
-            <Nav.Link as={Link} to="/" onClick={handleNavLinkClick}>
-              Home
-            </Nav.Link>
-          </Nav>
-
-          <Nav>
-            {!isLoggedIn && (
-              <Nav.Link as={Link} to="/login" onClick={handleNavLinkClick}>
-                Login/Register
+          <Navbar.Collapse id="navbar-nav" className="justify-content-center">
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/" onClick={handleNavLinkClick}>
+                Home
               </Nav.Link>
-            )}
-          </Nav>
-
-          {isLoggedIn && showElements && (
-            <>
-              <div
-                className="d-flex align-items-center"
-                style={{ fontFamily: '"Montserrat", sans-serif' }}
+            </Nav>
+            {alertMessage && (
+              <Alert
+                variant={alertVariant}
+                onClose={() => setAlertMessage(null)}
+                dismissible
+                className="mt-2"
               >
-                <h5
-                  className="text-white mb-0 me-2"
-                  style={{
-                    fontFamily: '"Montserrat",sans-serif',
-                    textTransform: "capitalize",
-                  }}
+                {alertMessage}
+              </Alert>
+            )}
+            <Nav>
+              {!isLoggedIn && (
+                <Nav.Link as={Link} to="/login" onClick={handleNavLinkClick}>
+                  Login/Register
+                </Nav.Link>
+              )}
+            </Nav>
+
+            {isLoggedIn && showElements && (
+              <>
+                <div
+                  className="d-flex align-items-center"
+                  style={{ fontFamily: '"Montserrat", sans-serif' }}
                 >
-                  Hi, {username}
-                </h5>
-                <Nav className="me-2">
-                  <Nav.Link
-                    as={Link}
-                    to="/profile"
-                    onClick={handleNavLinkClick}
-                  >
-                    <Image
-                      src={
-                        userInfo?.data.user.image
-                          ? `${UPLOADS_URL}/${userInfo?.data.user.image}`
-                          : `${UPLOADS_URL}/${DEFAULT_USER_IMG}`
-                      }
-                      roundedCircle
-                      alt={userInfo?.data.user.username || "User"}
-                      className="navbar-image"
-                    />
-                  </Nav.Link>
-                </Nav>
-                <Button
-                  onClick={handleSubmit}
-                  variant="danger"
-                  className="d-flex align-items-center justify-content-center"
-                  style={{
-                    width: "35px",
-                    height: "35px",
-                    borderRadius: "50%",
-                    padding: 0,
-                  }}
-                >
-                  <i
-                    className="bi bi-box-arrow-right"
+                  <h5
+                    className="text-white mb-0 me-2"
                     style={{
-                      fontSize: "1.1rem",
-                      size: "1rem",
-                      color: "white",
+                      fontFamily: '"Montserrat",sans-serif',
+                      textTransform: "capitalize",
                     }}
-                  ></i>
-                </Button>
-              </div>
-            </>
-          )}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+                  >
+                    Hi, {username}
+                  </h5>
+                  <Nav className="me-2">
+                    <Nav.Link
+                      as={Link}
+                      to="/profile"
+                      onClick={handleNavLinkClick}
+                    >
+                      <Image
+                        src={`${UPLOADS_URL}/${userInfo?.data.user.image}`}
+                        roundedCircle
+                        alt={userInfo?.data.user.username}
+                        className="navbar-image"
+                      />
+                    </Nav.Link>
+                  </Nav>
+                  <Button
+                    onClick={handleSubmit}
+                    variant="danger"
+                    className="d-flex align-items-center justify-content-center"
+                    style={{
+                      width: "35px",
+                      height: "35px",
+                      borderRadius: "50%",
+                      padding: 0,
+                    }}
+                  >
+                    <i
+                      className="bi bi-box-arrow-right"
+                      style={{
+                        fontSize: "1.1rem",
+                        size: "1rem",
+                        color: "white",
+                      }}
+                    ></i>
+                  </Button>
+                </div>
+              </>
+            )}
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </>
   );
 };
 
