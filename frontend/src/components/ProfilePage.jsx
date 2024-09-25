@@ -108,10 +108,10 @@ const ProfilePage = () => {
   return (
     <Container className="profile-page border-container">
       <div className="d-flex justify-content-end ">
-        <Button variant="outline-dark" onClick={handleImageShow}>
+        {/* <Button variant="outline-dark" onClick={handleImageShow}>
           <Icon.Camera />
         </Button>
-        &nbsp; &nbsp;
+        &nbsp; &nbsp; */}
         <Button variant="outline-secondary" onClick={handleShow}>
           <Icon.Pencil />
         </Button>
@@ -120,11 +120,12 @@ const ProfilePage = () => {
       <Row className="justify-content-center">
         <Col xs={12} md={8} className="text-center">
           <div className="profile-header">
-            <div className="profile-image-container" onClick={handleImageShow}>
+            <div>
               <Image
+                onClick={handleImageShow}
                 src={`${UPLOADS_URL}/${profileImage}`}
                 roundedCircle
-                className="profile-image"
+                className="profile-image profile-image-container"
               />
             </div>
             <h2 className="profile-name"> {displayUsername}</h2>
