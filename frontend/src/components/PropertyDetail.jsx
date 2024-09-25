@@ -331,7 +331,7 @@ const PropertyDetail = () => {
                   src={`${UPLOADS_URL}/${agentImage}`}
                   roundedCircle
                   alt="Agent"
-                  className="mb-3"
+                  className="mb-3 agent-image "
                 />
 
                 <h4>{agentName}</h4>
