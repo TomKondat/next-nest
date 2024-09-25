@@ -201,7 +201,7 @@
 
 .sort-wrapper select {
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 0 10px 0 10px;
   border: 1px solid #ccc;
   background-color: #e4ce7498;
 }

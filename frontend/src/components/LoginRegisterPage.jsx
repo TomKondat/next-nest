@@ -9,6 +9,7 @@ import {
   Tab,
   Tabs,
   Card,
+  Alert, // Import Alert component
 } from "react-bootstrap";
 import {
   useLoginMutation,
@@ -34,6 +35,10 @@ const LoginRegisterPage = () => {
   const [regConfirmPassword, setRegConfirmPassword] = useState("");
   const [regPhone, setRegPhone] = useState("");
   const [username, setUsername] = useState("");
+
+  // Alert state
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertVariant, setAlertVariant] = useState("success");
 
   const { data: userInfo, refetch } = useGetUserInfoQuery();
 
@@ -68,18 +73,23 @@ const LoginRegisterPage = () => {
       const userData = await login(formData).unwrap();
 
       setUser(userData.data);
-
       localStorage.setItem("username", userData.data.username);
       localStorage.setItem("isLoggedIn", "true");
-
       window.dispatchEvent(new Event("storage"));
+
+      // Show success alert
+      setAlertMessage("Successfully logged in!");
+      setAlertVariant("success");
       refetch();
       setTimeout(() => {
         navigate("/");
-      }, 1000);
+      }, 2000);
     } catch (err) {
       console.error("Failed to log in:", err);
-      alert("Failed to log in.");
+
+      // Show error alert
+      setAlertMessage("Failed to log in.");
+      setAlertVariant("danger");
     }
   };
 
@@ -95,12 +105,20 @@ const LoginRegisterPage = () => {
 
     try {
       await register(formData).unwrap();
+
+      // Show success alert
+      setAlertMessage("Successfully registered!");
+      setAlertVariant("success");
+
       setTimeout(() => {
-        navigate("/login");
-      }, 1000);
+        navigate("/login"); // Redirect to the login page
+      }, 2000);
     } catch (err) {
       console.error("Failed to register:", err);
-      alert("Failed to Register.");
+
+      // Show error alert
+      setAlertMessage("Failed to register.");
+      setAlertVariant("danger");
     }
   };
 
@@ -153,6 +171,16 @@ const LoginRegisterPage = () => {
                         Login
                       </Button>
                     </Form>
+                    <br />
+                    {alertMessage && (
+                      <Alert
+                        variant={alertVariant}
+                        onClose={() => setAlertMessage(null)}
+                        dismissible
+                      >
+                        {alertMessage}
+                      </Alert>
+                    )}
                   </Tab>
 
                   <Tab eventKey="register" title="Register">

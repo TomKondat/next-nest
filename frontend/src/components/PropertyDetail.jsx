@@ -222,11 +222,11 @@ const PropertyDetail = () => {
 
             {userRole === "buyer" && fromHomePage && showSaveButton && (
               <Button
-                variant="outline-warning"
+                variant="outline-danger"
                 className="position-absolute top-0 end-0 m-3"
                 onClick={handleSave}
               >
-                Save
+                <Icon.Heart />
               </Button>
             )}
 
@@ -240,7 +240,8 @@ const PropertyDetail = () => {
               </Button>
             )}
 
-            <Card.Title className="text-center display-5 mb-4">
+            {/* Property Title */}
+            <Card.Title className="text-center display-5 mb-4 mt-5">
               {property?.property.title}
             </Card.Title>
 
