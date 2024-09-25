@@ -68,7 +68,6 @@ const PropertyDetail = () => {
   const [agentPhone, setAgentPhone] = useState("");
   const [agentImage, setAgentImage] = useState("");
 
-  // Alert state management
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -119,7 +118,7 @@ const PropertyDetail = () => {
 
       setTimeout(() => {
         setShowSuccessAlert(false);
-      }, 2000); // Dismiss after 2 seconds
+      }, 2000);
     } catch (err) {
       setAlertMessage("Failed to save the property.");
       setShowErrorAlert(true);
@@ -127,7 +126,7 @@ const PropertyDetail = () => {
 
       setTimeout(() => {
         setShowErrorAlert(false);
-      }, 2000); // Dismiss after 2 seconds
+      }, 2000);
     }
   };
 
@@ -179,7 +178,7 @@ const PropertyDetail = () => {
 
         setTimeout(() => {
           setShowErrorAlert(false);
-        }, 2000); // Dismiss after 2 seconds
+        }, 2000);
         return;
       }
 
@@ -212,7 +211,7 @@ const PropertyDetail = () => {
 
       setTimeout(() => {
         setShowSuccessAlert(false);
-      }, 2000); // Dismiss after 2 seconds
+      }, 2000);
     } catch (err) {
       setAlertMessage("Failed to update property.");
       setShowErrorAlert(true);
@@ -220,7 +219,7 @@ const PropertyDetail = () => {
 
       setTimeout(() => {
         setShowErrorAlert(false);
-      }, 2000); // Dismiss after 2 seconds
+      }, 2000);
     }
   };
 

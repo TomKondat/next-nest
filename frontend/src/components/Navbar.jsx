@@ -23,7 +23,6 @@ const NavbarComponent = () => {
   const [showElements, setShowElements] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  // Alert state
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertVariant, setAlertVariant] = useState("success");
 
@@ -76,14 +75,13 @@ const NavbarComponent = () => {
     };
   }, []);
 
-  // Automatically dismiss alert after 2 seconds
   useEffect(() => {
     if (alertMessage) {
       const timer = setTimeout(() => {
         setAlertMessage(null);
-      }, 2000); // 2 seconds timeout
+      }, 2000);
 
-      return () => clearTimeout(timer); // Clear the timer if the component unmounts or alertMessage changes
+      return () => clearTimeout(timer);
     }
   }, [alertMessage]);
 
@@ -102,13 +100,11 @@ const NavbarComponent = () => {
 
       navigate("/");
 
-      // Show success alert
       setAlertMessage("Logged out successfully.");
-      setAlertVariant("success");
+      setAlertVariant("danger");
     } catch (err) {
       console.error("Failed to Logout:", err);
 
-      // Show error alert
       setAlertMessage("Failed to logout.");
       setAlertVariant("danger");
     }
