@@ -1,13 +1,22 @@
-import { PROPERTY_URL, RESAULT_NUM } from "./urlConstrains";
+import { PROPERTY_URL, RESAULT_NUM, USER_URL } from "./urlConstrains";
 import { apiSlice } from "./apiSlice";
 
 export const propertyApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProperties: builder.query({
-      query: ({ page = 1, limit = RESAULT_NUM, propertyType, priceRange, bedrooms, saleType, sort }) => {
+      query: ({
+        page = 1,
+        limit = RESAULT_NUM,
+        propertyType,
+        priceRange,
+        bedrooms,
+        saleType,
+        sort,
+      }) => {
         let queryParams = `?page=${page}&limit=${limit}`;
         if (sort) queryParams += `&sort=${sort}`;
-        if (propertyType) queryParams += `&propertyType=${propertyType.toLowerCase()}`;
+        if (propertyType)
+          queryParams += `&propertyType=${propertyType.toLowerCase()}`;
         if (priceRange) queryParams += `&priceRange=${priceRange}`;
         if (bedrooms) queryParams += `&bedrooms=${bedrooms}`;
         if (saleType) queryParams += `&saleType=${saleType}`;
@@ -56,7 +65,7 @@ export const propertyApiSlice = apiSlice.injectEndpoints({
     }),
     removeSaveProperty: builder.mutation({
       query: (propertyId) => ({
-        url: `${PROPERTY_URL}/add-saved-property/${propertyId}`,
+        url: `${USER_URL}/delete-from-saved-properties/${propertyId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["SavedProperty"],
