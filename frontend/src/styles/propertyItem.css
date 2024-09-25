@@ -161,6 +161,11 @@
   justify-content: space-around;
   align-items: center;
   margin: 20px;
+  width: 50%;
+}
+.PageButtonsFather {
+  display: flex;
+  justify-content: center;
 }
 
 .page-button {
@@ -198,10 +203,17 @@
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  background-color: #e4ce7498;
 }
 
 .modal-content {
   background-color: #4e5464e4;
   color: white;
   border: 2px solid #8c95adcb;
+}
+.page-button {
+  background-color: #e4cd74;
+}
+.page-button:hover {
+  background-color: #eecc44;
 }
