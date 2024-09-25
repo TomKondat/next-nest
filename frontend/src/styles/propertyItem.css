@@ -211,7 +211,12 @@
   color: white;
   border: 2px solid #8c95adcb;
 }
-
+.page-button {
+  background-color: #e4cd74;
+}
+.page-button:hover {
+  background-color: #eecc44;
+}
 .agent-image {
   width: 150px;
   height: 150px;
