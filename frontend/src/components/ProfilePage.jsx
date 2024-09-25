@@ -12,6 +12,7 @@ import { Link } from "react-router-dom"; // Import Link for navigation
 import {
   useGetUserInfoQuery,
   useUpdateUserProfileMutation,
+  useUpdateUserImageMutation,
 } from "../slices/userApiSlice";
 import * as Icon from "react-bootstrap-icons";
 import "../styles/profilePage.css";
@@ -19,10 +20,11 @@ import { UPLOADS_URL } from "../slices/urlConstrains";
 
 const ProfilePage = () => {
   const { data, error, isLoading, refetch } = useGetUserInfoQuery();
-  console.log(data);
 
   const userRole = data?.data?.user?.role || null;
+
   const [editUser] = useUpdateUserProfileMutation();
+  const [editImage] = useUpdateUserImageMutation();
 
   const [displayUsername, setDisplayUsername] = useState("");
   const [displayEmail, setDisplayEmail] = useState("");
@@ -35,7 +37,6 @@ const ProfilePage = () => {
 
   const [show, setShow] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
-  // const [selectedImage, setSelectedImage] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -48,8 +49,22 @@ const ProfilePage = () => {
   const handleImageClose = () => setShowImageModal(false);
   const handleImageShow = () => setShowImageModal(true);
 
-  const handleImageChange = (e) => {
-    alert("Image selected");
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      await editImage(formData).unwrap();
+      setProfileImage(URL.createObjectURL(file));
+      handleImageClose();
+      refetch();
+    } catch (err) {
+      console.error("Failed to update profile image:", err);
+      alert("Failed to update profile image.");
+    }
   };
 
   useEffect(() => {
@@ -93,10 +108,10 @@ const ProfilePage = () => {
   return (
     <Container className="profile-page border-container">
       <div className="d-flex justify-content-end ">
-        <Button variant="outline-dark" onClick={handleImageShow}>
+        {/* <Button variant="outline-dark" onClick={handleImageShow}>
           <Icon.Camera />
         </Button>
-        &nbsp; &nbsp;
+        &nbsp; &nbsp; */}
         <Button variant="outline-secondary" onClick={handleShow}>
           <Icon.Pencil />
         </Button>
@@ -105,11 +120,12 @@ const ProfilePage = () => {
       <Row className="justify-content-center">
         <Col xs={12} md={8} className="text-center">
           <div className="profile-header">
-            <div className="profile-image-container" onClick={handleImageShow}>
+            <div>
               <Image
-                src={`${UPLOADS_URL}/${data?.data.user.image}`}
+                onClick={handleImageShow}
+                src={`${UPLOADS_URL}/${profileImage}`}
                 roundedCircle
-                className="profile-image"
+                className="profile-image profile-image-container"
               />
             </div>
             <h2 className="profile-name"> {displayUsername}</h2>
@@ -205,7 +221,7 @@ const ProfilePage = () => {
               <Form.Control type="file" onChange={handleImageChange} />
             </Form.Group>
             <Button variant="warning" onClick={handleImageClose}>
-              Save Image
+              Close
             </Button>
           </Form>
         </Modal.Body>

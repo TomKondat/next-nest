@@ -44,6 +44,14 @@ const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
+    updateUserImage: builder.mutation({
+      query: (data) => ({
+        url: `${USER_URL}/upload-user-image`,
+        method: "POST",
+        body: data,
+      }),
+    }),
     // Saved user properties
 
     getSavedPropertiesById: builder.query({
@@ -76,4 +84,5 @@ export const {
   useGetSavedPropertiesByIdQuery,
   useGetManagedPropertiesByIdQuery,
   useGetUserInfoQuery,
+  useUpdateUserImageMutation,
 } = userApiSlice;
