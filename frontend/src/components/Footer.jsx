@@ -10,7 +10,7 @@ const Footer = () => {
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    setShowModal(true); // Show the modal on subscribe
+    setShowModal(true);
   };
 
   const handleClose = () => setShowModal(false);
@@ -104,7 +104,6 @@ const Footer = () => {
         </Row>
       </Container>
 
-      {/* Subscribe Modal */}
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Subscription Successful</Modal.Title>

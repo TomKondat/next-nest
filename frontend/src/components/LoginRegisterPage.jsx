@@ -9,6 +9,7 @@ import {
   Tab,
   Tabs,
   Card,
+  Alert, // Import Alert component
 } from "react-bootstrap";
 import {
   useLoginMutation,
@@ -22,10 +23,8 @@ const LoginRegisterPage = () => {
   const navigate = useNavigate();
   const [key, setKey] = useState("login");
 
-  // Add user state
   const [user, setUser] = useState(null);
 
-  // Login states
   const [login] = useLoginMutation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,10 +36,12 @@ const LoginRegisterPage = () => {
   const [regPhone, setRegPhone] = useState("");
   const [username, setUsername] = useState("");
 
-  // Fetch user data using useGetUserInfoQuery
+  // Alert state
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertVariant, setAlertVariant] = useState("success");
+
   const { data: userInfo, refetch } = useGetUserInfoQuery();
 
-  // Update user state when data is fetched
   useEffect(() => {
     if (userInfo) {
       setUser(userInfo);
@@ -72,25 +73,26 @@ const LoginRegisterPage = () => {
       const userData = await login(formData).unwrap();
 
       setUser(userData.data);
-
       localStorage.setItem("username", userData.data.username);
       localStorage.setItem("isLoggedIn", "true");
-
       window.dispatchEvent(new Event("storage"));
 
-      // Refetch user info after login
+      // Show success alert
+      setAlertMessage("Successfully logged in!");
+      setAlertVariant("success");
       refetch();
-
       setTimeout(() => {
         navigate("/");
-      }, 1000);
+      }, 2000);
     } catch (err) {
       console.error("Failed to log in:", err);
-      alert("Failed to log in.");
+
+      // Show error alert
+      setAlertMessage("Failed to log in.");
+      setAlertVariant("danger");
     }
   };
 
-  // Register Submission
   const handleRegister = async (e) => {
     e.preventDefault();
     const formData = {
@@ -103,21 +105,27 @@ const LoginRegisterPage = () => {
 
     try {
       await register(formData).unwrap();
+
+      // Show success alert
+      setAlertMessage("Successfully registered!");
+      setAlertVariant("success");
+
       setTimeout(() => {
         navigate("/login"); // Redirect to the login page
-      }, 1000);
+      }, 2000);
     } catch (err) {
       console.error("Failed to register:", err);
-      alert("Failed to Register.");
+
+      // Show error alert
+      setAlertMessage("Failed to register.");
+      setAlertVariant("danger");
     }
   };
 
   return (
     <div className="overlay-container">
-      {/* Background overlay */}
       <div className="overlay"></div>
 
-      {/* Content */}
       <Container
         fluid
         className="auth-container d-flex justify-content-center align-items-center"
@@ -163,9 +171,18 @@ const LoginRegisterPage = () => {
                         Login
                       </Button>
                     </Form>
+                    <br />
+                    {alertMessage && (
+                      <Alert
+                        variant={alertVariant}
+                        onClose={() => setAlertMessage(null)}
+                        dismissible
+                      >
+                        {alertMessage}
+                      </Alert>
+                    )}
                   </Tab>
 
-                  {/* Register form */}
                   <Tab eventKey="register" title="Register">
                     <Form onSubmit={handleRegister}>
                       <Form.Group controlId="formRegisterName" className="mb-3">

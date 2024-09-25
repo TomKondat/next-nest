@@ -10,7 +10,6 @@ const userApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
 
-    // Register user
     register: builder.mutation({
       query: (data) => ({
         url: `${USER_URL}/register`,
@@ -19,7 +18,6 @@ const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // Login user
     login: builder.mutation({
       query: (data) => ({
         url: `${USER_URL}/login`,
@@ -28,7 +26,6 @@ const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // Logout user
     logout: builder.mutation({
       query: () => ({
         url: `${USER_URL}/logout`,
@@ -36,7 +33,6 @@ const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // Update user profile
     updateUserProfile: builder.mutation({
       query: (data) => ({
         url: `${USER_URL}/updateUser`,
@@ -52,21 +48,18 @@ const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    // Saved user properties
 
     getSavedPropertiesById: builder.query({
       query: () => ({
         url: `${USER_URL}/get-saved-properties`,
       }),
     }),
-    // Managed user properties
 
     getManagedPropertiesById: builder.query({
       query: () => ({
         url: `${USER_URL}/get-managed-properties`,
       }),
     }),
-    // User Info
 
     getUserInfo: builder.query({
       query: () => ({

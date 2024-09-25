@@ -16,14 +16,14 @@ const NavbarComponent = () => {
 
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
-  const location = useLocation(); // To detect route change
+  const location = useLocation();
   const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [showElements, setShowElements] = useState(false);
-  const [expanded, setExpanded] = useState(false); // State for navbar expanded
+  const [expanded, setExpanded] = useState(false);
 
-  const navbarRef = useRef(null); // Ref for detecting click outside
+  const navbarRef = useRef(null);
 
   const checkLoginStatus = () => {
     const loginStatus = localStorage.getItem("isLoggedIn");
@@ -37,7 +37,7 @@ const NavbarComponent = () => {
   }, [userInfo]);
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Scrolls to the top of the page on route change
+    window.scrollTo(0, 0);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -59,11 +59,10 @@ const NavbarComponent = () => {
     };
   }, [isLoggedIn]);
 
-  // Detect click outside to collapse the navbar
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
-        setExpanded(false); // Collapse the navbar
+        setExpanded(false);
       }
     };
 
@@ -74,7 +73,7 @@ const NavbarComponent = () => {
   }, []);
 
   const handleNavLinkClick = () => {
-    setExpanded(false); // Collapse the navbar when a NavLink is clicked
+    setExpanded(false);
   };
 
   const handleSubmit = async () => {
@@ -101,8 +100,8 @@ const NavbarComponent = () => {
       expand="lg"
       fixed="top"
       className="navbar-transparent"
-      expanded={expanded} // Controls whether the navbar is expanded or collapsed
-      ref={navbarRef} // Attach the ref to the navbar
+      expanded={expanded}
+      ref={navbarRef}
     >
       <Container fluid>
         <Navbar.Brand as={Link} to="/" className="text-white">
@@ -119,7 +118,7 @@ const NavbarComponent = () => {
           aria-controls="navbar-nav"
           className="bg-white"
           id="hamburger"
-          onClick={() => setExpanded(!expanded)} // Toggle expanded state
+          onClick={() => setExpanded(!expanded)}
         />
         <Navbar.Collapse id="navbar-nav" className="justify-content-center">
           <Nav className="me-auto">

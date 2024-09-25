@@ -28,7 +28,6 @@ const PropertyDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Extract flags from ManagedProperties, HomePage, or SavedProperties
   const fromManagedProperty = location.state?.fromManagedProperty || false;
   const fromHomePage = location.state?.fromHomePage || false;
   const fromSavedProperties = location.state?.fromSavedProperties || false;
@@ -39,25 +38,19 @@ const PropertyDetail = () => {
   const [addSaveProperty] = useAddSavePropertyMutation();
   const [removeSaveProperty] = useRemoveSavePropertyMutation();
 
-  // Modal state for Edit and Contact Agent
   const [showEditModal, setShowEditModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
 
-  // Fetch user info to check role and ownership
   const { data: userInfo, refetch: refetchUserInfo } = useGetUserInfoQuery();
   const userRole = userInfo?.data?.user?.role || null;
   const userId = userInfo?.data?.user?._id;
   const savedProperties = userInfo?.data?.user?.savedProperties || [];
 
-  // Check if the current property is already saved
   const isPropertySaved = savedProperties.includes(id);
-  // Check if the current user is the owner (agent) of the property
   const isPropertyOwner = userId === property?.property.agent?._id;
 
-  // State to control the visibility of the Save button
   const [showSaveButton, setShowSaveButton] = useState(!isPropertySaved);
 
-  // Initialize state variables for the form fields
   const [title, setTitle] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
@@ -69,7 +62,6 @@ const PropertyDetail = () => {
   const [bathrooms, setBathrooms] = useState("");
   const [area, setArea] = useState("");
 
-  // Initialize state variables for the agent fields
   const [agentName, setAgentName] = useState("");
   const [agentEmail, setAgentEmail] = useState("");
   const [agentPhone, setAgentPhone] = useState("");
@@ -84,7 +76,6 @@ const PropertyDetail = () => {
     }
   }, [property]);
 
-  // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
@@ -96,7 +87,6 @@ const PropertyDetail = () => {
     return <h2 className="text-center">Property not found</h2>;
   }
 
-  // Populate form fields with current property data when opening the modal
   const handleOpenEditModal = () => {
     setTitle(property?.property.title || "");
     setPropertyType(property?.property.propertyType || "");
@@ -111,13 +101,12 @@ const PropertyDetail = () => {
     setShowEditModal(true);
   };
 
-  // Handle Save Property
   const handleSave = async () => {
     try {
       await addSaveProperty(id).unwrap();
       alert("Property saved successfully!");
       setShowSaveButton(false);
-      refetchUserInfo(); // Refetch user info to update saved properties list
+      refetchUserInfo();
       refetch();
     } catch (err) {
       console.error("Failed to save the property:", err);
@@ -125,12 +114,11 @@ const PropertyDetail = () => {
     }
   };
 
-  // Handle Delete Saved Property
   const handleDeleteSavedProperty = async () => {
     try {
       await removeSaveProperty(id).unwrap();
       alert("Property removed from saved properties!");
-      navigate(-1); // Go back to the previous page
+      navigate(-1);
       refetchUserInfo();
       refetch();
     } catch (err) {
@@ -139,7 +127,6 @@ const PropertyDetail = () => {
     }
   };
 
-  // Handle Edit Property
   const handleEditSubmit = async () => {
     try {
       const addressQuery = `${houseNumber} ${street}, ${city}`;
@@ -191,7 +178,6 @@ const PropertyDetail = () => {
     }
   };
 
-  // Handle Delete Property
   const handleDelete = async () => {
     try {
       await deleteProperty(id).unwrap();
@@ -215,7 +201,6 @@ const PropertyDetail = () => {
             className="shadow-lg carddetail position-relative"
             style={{ padding: "20px", fontSize: "1.2rem" }}
           >
-            {/* Edit and Delete Button for Agents if they own the property and accessed from ManagedProperties */}
             {userRole === "agent" && isPropertyOwner && fromManagedProperty && (
               <div className="position-absolute top-0 end-0 m-3">
                 <Button
@@ -234,18 +219,16 @@ const PropertyDetail = () => {
               </div>
             )}
 
-            {/* Save Button for Buyers only from HomePage */}
             {userRole === "buyer" && fromHomePage && showSaveButton && (
               <Button
-                variant="outline-warning"
+                variant="outline-danger"
                 className="position-absolute top-0 end-0 m-3"
                 onClick={handleSave}
               >
-                Save
+                <Icon.Heart />
               </Button>
             )}
 
-            {/* Delete Button for Saved Properties */}
             {userRole === "buyer" && fromSavedProperties && isPropertySaved && (
               <Button
                 variant="outline-danger"
@@ -257,7 +240,7 @@ const PropertyDetail = () => {
             )}
 
             {/* Property Title */}
-            <Card.Title className="text-center display-5 mb-4">
+            <Card.Title className="text-center display-5 mb-4 mt-5">
               {property?.property.title}
             </Card.Title>
 
@@ -303,12 +286,10 @@ const PropertyDetail = () => {
               </Col>
             </Row>
 
-            {/* Description Section */}
             <Card.Text className="my-4 text-center">
               <strong>Description:</strong> {property?.property.description}
             </Card.Text>
 
-            {/* Contact Agent Button */}
             <Button
               variant="warning"
               size="md"
@@ -318,14 +299,12 @@ const PropertyDetail = () => {
               Contact Agent
             </Button>
 
-            {/* Contact Agent Modal */}
             <Modal
               show={showContactModal}
               onHide={() => setShowContactModal(false)}
               centered
             >
               <Modal.Body className="text-center">
-                {/* Circular Image */}
                 <Image
                   src={`${UPLOADS_URL}/${agentImage}`}
                   roundedCircle
@@ -360,7 +339,6 @@ const PropertyDetail = () => {
               </Modal.Footer>
             </Modal>
 
-            {/* Map Section */}
             <div className="mt-4 map-wrapper">
               {property?.property.location?.coordinates?.lat &&
               property?.property.location?.coordinates?.lng ? (
@@ -380,7 +358,6 @@ const PropertyDetail = () => {
         </Col>
       </Row>
 
-      {/* ----------------Edit Modal---------------- */}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Property</Modal.Title>
@@ -505,7 +482,6 @@ const PropertyDetail = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Delete Confirmation Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>
