@@ -20,7 +20,6 @@ const AddProperty = () => {
   const [area, setArea] = useState("");
   const [images, setImages] = useState(null);
   const [saleType, setSaleType] = useState("");
-  const [saleType, setSaleType] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
