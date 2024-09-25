@@ -12,7 +12,7 @@ const HomePage = () => {
   return (
     <div>
       <HeroSection updateSearchParams={updateSearchParams} />
-      <PropertyList searchParams={searchParams} />
+      <PropertyList searchParams={searchParams} fromHomePage={true} />
     </div>
   );
 };
