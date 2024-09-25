@@ -19,7 +19,7 @@ const AddProperty = () => {
   const [bathrooms, setBathrooms] = useState("");
   const [area, setArea] = useState("");
   const [images, setImages] = useState(null);
-  const [saleType, setSaleType] = useState("");  
+  const [saleType, setSaleType] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +35,7 @@ const AddProperty = () => {
     formData.append("bedrooms", bedrooms);
     formData.append("bathrooms", bathrooms);
     formData.append("area", area);
-    formData.append("saleType", saleType); 
+    formData.append("saleType", saleType);
 
     if (images) {
       if (images.length) {
@@ -184,7 +184,7 @@ const AddProperty = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group controlId="formSaleType" className="mb-3"> {/* Sale Type */}
+                      <Form.Group controlId="formSaleType" className="mb-3">
                         <Form.Label>Sale Type</Form.Label>
                         <Form.Control
                           as="select"

@@ -8,7 +8,7 @@ import {
   Modal,
   Form,
 } from "react-bootstrap";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link } from "react-router-dom";
 import {
   useGetUserInfoQuery,
   useUpdateUserProfileMutation,
@@ -108,10 +108,6 @@ const ProfilePage = () => {
   return (
     <Container className="profile-page border-container">
       <div className="d-flex justify-content-end ">
-        {/* <Button variant="outline-dark" onClick={handleImageShow}>
-          <Icon.Camera />
-        </Button>
-        &nbsp; &nbsp; */}
         <Button variant="outline-secondary" onClick={handleShow}>
           <Icon.Pencil />
         </Button>
@@ -139,7 +135,6 @@ const ProfilePage = () => {
         </Col>
       </Row>
 
-      {/* Agent-Specific Buttons */}
       {userRole === "agent" && (
         <div className="mb-3 text-center">
           <Button
@@ -156,7 +151,6 @@ const ProfilePage = () => {
         </div>
       )}
 
-      {/* Buyer-Specific Buttons */}
       {userRole === "buyer" && (
         <div className="mb-3 text-center">
           <Button as={Link} to="/SavedProperties" variant="warning">
@@ -165,7 +159,6 @@ const ProfilePage = () => {
         </div>
       )}
 
-      {/* Edit Profile Modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit User </Modal.Title>
@@ -209,7 +202,6 @@ const ProfilePage = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Change Profile Image Modal */}
       <Modal show={showImageModal} onHide={handleImageClose}>
         <Modal.Header closeButton>
           <Modal.Title>Change Profile Image</Modal.Title>

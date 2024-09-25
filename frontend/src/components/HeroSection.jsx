@@ -14,8 +14,10 @@ const HeroSection = ({ updateSearchParams }) => {
 
   const handleSearch = () => {
     const params = {
-      propertyType: selectedPropertyType !== "Property Type" ? selectedPropertyType : null,
-      priceRange: selectedPriceRange !== "Price Range" ? selectedPriceRange : null,
+      propertyType:
+        selectedPropertyType !== "Property Type" ? selectedPropertyType : null,
+      priceRange:
+        selectedPriceRange !== "Price Range" ? selectedPriceRange : null,
       bedrooms: selectedRooms !== "Bedrooms" ? selectedRooms : null,
       saleType: activeButton,
     };
@@ -27,17 +29,23 @@ const HeroSection = ({ updateSearchParams }) => {
     <div className="homepage">
       <div className="image-overlay">
         <div className="overlay-content">
-          <h1 className="homepage-title text-center">Find Your Ideal Property</h1>
+          <h1 className="homepage-title text-center">
+            Find Your Ideal Property
+          </h1>
           <Col xs="auto">
             <Button
-              className={`btn-filter ${activeButton === "sell" ? "active" : ""}`}
+              className={`btn-filter ${
+                activeButton === "sell" ? "active" : ""
+              }`}
               onClick={() => handleButtonClick("sell")}
               variant="warning"
             >
               Buy
             </Button>
             <Button
-              className={`btn-filter ${activeButton === "rent" ? "active" : ""}`}
+              className={`btn-filter ${
+                activeButton === "rent" ? "active" : ""
+              }`}
               onClick={() => handleButtonClick("rent")}
               variant="warning"
             >
@@ -45,43 +53,63 @@ const HeroSection = ({ updateSearchParams }) => {
             </Button>
           </Col>
 
-          {/* Filter bar (Property Type, Price Range, Bedrooms) */}
           <div className="filter-bar">
             <Container>
               <Row className="align-items-center justify-content-center">
-                {/* Property Type Dropdown */}
                 <Col xs="auto">
                   <Dropdown onSelect={(e) => setSelectedPropertyType(e)}>
-                    <Dropdown.Toggle id="dropdown-basic" className="property-selector" variant="warning">
+                    <Dropdown.Toggle
+                      id="dropdown-basic"
+                      className="property-selector"
+                      variant="warning"
+                    >
                       {selectedPropertyType || "Property Type"}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item eventKey="House">House</Dropdown.Item>
-                      <Dropdown.Item eventKey="Apartment">Apartment</Dropdown.Item>
-                      <Dropdown.Item eventKey="Commercial">Commercial</Dropdown.Item>
-                      <Dropdown.Item eventKey="Residential">Residential</Dropdown.Item>
+                      <Dropdown.Item eventKey="Apartment">
+                        Apartment
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="Commercial">
+                        Commercial
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="Residential">
+                        Residential
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Col>
 
-                {/* Price Range Dropdown */}
                 <Col xs="auto">
                   <Dropdown onSelect={(e) => setSelectedPriceRange(e)}>
-                    <Dropdown.Toggle id="dropdown-basic" className="price-selector" variant="warning">
+                    <Dropdown.Toggle
+                      id="dropdown-basic"
+                      className="price-selector"
+                      variant="warning"
+                    >
                       {selectedPriceRange || "Price Range"}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item eventKey="0-200000">$0 - $200,000</Dropdown.Item>
-                      <Dropdown.Item eventKey="200000-500000">$200,000 - $500,000</Dropdown.Item>
-                      <Dropdown.Item eventKey="500000+">$500,000+</Dropdown.Item>
+                      <Dropdown.Item eventKey="0-200000">
+                        $0 - $200,000
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="200000-500000">
+                        $200,000 - $500,000
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="500000+">
+                        $500,000+
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Col>
 
-                {/* Rooms Dropdown */}
                 <Col xs="auto">
                   <Dropdown onSelect={(e) => setSelectedRooms(e)}>
-                    <Dropdown.Toggle id="dropdown-basic" className="rooms-selector" variant="warning">
+                    <Dropdown.Toggle
+                      id="dropdown-basic"
+                      className="rooms-selector"
+                      variant="warning"
+                    >
                       {selectedRooms || "Bedrooms"}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
@@ -93,8 +121,15 @@ const HeroSection = ({ updateSearchParams }) => {
                 </Col>
 
                 <Col xs="auto">
-                  <Button variant="warning" className="search-button" onClick={handleSearch}>
-                    <i className="bi bi-search" style={{ fontSize: "1.2rem" }}></i>
+                  <Button
+                    variant="warning"
+                    className="search-button"
+                    onClick={handleSearch}
+                  >
+                    <i
+                      className="bi bi-search"
+                      style={{ fontSize: "1.2rem" }}
+                    ></i>
                   </Button>
                 </Col>
               </Row>

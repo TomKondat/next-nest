@@ -22,10 +22,8 @@ const LoginRegisterPage = () => {
   const navigate = useNavigate();
   const [key, setKey] = useState("login");
 
-  // Add user state
   const [user, setUser] = useState(null);
 
-  // Login states
   const [login] = useLoginMutation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,10 +35,8 @@ const LoginRegisterPage = () => {
   const [regPhone, setRegPhone] = useState("");
   const [username, setUsername] = useState("");
 
-  // Fetch user data using useGetUserInfoQuery
   const { data: userInfo, refetch } = useGetUserInfoQuery();
 
-  // Update user state when data is fetched
   useEffect(() => {
     if (userInfo) {
       setUser(userInfo);
@@ -77,10 +73,7 @@ const LoginRegisterPage = () => {
       localStorage.setItem("isLoggedIn", "true");
 
       window.dispatchEvent(new Event("storage"));
-
-      // Refetch user info after login
       refetch();
-
       setTimeout(() => {
         navigate("/");
       }, 1000);
@@ -90,7 +83,6 @@ const LoginRegisterPage = () => {
     }
   };
 
-  // Register Submission
   const handleRegister = async (e) => {
     e.preventDefault();
     const formData = {
@@ -104,7 +96,7 @@ const LoginRegisterPage = () => {
     try {
       await register(formData).unwrap();
       setTimeout(() => {
-        navigate("/login"); // Redirect to the login page
+        navigate("/login");
       }, 1000);
     } catch (err) {
       console.error("Failed to register:", err);
@@ -114,10 +106,8 @@ const LoginRegisterPage = () => {
 
   return (
     <div className="overlay-container">
-      {/* Background overlay */}
       <div className="overlay"></div>
 
-      {/* Content */}
       <Container
         fluid
         className="auth-container d-flex justify-content-center align-items-center"
@@ -165,7 +155,6 @@ const LoginRegisterPage = () => {
                     </Form>
                   </Tab>
 
-                  {/* Register form */}
                   <Tab eventKey="register" title="Register">
                     <Form onSubmit={handleRegister}>
                       <Form.Group controlId="formRegisterName" className="mb-3">

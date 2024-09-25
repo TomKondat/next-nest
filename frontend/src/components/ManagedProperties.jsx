@@ -11,27 +11,23 @@ import { UPLOADS_URL } from "../slices/urlConstrains";
 const ManagedProperties = () => {
   const navigate = useNavigate();
 
-  // Fetch user info
   const {
     data: userInfo,
     isLoading: userInfoLoading,
     isError: userInfoError,
   } = useGetUserInfoQuery();
 
-  // Fetch managed properties (only for agents)
   const {
     data: managedPropertiesData,
     isLoading: managedPropertiesLoading,
     isError: managedPropertiesError,
-    refetch: refetchManagedProperties, // Add refetch function
+    refetch: refetchManagedProperties,
   } = useGetManagedPropertiesByIdQuery();
 
-  // Trigger refetch when the component is mounted or navigated back to
   useEffect(() => {
-    refetchManagedProperties(); // Ensure properties are up-to-date
+    refetchManagedProperties();
   }, [refetchManagedProperties]);
 
-  // Loading states
   if (userInfoLoading || managedPropertiesLoading) {
     return (
       <Container className="mt-5 text-center">
@@ -40,7 +36,6 @@ const ManagedProperties = () => {
     );
   }
 
-  // Error handling
   if (userInfoError || managedPropertiesError) {
     return (
       <Container className="mt-5">
@@ -49,7 +44,6 @@ const ManagedProperties = () => {
     );
   }
 
-  // Check if the user is an agent
   const userRole = userInfo?.data?.user?.role;
   if (userRole !== "agent") {
     return (
@@ -61,11 +55,9 @@ const ManagedProperties = () => {
     );
   }
 
-  // Get managed properties data
   const propertiesArr = managedPropertiesData?.data?.managedProperties || [];
 
   const handleCardClick = (property) => {
-    // Navigate to PropertyDetail with 'fromManagedProperty' flag
     navigate(`/properties/${property._id}`, {
       state: { fromManagedProperty: true, property },
     });
