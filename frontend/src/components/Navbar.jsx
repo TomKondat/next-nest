@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Navbar, Nav, Container, Button, Image } from "react-bootstrap";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../images/NNlogo.png";
 import "../styles/navbar.css";
@@ -8,11 +8,11 @@ import {
   useLogoutMutation,
   useGetUserInfoQuery,
 } from "./../slices/userApiSlice";
+import { UPLOADS_URL } from "../slices/urlConstrains";
 import { useDispatch } from "react-redux"; // To clear the user state on logout
 
 const NavbarComponent = () => {
   const { data: userInfo } = useGetUserInfoQuery();
-  const userRole = userInfo?.data?.user?.role || null;
 
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
@@ -157,13 +157,12 @@ const NavbarComponent = () => {
                     to="/profile"
                     onClick={handleNavLinkClick}
                   >
-                    <i
-                      className="bi bi-person-circle"
-                      style={{
-                        fontSize: "1.75rem",
-                        color: "white",
-                      }}
-                    ></i>
+                    <Image
+                      src={`${UPLOADS_URL}/${userInfo?.data.user.image}`}
+                      roundedCircle
+                      alt={userInfo?.data.user.username}
+                      className="navbar-image"
+                    />
                   </Nav.Link>
                 </Nav>
                 <Button
