@@ -44,7 +44,7 @@ const PropertyList = ({ searchParams, fromHomePage }) => {
       <h4>Searched Properties</h4>
 
       <div className="sort-wrapper">
-        <label htmlFor="sort">Sort by: </label>
+        <label htmlFor="sort"></label>
         <select id="sort" value={sortOrder} onChange={handleSortChange}>
           <option value="price">Price (Low to High)</option>
           <option value="-price">Price (High to Low)</option>
@@ -74,25 +74,26 @@ const PropertyList = ({ searchParams, fromHomePage }) => {
           <div>No properties found</div>
         )}
       </Row>
-
-      <div className="pagination-controls page-button-wrapper">
-        <button
-          className="page-button"
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 1}
-        >
-          <Icon.ArrowLeft />
-        </button>
-        <span>
-          Page {page} of {totalPages}
-        </span>
-        <button
-          className="page-button"
-          onClick={() => handlePageChange(page + 1)}
-          disabled={page === totalPages}
-        >
-          <Icon.ArrowRight />
-        </button>
+      <div className="PageButtonsFather">
+        <div className="page-button-wrapper ">
+          <button
+            className="page-button"
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 1}
+          >
+            <Icon.ArrowLeft />
+          </button>
+          <span>
+            Page {page} of {totalPages}
+          </span>
+          <button
+            className="page-button"
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page === totalPages}
+          >
+            <Icon.ArrowRight />
+          </button>
+        </div>
       </div>
     </div>
   );
