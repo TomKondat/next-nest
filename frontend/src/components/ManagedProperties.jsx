@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useGetUserInfoQuery,
   useGetManagedPropertiesByIdQuery,
 } from "../slices/userApiSlice";
 import { Container, Row, Col, Alert, Spinner } from "react-bootstrap";
-import "../styles/propertyItem.css"; // Using the updated CSS styles
+import "../styles/propertyItem.css";
 import { UPLOADS_URL } from "../slices/urlConstrains";
 
 const ManagedProperties = () => {
@@ -23,7 +23,13 @@ const ManagedProperties = () => {
     data: managedPropertiesData,
     isLoading: managedPropertiesLoading,
     isError: managedPropertiesError,
+    refetch: refetchManagedProperties, // Add refetch function
   } = useGetManagedPropertiesByIdQuery();
+
+  // Trigger refetch when the component is mounted or navigated back to
+  useEffect(() => {
+    refetchManagedProperties(); // Ensure properties are up-to-date
+  }, [refetchManagedProperties]);
 
   // Loading states
   if (userInfoLoading || managedPropertiesLoading) {
@@ -59,15 +65,16 @@ const ManagedProperties = () => {
   const propertiesArr = managedPropertiesData?.data?.managedProperties || [];
 
   const handleCardClick = (property) => {
-    // Navigate to PropertyDetail with property information as state
+    // Navigate to PropertyDetail with 'fromManagedProperty' flag
     navigate(`/properties/${property._id}`, {
-      state: { isManaged: true, property },
+      state: { fromManagedProperty: true, property },
     });
   };
 
   return (
     <Container fluid className="property-list-wrapper pt-5">
       <h4>Managed Properties</h4>
+
       <Row className="g-3">
         {propertiesArr.length > 0 ? (
           propertiesArr.map((property) => (

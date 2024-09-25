@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useGetUserInfoQuery,
   useGetSavedPropertiesByIdQuery,
 } from "../slices/userApiSlice";
 import { Container, Row, Col, Alert, Spinner } from "react-bootstrap";
-import "../styles/propertyItem.css"; // Reusing the updated CSS styles
+import "../styles/propertyItem.css";
 
 const SavedProperties = () => {
   const navigate = useNavigate();
@@ -22,7 +22,13 @@ const SavedProperties = () => {
     data: savedPropertiesData,
     isLoading: savedPropertiesLoading,
     isError: savedPropertiesError,
+    refetch: refetchSavedProperties, // Get the refetch function
   } = useGetSavedPropertiesByIdQuery();
+
+  // Call refetch when the component mounts or when navigating back
+  useEffect(() => {
+    refetchSavedProperties(); // Trigger a refetch when the component mounts
+  }, [refetchSavedProperties]);
 
   // Loading states
   if (userInfoLoading || savedPropertiesLoading) {
@@ -58,7 +64,9 @@ const SavedProperties = () => {
   const propertiesArr = savedPropertiesData?.data?.savedProperties || [];
 
   const handleCardClick = (propertyId) => {
-    navigate(`/properties/${propertyId}`);
+    navigate(`/properties/${propertyId}`, {
+      state: { fromSavedProperties: true },
+    });
   };
 
   return (

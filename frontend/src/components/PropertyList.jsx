@@ -4,12 +4,19 @@ import "../styles/propertyItem.css";
 import { RESAULT_NUM } from "../slices/urlConstrains";
 import PropertyItem from "./PropertyItem";
 import { useGetPropertiesQuery } from "./../slices/propertyApiSlice";
+import { useNavigate } from "react-router-dom";
+import * as Icon from "react-bootstrap-icons";
 
-const PropertyList = ({ searchParams }) => {
+const PropertyList = ({ searchParams, fromHomePage }) => {
   const [page, setPage] = useState(1);
   const [sortOrder, setSortOrder] = useState("price");
+  const navigate = useNavigate();
 
-  const { data, error, isLoading } = useGetPropertiesQuery({ page, sort: sortOrder, ...searchParams });
+  const { data, error, isLoading } = useGetPropertiesQuery({
+    page,
+    sort: sortOrder,
+    ...searchParams,
+  });
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error?.data?.message}</div>;
@@ -24,6 +31,10 @@ const PropertyList = ({ searchParams }) => {
     }
   };
 
+  const handleCardClick = (propertyId) => {
+    navigate(`/properties/${propertyId}`, { state: { fromHomePage: true } });
+  };
+
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
   };
@@ -32,7 +43,6 @@ const PropertyList = ({ searchParams }) => {
     <div className="property-list-wrapper">
       <h4>Searched Properties</h4>
 
-      {/* Sort by dropdown */}
       <div className="sort-wrapper">
         <label htmlFor="sort">Sort by: </label>
         <select id="sort" value={sortOrder} onChange={handleSortChange}>
@@ -45,12 +55,19 @@ const PropertyList = ({ searchParams }) => {
         {propertiesArr.length > 0 ? (
           propertiesArr.map((property) => (
             <Col key={property._id} xs={12} sm={6} md={4} lg={3} xl={3}>
-              <PropertyItem
-                id={property._id}
-                images={property.images[0]}
-                title={property.title}
-                price={property.price}
-              />
+              <div
+                className="clickable-card"
+                onClick={() => handleCardClick(property._id)}
+                role="button"
+                tabIndex="0"
+              >
+                <PropertyItem
+                  id={property._id}
+                  images={property.images[0]}
+                  title={property.title}
+                  price={property.price}
+                />
+              </div>
             </Col>
           ))
         ) : (
@@ -58,22 +75,23 @@ const PropertyList = ({ searchParams }) => {
         )}
       </Row>
 
-      {/* Pagination controls */}
       <div className="pagination-controls page-button-wrapper">
         <button
           className="page-button"
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
         >
-          Previous
+          <Icon.ArrowLeft />
         </button>
-        <span>Page {page} of {totalPages}</span>
+        <span>
+          Page {page} of {totalPages}
+        </span>
         <button
           className="page-button"
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages}
         >
-          Next
+          <Icon.ArrowRight />
         </button>
       </div>
     </div>

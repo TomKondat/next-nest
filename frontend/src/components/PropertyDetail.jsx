@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   useEditPropertyMutation,
   useDeletePropertyMutation,
   useGetPropertyByIdQuery,
+  useAddSavePropertyMutation,
+  useRemoveSavePropertyMutation,
 } from "./../slices/propertyApiSlice";
 import * as Icon from "react-bootstrap-icons";
 import {
@@ -24,41 +26,49 @@ import { useGetUserInfoQuery } from "../slices/userApiSlice";
 const PropertyDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Extract flags from ManagedProperties, HomePage, or SavedProperties
+  const fromManagedProperty = location.state?.fromManagedProperty || false;
+  const fromHomePage = location.state?.fromHomePage || false;
+  const fromSavedProperties = location.state?.fromSavedProperties || false;
 
   const { data: property, refetch } = useGetPropertyByIdQuery(id);
   console.log(property?.property.agent);
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
+  const [addSaveProperty] = useAddSavePropertyMutation();
+  const [removeSaveProperty] = useRemoveSavePropertyMutation();
 
   // Modal state for Edit and Contact Agent
   const [showEditModal, setShowEditModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
 
-  // Fetch user info to check role
-  const { data: userInfo } = useGetUserInfoQuery();
+  // Fetch user info to check role and ownership
+  const { data: userInfo, refetch: refetchUserInfo } = useGetUserInfoQuery();
   const userRole = userInfo?.data?.user?.role || null;
+  const userId = userInfo?.data?.user?._id;
+  const savedProperties = userInfo?.data?.user?.savedProperties || [];
+
+  // Check if the current property is already saved
+  const isPropertySaved = savedProperties.includes(id);
+  // Check if the current user is the owner (agent) of the property
+  const isPropertyOwner = userId === property?.property.agent?._id;
+
+  // State to control the visibility of the Save button
+  const [showSaveButton, setShowSaveButton] = useState(!isPropertySaved);
 
   // Initialize state variables for the form fields
-  const [title, setTitle] = useState(property?.property.title || "");
-  const [propertyType, setPropertyType] = useState(
-    property?.property.propertyType || ""
-  );
-  const [houseNumber, setHouseNumber] = useState(
-    property?.property.location.houseNumber || ""
-  );
-  const [street, setStreet] = useState(
-    property?.property.location.street || ""
-  );
-  const [city, setCity] = useState(property?.property.location.city || "");
-  const [price, setPrice] = useState(property?.property.price || "");
-  const [description, setDescription] = useState(
-    property?.property.description || ""
-  );
-  const [bedrooms, setBedrooms] = useState(property?.property.bedrooms || "");
-  const [bathrooms, setBathrooms] = useState(
-    property?.property.bathrooms || ""
-  );
-  const [area, setArea] = useState(property?.property.area || "");
+  const [title, setTitle] = useState("");
+  const [propertyType, setPropertyType] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [bedrooms, setBedrooms] = useState("");
+  const [bathrooms, setBathrooms] = useState("");
+  const [area, setArea] = useState("");
 
   // Initialize state variables for the agent fields
   const [agentName, setAgentName] = useState("");
@@ -74,17 +84,61 @@ const PropertyDetail = () => {
       setAgentImage(property?.property.agent.image);
     }
   }, [property]);
+
   // Modal state for Delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to top
-    refetch(); // Refetch property data on component mount
-  }, [id, refetch]); // Adding id to the dependency array ensures refetching when the id changes
+    window.scrollTo(0, 0);
+    refetch();
+  }, [id, refetch]);
 
   if (!property) {
     return <h2 className="text-center">Property not found</h2>;
   }
+
+  // Populate form fields with current property data when opening the modal
+  const handleOpenEditModal = () => {
+    setTitle(property?.property.title || "");
+    setPropertyType(property?.property.propertyType || "");
+    setHouseNumber(property?.property.location.houseNumber || "");
+    setStreet(property?.property.location.street || "");
+    setCity(property?.property.location.city || "");
+    setPrice(property?.property.price || "");
+    setDescription(property?.property.description || "");
+    setBedrooms(property?.property.bedrooms || "");
+    setBathrooms(property?.property.bathrooms || "");
+    setArea(property?.property.area || "");
+    setShowEditModal(true);
+  };
+
+  // Handle Save Property
+  const handleSave = async () => {
+    try {
+      await addSaveProperty(id).unwrap();
+      alert("Property saved successfully!");
+      setShowSaveButton(false);
+      refetchUserInfo(); // Refetch user info to update saved properties list
+      refetch();
+    } catch (err) {
+      console.error("Failed to save the property:", err);
+      alert("Failed to save the property.");
+    }
+  };
+
+  // Handle Delete Saved Property
+  const handleDeleteSavedProperty = async () => {
+    try {
+      await removeSaveProperty(id).unwrap();
+      alert("Property removed from saved properties!");
+      navigate(-1); // Go back to the previous page
+      refetchUserInfo();
+      refetch();
+    } catch (err) {
+      console.error("Failed to remove saved property:", err);
+      alert("Failed to remove saved property.");
+    }
+  };
 
   // Handle Edit Property
   const handleEditSubmit = async () => {
@@ -131,6 +185,7 @@ const PropertyDetail = () => {
 
       alert("Property updated successfully!");
       setShowEditModal(false);
+      refetch();
     } catch (err) {
       console.error("Failed to update property:", err);
       alert("Failed to update property.");
@@ -142,7 +197,8 @@ const PropertyDetail = () => {
     try {
       await deleteProperty(id).unwrap();
       alert("Property deleted successfully!");
-      navigate("/"); // Redirect to homepage after deletion
+      navigate("/");
+      refetch();
     } catch (err) {
       console.error("Failed to delete property:", err);
       alert("Failed to delete property.");
@@ -160,12 +216,12 @@ const PropertyDetail = () => {
             className="shadow-lg carddetail position-relative"
             style={{ padding: "20px", fontSize: "1.2rem" }}
           >
-            {/* Edit and Delete Button in Top Right for Agents */}
-            {userRole === "agent" && (
+            {/* Edit and Delete Button for Agents if they own the property and accessed from ManagedProperties */}
+            {userRole === "agent" && isPropertyOwner && fromManagedProperty && (
               <div className="position-absolute top-0 end-0 m-3">
                 <Button
                   variant="outline-secondary"
-                  onClick={() => setShowEditModal(true)}
+                  onClick={handleOpenEditModal}
                   className="me-2"
                 >
                   <Icon.Pencil />
@@ -177,6 +233,28 @@ const PropertyDetail = () => {
                   <Icon.Trash />
                 </Button>
               </div>
+            )}
+
+            {/* Save Button for Buyers only from HomePage */}
+            {userRole === "buyer" && fromHomePage && showSaveButton && (
+              <Button
+                variant="outline-warning"
+                className="position-absolute top-0 end-0 m-3"
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+            )}
+
+            {/* Delete Button for Saved Properties */}
+            {userRole === "buyer" && fromSavedProperties && isPropertySaved && (
+              <Button
+                variant="outline-danger"
+                className="position-absolute top-0 end-0 m-3"
+                onClick={handleDeleteSavedProperty}
+              >
+                <Icon.Trash />
+              </Button>
             )}
 
             {/* Property Title */}
