@@ -1,6 +1,6 @@
 .homepage {
   position: relative;
-  min-height: 60vh;
+  min-height: 50vh;
   background-image: url("./images/cover.webp");
   background-size: cover;
   background-position: center;

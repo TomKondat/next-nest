@@ -17,6 +17,7 @@ import {
   Modal,
   Form,
   Image,
+  Alert,
 } from "react-bootstrap";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
@@ -33,7 +34,6 @@ const PropertyDetail = () => {
   const fromSavedProperties = location.state?.fromSavedProperties || false;
 
   const { data: property, refetch } = useGetPropertyByIdQuery(id);
-  console.log(property?.property.agent);
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
   const [addSaveProperty] = useAddSavePropertyMutation();
@@ -67,6 +67,11 @@ const PropertyDetail = () => {
   const [agentEmail, setAgentEmail] = useState("");
   const [agentPhone, setAgentPhone] = useState("");
   const [agentImage, setAgentImage] = useState("");
+
+  // Alert state management
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     if (property) {
@@ -105,26 +110,47 @@ const PropertyDetail = () => {
   const handleSave = async () => {
     try {
       await addSaveProperty(id).unwrap();
-      alert("Property saved successfully!");
+      setAlertMessage("Property saved successfully!");
+      setShowSuccessAlert(true);
+      setShowErrorAlert(false);
       setShowSaveButton(false);
       refetchUserInfo();
       refetch();
+
+      setTimeout(() => {
+        setShowSuccessAlert(false);
+      }, 2000); // Dismiss after 2 seconds
     } catch (err) {
-      console.error("Failed to save the property:", err);
-      alert("Failed to save the property.");
+      setAlertMessage("Failed to save the property.");
+      setShowErrorAlert(true);
+      setShowSuccessAlert(false);
+
+      setTimeout(() => {
+        setShowErrorAlert(false);
+      }, 2000); // Dismiss after 2 seconds
     }
   };
 
   const handleDeleteSavedProperty = async () => {
     try {
       await removeSaveProperty(id).unwrap();
-      alert("Property removed from saved properties!");
-      navigate(-1);
-      refetchUserInfo();
-      refetch();
+
+      setAlertMessage("Property removed from saved properties!");
+      setShowSuccessAlert(true);
+      setShowErrorAlert(false);
+
+      setTimeout(() => {
+        setShowSuccessAlert(false);
+        navigate(-1);
+      }, 2000);
     } catch (err) {
-      console.error("Failed to remove saved property:", err);
-      alert("Failed to remove saved property.");
+      setAlertMessage("Failed to remove saved property.");
+      setShowErrorAlert(true);
+      setShowSuccessAlert(false);
+
+      setTimeout(() => {
+        setShowErrorAlert(false);
+      }, 2000);
     }
   };
 
@@ -145,7 +171,15 @@ const PropertyDetail = () => {
       const coordinates = await fetchCoordinates(addressQuery);
 
       if (!coordinates) {
-        alert("Failed to fetch coordinates. Please check the address.");
+        setAlertMessage(
+          "Failed to fetch coordinates. Please check the address."
+        );
+        setShowErrorAlert(true);
+        setShowSuccessAlert(false);
+
+        setTimeout(() => {
+          setShowErrorAlert(false);
+        }, 2000); // Dismiss after 2 seconds
         return;
       }
 
@@ -170,24 +204,48 @@ const PropertyDetail = () => {
 
       await editProperty({ data: updatedProperty, propertyId: id }).unwrap();
 
-      alert("Property updated successfully!");
+      setAlertMessage("Property updated successfully!");
+      setShowSuccessAlert(true);
+      setShowErrorAlert(false);
       setShowEditModal(false);
       refetch();
+
+      setTimeout(() => {
+        setShowSuccessAlert(false);
+      }, 2000); // Dismiss after 2 seconds
     } catch (err) {
-      console.error("Failed to update property:", err);
-      alert("Failed to update property.");
+      setAlertMessage("Failed to update property.");
+      setShowErrorAlert(true);
+      setShowSuccessAlert(false);
+
+      setTimeout(() => {
+        setShowErrorAlert(false);
+      }, 2000); // Dismiss after 2 seconds
     }
   };
 
   const handleDelete = async () => {
     try {
       await deleteProperty(id).unwrap();
-      alert("Property deleted successfully!");
-      navigate("/");
-      refetch();
+
+      setShowDeleteModal(false);
+
+      setAlertMessage("Property deleted successfully!");
+      setShowSuccessAlert(true);
+      setShowErrorAlert(false);
+
+      setTimeout(() => {
+        setShowSuccessAlert(false);
+        navigate(-1);
+      }, 1000);
     } catch (err) {
-      console.error("Failed to delete property:", err);
-      alert("Failed to delete property.");
+      setAlertMessage("Failed to delete property.");
+      setShowErrorAlert(true);
+      setShowSuccessAlert(false);
+
+      setTimeout(() => {
+        setShowErrorAlert(false);
+      }, 2000);
     }
   };
 
@@ -198,6 +256,28 @@ const PropertyDetail = () => {
     >
       <Row className="w-100 d-flex justify-content-center">
         <Col xs={12} md={10} lg={8}>
+          {/* Success Alert */}
+          {showSuccessAlert && (
+            <Alert
+              variant="success"
+              onClose={() => setShowSuccessAlert(false)}
+              dismissible
+            >
+              {alertMessage}
+            </Alert>
+          )}
+
+          {/* Error Alert */}
+          {showErrorAlert && (
+            <Alert
+              variant="danger"
+              onClose={() => setShowErrorAlert(false)}
+              dismissible
+            >
+              {alertMessage}
+            </Alert>
+          )}
+
           <Card
             className="shadow-lg carddetail position-relative"
             style={{ padding: "20px", fontSize: "1.2rem" }}
