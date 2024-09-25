@@ -20,7 +20,7 @@ import {
 } from "react-bootstrap";
 import PropertyMap from "./PropertyMap";
 import "../styles/propertyItem.css";
-import { UPLOADS_URL } from "../slices/urlConstrains";
+import { DEFAULT_PROPERTY_IMG, UPLOADS_URL } from "../slices/urlConstrains";
 import { useGetUserInfoQuery } from "../slices/userApiSlice";
 
 const PropertyDetail = () => {
@@ -33,7 +33,6 @@ const PropertyDetail = () => {
   const fromSavedProperties = location.state?.fromSavedProperties || false;
 
   const { data: property, refetch } = useGetPropertyByIdQuery(id);
-  console.log(property?.property.agent);
   const [editProperty] = useEditPropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
   const [addSaveProperty] = useAddSavePropertyMutation();
@@ -246,12 +245,12 @@ const PropertyDetail = () => {
             </Card.Title>
 
             <Row className="property-details-row mb-4">
-              <Col xs={12} md={8}>
+              <Col xs={12} md={8} className= "property-detail-con">
                 <Card.Img
                   variant="top"
-                  src={
-                    `${UPLOADS_URL}/${property?.property.images[0]}` ||
-                    "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko="
+                  src={property?.property.images[0]?
+                    `${UPLOADS_URL}/${property?.property.images[0]}` :
+                    `${UPLOADS_URL}/${DEFAULT_PROPERTY_IMG}`
                   }
                   alt={property?.property.title}
                   className="property-detail-image"

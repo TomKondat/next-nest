@@ -8,8 +8,8 @@ import {
   useLogoutMutation,
   useGetUserInfoQuery,
 } from "./../slices/userApiSlice";
-import { UPLOADS_URL } from "../slices/urlConstrains";
-import { useDispatch } from "react-redux";
+import { DEFAULT_USER_IMG, UPLOADS_URL } from "../slices/urlConstrains";
+import { useDispatch } from "react-redux"; // To clear the user state on logout
 
 const NavbarComponent = () => {
   const { data: userInfo } = useGetUserInfoQuery();
@@ -157,9 +157,13 @@ const NavbarComponent = () => {
                     onClick={handleNavLinkClick}
                   >
                     <Image
-                      src={`${UPLOADS_URL}/${userInfo?.data.user.image}`}
+                      src={
+                        userInfo?.data.user.image
+                          ? `${UPLOADS_URL}/${userInfo?.data.user.image}`
+                          : `${UPLOADS_URL}/${DEFAULT_USER_IMG}`
+                      }
                       roundedCircle
-                      alt={userInfo?.data.user.username}
+                      alt={userInfo?.data.user.username || "User"}  // Fallback for alt text
                       className="navbar-image"
                     />
                   </Nav.Link>
