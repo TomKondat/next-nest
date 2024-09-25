@@ -188,8 +188,6 @@ const AddProperty = () => {
                       </Form.Group>
 
                       <Form.Group controlId="formSaleType" className="mb-3">
-                        {" "}
-                        {/* Sale Type */}
                         <Form.Label>Sale Type</Form.Label>
                         <Form.Control
                           as="select"

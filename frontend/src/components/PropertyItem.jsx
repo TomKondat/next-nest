@@ -4,9 +4,7 @@ import "../styles/propertyItem.css";
 import { UPLOADS_URL } from "../slices/urlConstrains";
 
 const PropertyItem = (props) => {
-  //console.log (props.images)
-  let urlimage=`${UPLOADS_URL}/${props.images}`
-  //console.log(urlimage)
+  let urlimage = `${UPLOADS_URL}/${props.images}`;
 
   return (
     <Link to={`/properties/${props.id}`} className="property-link">

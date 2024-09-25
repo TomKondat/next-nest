@@ -23,10 +23,8 @@ const LoginRegisterPage = () => {
   const navigate = useNavigate();
   const [key, setKey] = useState("login");
 
-  // Add user state
   const [user, setUser] = useState(null);
 
-  // Login states
   const [login] = useLoginMutation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,10 +40,8 @@ const LoginRegisterPage = () => {
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertVariant, setAlertVariant] = useState("success");
 
-  // Fetch user data using useGetUserInfoQuery
   const { data: userInfo, refetch } = useGetUserInfoQuery();
 
-  // Update user state when data is fetched
   useEffect(() => {
     if (userInfo) {
       setUser(userInfo);
@@ -85,7 +81,6 @@ const LoginRegisterPage = () => {
       setAlertMessage("Successfully logged in!");
       setAlertVariant("success");
       refetch();
-
       setTimeout(() => {
         navigate("/");
       }, 2000);
@@ -98,7 +93,6 @@ const LoginRegisterPage = () => {
     }
   };
 
-  // Register Submission
   const handleRegister = async (e) => {
     e.preventDefault();
     const formData = {
@@ -130,10 +124,8 @@ const LoginRegisterPage = () => {
 
   return (
     <div className="overlay-container">
-      {/* Background overlay */}
       <div className="overlay"></div>
 
-      {/* Content */}
       <Container
         fluid
         className="auth-container d-flex justify-content-center align-items-center"
@@ -191,7 +183,6 @@ const LoginRegisterPage = () => {
                     )}
                   </Tab>
 
-                  {/* Register form */}
                   <Tab eventKey="register" title="Register">
                     <Form onSubmit={handleRegister}>
                       <Form.Group controlId="formRegisterName" className="mb-3">

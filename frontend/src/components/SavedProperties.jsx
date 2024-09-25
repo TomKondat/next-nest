@@ -10,27 +10,23 @@ import "../styles/propertyItem.css";
 const SavedProperties = () => {
   const navigate = useNavigate();
 
-  // Fetch user info
   const {
     data: userInfo,
     isLoading: userInfoLoading,
     isError: userInfoError,
   } = useGetUserInfoQuery();
 
-  // Fetch saved properties (only for buyers)
   const {
     data: savedPropertiesData,
     isLoading: savedPropertiesLoading,
     isError: savedPropertiesError,
-    refetch: refetchSavedProperties, // Get the refetch function
+    refetch: refetchSavedProperties,
   } = useGetSavedPropertiesByIdQuery();
 
-  // Call refetch when the component mounts or when navigating back
   useEffect(() => {
-    refetchSavedProperties(); // Trigger a refetch when the component mounts
+    refetchSavedProperties();
   }, [refetchSavedProperties]);
 
-  // Loading states
   if (userInfoLoading || savedPropertiesLoading) {
     return (
       <Container className="mt-5 text-center">
@@ -39,7 +35,6 @@ const SavedProperties = () => {
     );
   }
 
-  // Error handling
   if (userInfoError || savedPropertiesError) {
     return (
       <Container className="mt-5">
@@ -48,7 +43,6 @@ const SavedProperties = () => {
     );
   }
 
-  // Check if the user is a buyer
   const userRole = userInfo?.data?.user?.role;
   if (userRole !== "buyer") {
     return (
@@ -60,7 +54,6 @@ const SavedProperties = () => {
     );
   }
 
-  // Get saved properties data
   const propertiesArr = savedPropertiesData?.data?.savedProperties || [];
 
   const handleCardClick = (propertyId) => {

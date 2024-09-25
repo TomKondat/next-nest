@@ -12,7 +12,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5) !important; /* Dark overlay */
+  background-color: rgba(0, 0, 0, 0.5) !important;
   border-radius: 0 0 12px 12px;
 }
 
@@ -43,7 +43,6 @@
   background-color: #ff9800;
 }
 
-/* Active Button Style */
 .btn-option.active {
   background-color: #ff9800;
   color: white;
@@ -68,8 +67,6 @@
 #search {
   margin-left: -15px;
 }
-/* heroSection.css */
-
 .overlay-content {
   position: absolute;
   top: 50%;
@@ -79,7 +76,6 @@
   width: 100%;
 }
 
-/* Filter Bar */
 .filter-bar {
   background: rgba(210, 210, 210, 0.452);
   border-radius: 20px;

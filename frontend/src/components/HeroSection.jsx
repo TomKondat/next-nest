@@ -18,6 +18,10 @@ const HeroSection = ({ updateSearchParams }) => {
         selectedPropertyType !== "Property Type" ? selectedPropertyType : null,
       priceRange:
         selectedPriceRange !== "Price Range" ? selectedPriceRange : null,
+      propertyType:
+        selectedPropertyType !== "Property Type" ? selectedPropertyType : null,
+      priceRange:
+        selectedPriceRange !== "Price Range" ? selectedPriceRange : null,
       bedrooms: selectedRooms !== "Bedrooms" ? selectedRooms : null,
       saleType: activeButton,
     };
@@ -54,11 +58,9 @@ const HeroSection = ({ updateSearchParams }) => {
             </Button>
           </Col>
 
-          {/* Filter bar (Property Type, Price Range, Bedrooms) */}
           <div className="filter-bar">
             <Container>
               <Row className="align-items-center justify-content-center">
-                {/* Property Type Dropdown */}
                 <Col xs="auto">
                   <Dropdown onSelect={(e) => setSelectedPropertyType(e)}>
                     <Dropdown.Toggle
@@ -69,9 +71,9 @@ const HeroSection = ({ updateSearchParams }) => {
                       {selectedPropertyType || "Property Type"}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item eventKey="Land">Land</Dropdown.Item>
-                      <Dropdown.Item eventKey="Industrial">
-                        Industrial
+                      <Dropdown.Item eventKey="House">House</Dropdown.Item>
+                      <Dropdown.Item eventKey="Apartment">
+                        Apartment
                       </Dropdown.Item>
                       <Dropdown.Item eventKey="Commercial">
                         Commercial
@@ -79,18 +81,10 @@ const HeroSection = ({ updateSearchParams }) => {
                       <Dropdown.Item eventKey="Residential">
                         Residential
                       </Dropdown.Item>
-                      <Dropdown.Item eventKey="mixed-Use">
-                        Mixed-Use
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey="Retail">Retail</Dropdown.Item>
-                      <Dropdown.Item eventKey="Hospitality">
-                        Hospitality
-                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Col>
 
-                {/* Price Range Dropdown */}
                 <Col xs="auto">
                   <Dropdown onSelect={(e) => setSelectedPriceRange(e)}>
                     <Dropdown.Toggle
@@ -114,7 +108,6 @@ const HeroSection = ({ updateSearchParams }) => {
                   </Dropdown>
                 </Col>
 
-                {/* Rooms Dropdown */}
                 <Col xs="auto">
                   <Dropdown onSelect={(e) => setSelectedRooms(e)}>
                     <Dropdown.Toggle
