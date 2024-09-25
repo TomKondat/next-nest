@@ -133,11 +133,7 @@ const HeroSection = ({ updateSearchParams }) => {
                 </Col>
 
                 <Col xs="auto">
-                  <Button
-                    variant="warning"
-                    className="search-button"
-                    onClick={handleSearch}
-                  >
+                  <Button className="search-button" onClick={handleSearch}>
                     <i
                       className="bi bi-search"
                       style={{ fontSize: "1.2rem" }}
