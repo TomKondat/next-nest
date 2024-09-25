@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: "https://via.placeholder.com/300",
+      default: "img/users/default-user-image.jpg",
     },
     phone: {
       type: String,

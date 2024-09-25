@@ -25,9 +25,16 @@ const HeroSection = ({ updateSearchParams }) => {
       bedrooms: selectedRooms !== "Bedrooms" ? selectedRooms : null,
       saleType: activeButton,
     };
-    console.log(selectedPropertyType);
 
     updateSearchParams(params);
+  };
+
+  const handleReset = () => {
+    setActiveButton("sell");
+    setSelectedPropertyType("");
+    setSelectedPriceRange("");
+    setSelectedRooms("");
+    updateSearchParams({});
   };
 
   return (
@@ -131,6 +138,15 @@ const HeroSection = ({ updateSearchParams }) => {
                       className="bi bi-search"
                       style={{ fontSize: "1.2rem" }}
                     ></i>
+                  </Button>
+                </Col>
+
+                <Col xs="auto">
+                  <Button
+                    className="reset-button"
+                    onClick={handleReset}
+                  >
+                    Reset Filters
                   </Button>
                 </Col>
               </Row>

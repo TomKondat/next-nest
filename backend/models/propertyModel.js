@@ -68,7 +68,7 @@ const propertySchema = new mongoose.Schema(
     },
     images: {
       type: [String],
-      default: ["https://via.placeholder.com/300"],
+      default: ["/img/properties/default-property-image.jpg"],
     },
     status: {
       type: String,

@@ -8,8 +8,8 @@ import {
   useLogoutMutation,
   useGetUserInfoQuery,
 } from "./../slices/userApiSlice";
-import { UPLOADS_URL } from "../slices/urlConstrains";
-import { useDispatch } from "react-redux";
+import { DEFAULT_USER_IMG, UPLOADS_URL } from "../slices/urlConstrains";
+import { useDispatch } from "react-redux"; // To clear the user state on logout
 
 const NavbarComponent = () => {
   const { data: userInfo } = useGetUserInfoQuery();
