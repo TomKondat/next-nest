@@ -118,10 +118,22 @@
   background-color: rgb(255, 77, 0);
   border: none;
   border-radius: 12px;
-  padding: 4px 7px;
+  padding: 4px 6px;
+  width: 37px;
 }
 
 .search-button i {
   font-size: 1.5rem;
   color: white;
+}
+
+.reset-button{
+  background-color: rgb(253, 241, 235);
+  color: gray;
+  border: none;
+}
+.reset-button:hover{
+  background-color: rgb(184, 184, 184);
+  color: rgb(253, 241, 235);
+  border: none;
 }

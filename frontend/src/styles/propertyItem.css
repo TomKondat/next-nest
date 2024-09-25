@@ -130,6 +130,9 @@
   width: 100%;
   border-radius: 12px;
 }
+.property-detail-con {
+  max-height: 50vh;
+}
 
 .property-details-container {
   display: flex;

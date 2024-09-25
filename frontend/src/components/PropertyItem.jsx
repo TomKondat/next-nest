@@ -1,12 +1,10 @@
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../styles/propertyItem.css";
-import { UPLOADS_URL } from "../slices/urlConstrains";
+import { DEFAULT_PROPERTY_IMG, UPLOADS_URL } from "../slices/urlConstrains";
 
 const PropertyItem = (props) => {
-  //console.log (props.images)
-  let urlimage=`${UPLOADS_URL}/${props.images}`
-  //console.log(urlimage)
+  let urlimage=props.images?`${UPLOADS_URL}/${props.images}`:`${UPLOADS_URL}/${DEFAULT_PROPERTY_IMG}`
 
   return (
     <Link to={`/properties/${props.id}`} className="property-link">
