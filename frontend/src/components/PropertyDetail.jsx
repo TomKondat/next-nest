@@ -258,7 +258,7 @@ const PropertyDetail = () => {
             )}
 
             {/* Property Title */}
-            <Card.Title className="text-center display-5 mb-4">
+            <Card.Title className="text-center display-5 mb-4 mt-5">
               {property?.property.title}
             </Card.Title>
 
