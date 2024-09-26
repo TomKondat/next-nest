@@ -7,10 +7,12 @@ import logo from "../../images/NNlogo.png";
 
 const Footer = () => {
   const [showModal, setShowModal] = useState(false);
+  const [email, setEmail] = useState(""); // State for email input
 
   const handleSubscribe = (e) => {
     e.preventDefault();
     setShowModal(true);
+    setEmail(""); // Clear the email input after subscribing
   };
 
   const handleClose = () => setShowModal(false);
@@ -65,6 +67,8 @@ const Footer = () => {
                         type="email"
                         placeholder="Enter your email"
                         size="md"
+                        value={email} // Bind email state to input
+                        onChange={(e) => setEmail(e.target.value)} // Update state on input change
                       />
                     </Form.Group>
                   </Col>
