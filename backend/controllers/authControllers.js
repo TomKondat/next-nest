@@ -96,7 +96,6 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   const user = await User.findById(decoded.id);
   if (!user) return next(new AppError(404, "User no longer exists"));
-
   if (
     user.passwordChangedAt &&
     Date.parse(user.passwordChangedAt) / 1000 > decoded.iat
@@ -133,38 +132,28 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
 
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const userId = req.user._id;
-
-  // Check if there are fields to update (apart from the image)
   const allowedFields = {};
   if (req.body.newUsername) allowedFields.username = req.body.newUsername;
   if (req.body.newEmail) allowedFields.email = req.body.newEmail;
   if (req.body.newPhone) allowedFields.phone = req.body.newPhone;
-
-  // If there are fields to update, find and update the user (excluding image and password fields)
   let updatedUser;
   if (Object.keys(allowedFields).length > 0) {
     updatedUser = await User.findByIdAndUpdate(userId, allowedFields, {
       new: true,
-      runValidators: true, // Run validators only for these fields
+      runValidators: true,
     });
     if (!updatedUser) return next(new AppError(404, "User not found"));
   } else {
-    updatedUser = await User.findById(userId); // Just fetch user if no fields to update
+    updatedUser = await User.findById(userId);
     if (!updatedUser) return next(new AppError(404, "User not found"));
   }
-
-  // If an image is being uploaded, handle the image upload separately
   if (req.file) {
     const fileName = `user-${Date.now()}-${updatedUser._id}.jpg`;
-
-    // Process and save the image
     await sharp(req.file.buffer)
       .resize(500, 300)
       .toFormat("jpeg")
       .jpeg({ quality: 80 })
       .toFile(`public/img/users/${fileName}`);
-
-    // Update the image field in the database (single image now)
     updatedUser.image = `img/users/${fileName}`;
     await User.findByIdAndUpdate(
       userId,
@@ -172,8 +161,6 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
       { new: true }
     );
   }
-
-  // Send back the updated user data
   res.status(200).json({
     status: "success",
     data: {
