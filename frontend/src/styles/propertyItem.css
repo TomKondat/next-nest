@@ -243,3 +243,7 @@
   height: auto;
   margin-left: 10px;
 }
+.image-preview {
+  display: flex;
+  justify-content: space-evenly;
+}
