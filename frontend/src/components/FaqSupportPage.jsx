@@ -24,13 +24,13 @@ const FaqSupportPage = () => {
 
   return (
     <Container className="my-5" id="faq">
-      <Card className="shadow-sm">
-        <Card.Body>
+      <Card className="shadow-sm ">
+        <Card.Body className="faqbg">
           <h1 className="text-center mb-4" id="faqheader">
             FAQ & Support
           </h1>
 
-          <Row className="mb-5" id="faq">
+          <Row className="mb-5 " id="faq">
             <Col>
               <h2>Frequently Asked Questions</h2>
               <Accordion defaultActiveKey="0">
@@ -100,7 +100,7 @@ const FaqSupportPage = () => {
                   />
                 </Form.Group>
 
-                <Button variant="primary" type="submit" block>
+                <Button variant="warning" type="submit" block>
                   Submit
                 </Button>
               </Form>
