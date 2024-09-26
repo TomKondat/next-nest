@@ -16,7 +16,6 @@ const AddProperty = () => {
   const navigate = useNavigate();
   const [addProperty, { isLoading }] = useAddPropertyMutation();
 
-  // State to handle form fields
   const [title, setTitle] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
@@ -30,7 +29,6 @@ const AddProperty = () => {
   const [images, setImages] = useState(null);
   const [saleType, setSaleType] = useState("");
 
-  // State to manage alerts
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -63,14 +61,14 @@ const AddProperty = () => {
 
     try {
       await addProperty(formData).unwrap();
-      setShowSuccessAlert(true); // Show success alert
-      setShowErrorAlert(false); // Hide error alert
+      setShowSuccessAlert(true);
+      setShowErrorAlert(false);
       setTimeout(() => {
         navigate("/");
-      }, 1000); // Navigate after 2 seconds
+      }, 1000);
     } catch (err) {
-      setShowErrorAlert(true); // Show error alert
-      setShowSuccessAlert(false); // Hide success alert
+      setShowErrorAlert(true);
+      setShowSuccessAlert(false);
       setErrorMessage(
         err?.data?.message || "Error adding property. Please try again."
       );

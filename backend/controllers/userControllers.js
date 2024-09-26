@@ -115,7 +115,7 @@ exports.addManagedProperty = asyncHandler(async (req, res, next) => {
 
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { $addToSet: { managedProperties: propertyId } }, // addToSet ensures no duplicates
+    { $addToSet: { managedProperties: propertyId } },
     { new: true, runValidators: true }
   ).populate("managedProperties");
 

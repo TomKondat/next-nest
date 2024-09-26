@@ -9,7 +9,7 @@ import {
   Tab,
   Tabs,
   Card,
-  Alert, // Import Alert component
+  Alert,
 } from "react-bootstrap";
 import {
   useLoginMutation,
@@ -36,7 +36,6 @@ const LoginRegisterPage = () => {
   const [regPhone, setRegPhone] = useState("");
   const [username, setUsername] = useState("");
 
-  // Alert state
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertVariant, setAlertVariant] = useState("success");
 
@@ -77,7 +76,6 @@ const LoginRegisterPage = () => {
       localStorage.setItem("isLoggedIn", "true");
       window.dispatchEvent(new Event("storage"));
 
-      // Show success alert
       setAlertMessage("Successfully logged in!");
       setAlertVariant("success");
       refetch();
@@ -87,7 +85,6 @@ const LoginRegisterPage = () => {
     } catch (err) {
       console.error("Failed to log in:", err);
 
-      // Show error alert
       setAlertMessage("Failed to log in.");
       setAlertVariant("danger");
     }
@@ -106,17 +103,15 @@ const LoginRegisterPage = () => {
     try {
       await register(formData).unwrap();
 
-      // Show success alert
       setAlertMessage("Successfully registered!");
       setAlertVariant("success");
 
       setTimeout(() => {
-        navigate("/login"); // Redirect to the login page
+        navigate("/login");
       }, 2000);
     } catch (err) {
       console.error("Failed to register:", err);
 
-      // Show error alert
       setAlertMessage("Failed to register.");
       setAlertVariant("danger");
     }
