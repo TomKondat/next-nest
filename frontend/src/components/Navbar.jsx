@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Navbar, Nav, Container, Button, Image, Alert } from "react-bootstrap"; // Imported Alert component
+import { Navbar, Nav, Container, Button, Image, Alert } from "react-bootstrap";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../images/NNlogo.png";
 import "../styles/navbar.css";
@@ -9,7 +9,7 @@ import {
   useGetUserInfoQuery,
 } from "./../slices/userApiSlice";
 import { DEFAULT_USER_IMG, UPLOADS_URL } from "../slices/urlConstrains";
-import { useDispatch } from "react-redux"; // To clear the user state on logout
+import { useDispatch } from "react-redux";
 
 const NavbarComponent = () => {
   const { data: userInfo } = useGetUserInfoQuery();
