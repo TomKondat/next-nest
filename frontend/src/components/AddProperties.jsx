@@ -89,10 +89,10 @@ const AddProperty = () => {
                           <option value="" disabled hidden>
                             Choose Property Type
                           </option>
-                          <option value="land">Land</option>
+                          <option value="residential">Residential</option>
                           <option value="industrial">Industrial</option>
                           <option value="commercial">Commercial</option>
-                          <option value="residential">Residential</option>
+                          <option value="land">Land</option>
                           <option value="mixed-use">Mixed-Use</option>
                           <option value="retail">Retail</option>
                           <option value="hospitality">Hospitality</option>

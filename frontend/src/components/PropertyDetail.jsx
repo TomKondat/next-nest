@@ -61,7 +61,8 @@ const PropertyDetail = () => {
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [area, setArea] = useState("");
-
+  const [images, setImages] = useState(null);
+  const [previewImages, setPreviewImages] = useState([]);
   const [agentName, setAgentName] = useState("");
   const [agentEmail, setAgentEmail] = useState("");
   const [agentPhone, setAgentPhone] = useState("");
@@ -98,7 +99,14 @@ const PropertyDetail = () => {
     setBedrooms(property?.property.bedrooms || "");
     setBathrooms(property?.property.bathrooms || "");
     setArea(property?.property.area || "");
+    setPreviewImages(property?.property.images || []);
     setShowEditModal(true);
+  };
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImages(files);
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages(previews);
   };
 
   const handleSave = async () => {
@@ -129,46 +137,24 @@ const PropertyDetail = () => {
 
   const handleEditSubmit = async () => {
     try {
-      const addressQuery = `${houseNumber} ${street}, ${city}`;
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("propertyType", propertyType);
+      formData.append("price", price);
+      formData.append("description", description);
+      formData.append("bedrooms", bedrooms);
+      formData.append("bathrooms", bathrooms);
+      formData.append("area", area);
+      formData.append("location[houseNumber]", houseNumber);
+      formData.append("location[street]", street);
+      formData.append("location[city]", city);
 
-      const fetchCoordinates = async (query) => {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-            query
-          )}&format=json`
-        );
-        const data = await response.json();
-        return data.length > 0 ? { lat: data[0].lat, lng: data[0].lon } : null;
-      };
-
-      const coordinates = await fetchCoordinates(addressQuery);
-
-      if (!coordinates) {
-        alert("Failed to fetch coordinates. Please check the address.");
-        return;
+      if (images) {
+        images.forEach((image, index) => {
+          formData.append("image", image); 
+        });
       }
-
-      const updatedProperty = {
-        title,
-        propertyType,
-        location: {
-          houseNumber,
-          street,
-          city,
-          coordinates: {
-            lat: parseFloat(coordinates.lat),
-            lng: parseFloat(coordinates.lng),
-          },
-        },
-        price,
-        description,
-        bedrooms,
-        bathrooms,
-        area,
-      };
-
-      await editProperty({ data: updatedProperty, propertyId: id }).unwrap();
-
+      await editProperty({ data: formData, propertyId: id }).unwrap();
       alert("Property updated successfully!");
       setShowEditModal(false);
       refetch();
@@ -177,7 +163,6 @@ const PropertyDetail = () => {
       alert("Failed to update property.");
     }
   };
-
   const handleDelete = async () => {
     try {
       await deleteProperty(id).unwrap();
@@ -468,8 +453,29 @@ const PropertyDetail = () => {
                     onChange={(e) => setDescription(e.target.value)}
                   />
                 </Form.Group>
-              </Col>
-            </Row>
+                </Col>
+                </Row>
+  <               Form.Group className="mb-3" controlId="formImages">
+                  <Form.Label>Property Images</Form.Label>
+                  <Form.Control
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                </Form.Group>
+
+                <div className="image-preview">
+                  {previewImages.map((img, index) => (
+                    <Image
+                      key={index}
+                      src={img.startsWith("blob:") ? img : UPLOADS_URL +'/'+ img}
+                      alt={`property-img-${index}`}
+                      thumbnail
+                      style={{ width: "150px", margin: "5px" }}
+                    />
+                  ))}
+                </div>
           </Form>
         </Modal.Body>
         <Modal.Footer>

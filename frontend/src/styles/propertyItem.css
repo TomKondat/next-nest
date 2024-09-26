@@ -226,3 +226,7 @@
   border: 3px solid #6c757d;
   object-fit: cover;
 }
+.image-preview{
+  display: flex;
+  justify-content: space-evenly;
+}

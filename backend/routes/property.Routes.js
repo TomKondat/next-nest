@@ -19,7 +19,7 @@ router.route("/:propertyId/add-managed-property")
 router
   .route("/:id")
   .get(propertyControllers.getPropertyById)
-  .patch(authControllers.protect, authControllers.restrictByRole("agent"), propertyControllers.editPropertyById)
+  .patch(authControllers.protect, authControllers.restrictByRole("agent"), propertyControllers.uploadPropertyImage, propertyControllers.editPropertyById)
   .delete(authControllers.protect, authControllers.restrictByRole("agent"), propertyControllers.deletePropertyById);
 
 module.exports = router;

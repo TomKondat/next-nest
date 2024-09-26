@@ -50,6 +50,79 @@ exports.addProperty = asyncHandler(async (req, res, next) => {
   });
 });
 
+exports.editPropertyById = asyncHandler(async (req, res, next) => {
+  const { id: property_Id } = req.params;
+  if (!property_Id) {
+    return next(new AppError(400, "No property ID provided"));
+  }
+  const managesProperty = req.user.managedProperties.some(
+    (propertyId) => propertyId.toString() === property_Id
+  );
+  if (!managesProperty) {
+    return next(new AppError(403, "You are not allowed to edit this property"));
+  }
+
+  const property = await Property.findById(property_Id);
+  if (!property) {
+    return next(new AppError(404, "Property not found"));
+  }
+  console.log(req);
+
+  const {
+    title,
+    propertyType,
+    price,
+    description,
+    location,
+    bedrooms,
+    bathrooms,
+    area,
+    status,
+    virtualTour
+  } = req.body;
+
+  if (title) property.title = title;
+  if (propertyType) property.propertyType = propertyType;
+  if (price) property.price = price;
+  if (description) property.description = description;
+  if (location) property.location = location;
+  if (bedrooms) property.bedrooms = bedrooms;
+  if (bathrooms) property.bathrooms = bathrooms;
+  if (area) property.area = area;
+  if (status) property.status = status;
+  if (req.file) {
+    const fileName = `property-${Date.now()}-${property._id}.jpg`;
+    await sharp(req.file.buffer)
+      .resize(500, 300)
+      .toFormat("jpeg")
+      .jpeg({ quality: 80 })
+      .toFile(`public/img/properties/${fileName}`);
+    property.images = `img/properties/${fileName}`;
+  }
+  if (
+    !title &&
+    !propertyType &&
+    !price &&
+    !description &&
+    !location &&
+    !bedrooms &&
+    !bathrooms &&
+    !area &&
+    !status &&
+    !virtualTour &&
+    !req.file
+  ) {
+    return next(
+      new AppError(400, "Please provide at least one field to update")
+    );
+  }
+  await property.save();
+  res.status(200).json({
+    status: "success",
+    property,
+  });
+});
+
 exports.getProperties = asyncHandler(async (req, res, next) => {
   const apimethods = new APImethods(Property.find(), req.query);
   apimethods.filter().sort().selectFields();
@@ -86,60 +159,6 @@ exports.getPropertyById = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.editPropertyById = asyncHandler(async (req, res, next) => {
-  const { id: property_Id } = req.params;
-  if (!property_Id) {
-    return next(new AppError(400, "No property ID provided"));
-  }
-  const managesProperty = req.user.managedProperties.some(
-    (propertyId) => propertyId.toString() === property_Id
-  );
-  if (!managesProperty) {
-    return next(new AppError(403, "You are not allowed to edit this property"));
-  }
-  const {
-    title,
-    propertyType,
-    price,
-    description,
-    location,
-    bedrooms,
-    bathrooms,
-    area,
-    status,
-    images,
-    virtualTour,
-  } = req.body;
-  if (
-    !title &&
-    !propertyType &&
-    !price &&
-    !description &&
-    !location &&
-    !bedrooms &&
-    !bathrooms &&
-    !area &&
-    !status &&
-    !images &&
-    !virtualTour
-  ) {
-    return next(
-      new AppError(400, "Please provide at least one field to update")
-    );
-  }
-  const property = await Property.findByIdAndUpdate(property_Id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  if (!property) {
-    return next(new AppError(404, "Property not found"));
-  }
-
-  res.status(200).json({
-    status: "success",
-    property,
-  });
-});
 
 exports.deletePropertyById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;

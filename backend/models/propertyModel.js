@@ -100,9 +100,9 @@ const propertySchema = new mongoose.Schema(
 
 propertySchema.pre("save", async function (next) {
   if (
-    !this.location.coordinates ||
-    !this.location.coordinates.lat ||
-    !this.location.coordinates.lng
+    this.isModified("location.houseNumber") ||
+    this.isModified("location.street") ||
+    this.isModified("location.city")
   ) {
     try {
       const fetchCoordinates = async (query) => {
@@ -129,6 +129,7 @@ propertySchema.pre("save", async function (next) {
         `Jerusalem, Israel`,
       ];
       let responseData;
+      let zoomLevel;
       for (let i = 0; i < queries.length; i++) {
         const data = await fetchCoordinates(queries[i]);
         if (data.length > 0) {
