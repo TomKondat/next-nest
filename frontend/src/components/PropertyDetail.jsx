@@ -177,11 +177,13 @@ const PropertyDetail = () => {
 
       if (images) {
         images.forEach((image, index) => {
-          formData.append("image", image); 
+          formData.append("image", image);
         });
       }
       await editProperty({ data: formData, propertyId: id }).unwrap();
-      alert("Property updated successfully!");
+      setAlertMessage("Property updated successfully!");
+      setShowSuccessAlert(true);
+      setShowErrorAlert(false);
       setShowEditModal(false);
       refetch();
 
@@ -300,12 +302,13 @@ const PropertyDetail = () => {
             </Card.Title>
 
             <Row className="property-details-row mb-4">
-              <Col xs={12} md={8} className= "property-detail-con">
+              <Col xs={12} md={8} className="property-detail-con">
                 <Card.Img
                   variant="top"
-                  src={property?.property.images[0]?
-                    `${UPLOADS_URL}/${property?.property.images[0]}` :
-                    `${UPLOADS_URL}/${DEFAULT_PROPERTY_IMG}`
+                  src={
+                    property?.property.images[0]
+                      ? `${UPLOADS_URL}/${property?.property.images[0]}`
+                      : `${UPLOADS_URL}/${DEFAULT_PROPERTY_IMG}`
                   }
                   alt={property?.property.title}
                   className="property-detail-image"
@@ -523,29 +526,29 @@ const PropertyDetail = () => {
                     onChange={(e) => setDescription(e.target.value)}
                   />
                 </Form.Group>
-                </Col>
-                </Row>
-  <               Form.Group className="mb-3" controlId="formImages">
-                  <Form.Label>Property Images</Form.Label>
-                  <Form.Control
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
-                </Form.Group>
+              </Col>
+            </Row>
+            <Form.Group className="mb-3" controlId="formImages">
+              <Form.Label>Property Images</Form.Label>
+              <Form.Control
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </Form.Group>
 
-                <div className="image-preview">
-                  {previewImages.map((img, index) => (
-                    <Image
-                      key={index}
-                      src={img.startsWith("blob:") ? img : UPLOADS_URL +'/'+ img}
-                      alt={`property-img-${index}`}
-                      thumbnail
-                      style={{ width: "150px", margin: "5px" }}
-                    />
-                  ))}
-                </div>
+            <div className="image-preview">
+              {previewImages.map((img, index) => (
+                <Image
+                  key={index}
+                  src={img.startsWith("blob:") ? img : UPLOADS_URL + "/" + img}
+                  alt={`property-img-${index}`}
+                  thumbnail
+                  style={{ width: "150px", margin: "5px" }}
+                />
+              ))}
+            </div>
           </Form>
         </Modal.Body>
         <Modal.Footer>
