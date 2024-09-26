@@ -145,8 +145,9 @@ const HeroSection = ({ updateSearchParams }) => {
                   <Button
                     className="reset-button"
                     onClick={handleReset}
+                    variant="secondary"
                   >
-                    Reset Filters
+                    Reset{" "}
                   </Button>
                 </Col>
               </Row>
