@@ -78,15 +78,22 @@ const HeroSection = ({ updateSearchParams }) => {
                       {selectedPropertyType || "Property Type"}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item eventKey="House">House</Dropdown.Item>
-                      <Dropdown.Item eventKey="Apartment">
-                        Apartment
+                      <Dropdown.Item eventKey="Land">Land</Dropdown.Item>
+                      <Dropdown.Item eventKey="Industrial">
+                        Industrial
                       </Dropdown.Item>
                       <Dropdown.Item eventKey="Commercial">
                         Commercial
                       </Dropdown.Item>
                       <Dropdown.Item eventKey="Residential">
                         Residential
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="Mixed-Use">
+                        Mixed-Use
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="Retail">Retail</Dropdown.Item>
+                      <Dropdown.Item eventKey="Hospitality">
+                        Hospitality
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
