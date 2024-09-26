@@ -1,13 +1,22 @@
 import { useState } from "react";
-import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  Card,
+  Alert,
+} from "react-bootstrap";
 import { useAddPropertyMutation } from "../slices/propertyApiSlice";
 import { useNavigate } from "react-router-dom";
 import "../styles/addProperty.css";
 
 const AddProperty = () => {
   const navigate = useNavigate();
-  const [addProperty, { isLoading, isSuccess, isError, error }] =
-    useAddPropertyMutation();
+  const [addProperty, { isLoading }] = useAddPropertyMutation();
+
+  // State to handle form fields
   const [title, setTitle] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
@@ -20,6 +29,11 @@ const AddProperty = () => {
   const [area, setArea] = useState("");
   const [images, setImages] = useState(null);
   const [saleType, setSaleType] = useState("");
+
+  // State to manage alerts
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,13 +60,20 @@ const AddProperty = () => {
         formData.append("image", images);
       }
     }
+
     try {
       await addProperty(formData).unwrap();
-      alert("Property added successfully!");
-      navigate("/");
+      setShowSuccessAlert(true); // Show success alert
+      setShowErrorAlert(false); // Hide error alert
+      setTimeout(() => {
+        navigate("/");
+      }, 1000); // Navigate after 2 seconds
     } catch (err) {
-      console.error("Failed to add property:", err);
-      alert("Error adding property. Please try again.");
+      setShowErrorAlert(true); // Show error alert
+      setShowSuccessAlert(false); // Hide success alert
+      setErrorMessage(
+        err?.data?.message || "Error adding property. Please try again."
+      );
     }
   };
 
@@ -99,17 +120,16 @@ const AddProperty = () => {
                         </Form.Control>
                       </Form.Group>
 
-                      <Form.Group controlId="formHouseNumber" className="mb-3">
-                        <Form.Label>House Number</Form.Label>
+                      <Form.Group controlId="formCity" className="mb-3">
+                        <Form.Label>City</Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Enter house number"
-                          value={houseNumber}
-                          onChange={(e) => setHouseNumber(e.target.value)}
+                          placeholder="Enter city"
+                          value={city}
+                          onChange={(e) => setCity(e.target.value)}
                           required
                         />
                       </Form.Group>
-
                       <Form.Group controlId="formStreet" className="mb-3">
                         <Form.Label>Street</Form.Label>
                         <Form.Control
@@ -120,14 +140,13 @@ const AddProperty = () => {
                           required
                         />
                       </Form.Group>
-
-                      <Form.Group controlId="formCity" className="mb-3">
-                        <Form.Label>City</Form.Label>
+                      <Form.Group controlId="formHouseNumber" className="mb-3">
+                        <Form.Label>House Number</Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Enter city"
-                          value={city}
-                          onChange={(e) => setCity(e.target.value)}
+                          placeholder="Enter house number"
+                          value={houseNumber}
+                          onChange={(e) => setHouseNumber(e.target.value)}
                           required
                         />
                       </Form.Group>
@@ -146,17 +165,6 @@ const AddProperty = () => {
                     </Col>
 
                     <Col md={6}>
-                      <Form.Group controlId="formPrice" className="mb-3">
-                        <Form.Label>Price</Form.Label>
-                        <Form.Control
-                          type="number"
-                          placeholder="Enter price"
-                          value={price}
-                          onChange={(e) => setPrice(e.target.value)}
-                          required
-                        />
-                      </Form.Group>
-
                       <Form.Group controlId="formBedrooms" className="mb-3">
                         <Form.Label>Bedrooms</Form.Label>
                         <Form.Control
@@ -202,6 +210,16 @@ const AddProperty = () => {
                           <option value="rent">Rent</option>
                         </Form.Control>
                       </Form.Group>
+                      <Form.Group controlId="formPrice" className="mb-3">
+                        <Form.Label>Price</Form.Label>
+                        <Form.Control
+                          type="number"
+                          placeholder="Enter price"
+                          value={price}
+                          onChange={(e) => setPrice(e.target.value)}
+                          required
+                        />
+                      </Form.Group>
 
                       <Form.Group controlId="formImage" className="mb-3">
                         <Form.Label>Image</Form.Label>
@@ -220,19 +238,29 @@ const AddProperty = () => {
                       {isLoading ? "Adding..." : "Add Property"}
                     </Button>
                   </div>
-
-                  {isError && (
-                    <div className="text-danger mt-3">
-                      {error?.data?.message || "Something went wrong"}
-                    </div>
-                  )}
-                  {isSuccess && (
-                    <div className="text-success mt-3">
-                      Property added successfully!
-                    </div>
-                  )}
                 </Form>
               </Card.Body>
+              {/* Success Alert */}
+              {showSuccessAlert && (
+                <Alert
+                  variant="success"
+                  onClose={() => setShowSuccessAlert(false)}
+                  dismissible
+                >
+                  Property added successfully!
+                </Alert>
+              )}
+
+              {/* Error Alert */}
+              {showErrorAlert && (
+                <Alert
+                  variant="danger"
+                  onClose={() => setShowErrorAlert(false)}
+                  dismissible
+                >
+                  {errorMessage}
+                </Alert>
+              )}
             </Card>
           </Col>
         </Row>
