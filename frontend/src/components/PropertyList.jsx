@@ -66,6 +66,7 @@ const PropertyList = ({ searchParams, fromHomePage }) => {
                   images={property.images[0]}
                   title={property.title}
                   price={property.price}
+                  saleType={property.saleType}
                 />
               </div>
             </Col>
